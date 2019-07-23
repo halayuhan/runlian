@@ -2,14 +2,11 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-23 14:55:48
+ * @LastEditTime: 2019-07-23 20:31:40
  * @Description: file content
  -->
 <template>
   <div id="app">
-    <header class="header">
-      <h1>Linksoul读书会签到表</h1>
-    </header>
     <router-view></router-view>
   </div>
 </template>

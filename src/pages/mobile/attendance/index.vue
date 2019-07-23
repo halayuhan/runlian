@@ -1,12 +1,12 @@
 <!--
  * @Author: liyan
- * @Date: 2019-07-22 19:56:58
+ * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-23 15:11:30
+ * @LastEditTime: 2019-07-23 20:18:03
  * @Description: file content
  -->
 <template>
-  <div id="landing">
+  <div id="attendance">
     <div class="container">
       <form class="form">
         <div class="form-item">
@@ -79,7 +79,7 @@
 
 <script>
 export default {
-  name: 'Landing',
+  name: 'Attendance',
   data: () => ({
     form: {
       name: '',
@@ -103,7 +103,7 @@ export default {
 </script>
 
 <style scoped>
-#landing {
+#attendance {
   height: 100%;
 }
 
