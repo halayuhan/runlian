@@ -12,8 +12,8 @@
         <div class="form-item">
           <span>姓名*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.name" />
-            <p v-if="errors.name">姓名{{errors.name}}</p>
+            <input type="text" v-model="form.name.val" />
+            <!-- <p v-if="errors.name">姓名{{errors.name}}</p> -->
           </div>
         </div>
         <div class="form-item justify-item">
@@ -21,15 +21,15 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="male" value="male" v-model="form.sex" />
+                <input type="radio" id="male" value="male" v-model="sex" />
                 <label for="male">男</label>
               </li>
               <li>
-                <input type="radio" id="female" value="female" v-model="form.sex" />
+                <input type="radio" id="female" value="female" v-model="sex" />
                 <label for="female">女</label>
               </li>
             </ul>
-            <p class="justify-p" v-if="errors.sex">性别{{errors.sex}}</p>
+            <!-- <p class="justify-p" v-if="errors.sex">性别{{errors.sex}}</p> -->
           </div>
         </div>
         <div class="form-item justify-item">
@@ -37,40 +37,40 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="inner" value="inner" v-model="form.from" />
+                <input type="radio" id="inner" value="inner" v-model="from" />
                 <label for="inner">内部</label>
               </li>
               <li>
-                <input type="radio" id="outer" value="outer" v-model="form.from" />
+                <input type="radio" id="outer" value="outer" v-model="from" />
                 <label for="outer">外部</label>
               </li>
             </ul>
-            <p class="justify-p" v-if="errors.from">内外部{{errors.from}}</p>
+            <!-- <p class="justify-p" v-if="errors.from">内外部{{errors.from}}</p> -->
           </div>
         </div>
         <div class="form-item">
           <span>部门*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.apartment" />
-            <p v-if="errors.apartment">部门{{errors.apartment}}</p>
+            <input type="text" v-model="form.apartment.val" />
+            <!-- <p v-if="errors.apartment">部门{{errors.apartment}}</p> -->
           </div>
         </div>
         <div class="form-item">
           <span>手机号码*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone" />
-            <p v-if="errors.phone">手机号码{{errors.phone}}</p>
+            <input type="text" v-model="form.phone.val" />
+            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
         <div class="form-item">
           <span>在读书籍*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.books" />
-            <p v-if="errors.books">在读书籍{{errors.books}}</p>
+            <input type="text" v-model="form.books.val" />
+            <!-- <p v-if="errors.books">在读书籍{{errors.books}}</p> -->
           </div>
         </div>
         <center>
-          <button>签到</button>
+          <button @click="loginSubmit">签到</button>
         </center>
       </form>
     </div>
@@ -80,25 +80,77 @@
 <script>
 export default {
   name: 'Attendance',
-  data: () => ({
-    form: {
-      name: '',
-      sex: '',
-      from: '',
-      apartment: '',
-      phone: '',
-      books: ''
-    },
-    errors: {
-      name: '不能为空!',
-      sex: '不能为空！',
-      from: '不能为空！',
-      apartment: '不能为空',
-      phone: '不能为空！',
-      books: '不能为空！'
+  data() {
+    return {
+      sex: "male",
+      from: "inner",
+      form: {
+        name: {
+          val: '',
+          err_msg: '请输入正确姓名',
+          rules: [/^[\u4e00-\u9fffa-zA-Z]+$/]
+        },
+        apartment: {
+          val: '',
+          err_msg: '请输入正确部门',
+          rules: [/^[\u4e00-\u9fffa-zA-Z]{1,15}$/]
+        },
+        phone: {
+          val: '',
+          err_msg: '请输入正确手机号',
+          rules: [/^[1]([3-9])[0-9]{9}$/]
+        },
+        books: {
+          val: '',
+          err_msg: '请输入正确书名',
+          rules: [/^[\u4e00-\u9fffa-zA-Z]{1,15}$/]
+        }
+      }
     }
-  })
+  },
+  methods: {
+    _validate() {
+      let isPass = false;
+      for (let key in this.form) {
+        let reg = this.form[key].rules[0];
+        // console.log(reg.test(this.form[key].val));
+        if (reg.test(this.form[key].val) && this.form[key].val != '') {
+          isPass = true;
+        }
+        else {
+          isPass = false;
+          alert(this.form[key].err_msg);
+          this.form[key].val = '';
+          break;        }
+      }
+      return isPass
+    },
+    loginSubmit() {
+      if (!this._validate()) {
+      }
+      else {
+        this.$axios({
+          methods: 'post',
+          url: 'api',
+          data: {    //这里是发送给后台的数据
+            username: this.form['name'].val,
+            sex: this.sex,
+            from: this.from,
+            apartment: this.form['apartment'].val,
+            phone: this.form['phone'].val,
+            books: this.form['books'].val,
+          }
+        }).then((response) => {
+          this.$router.push('/success');
+          console.log(response)       //请求成功返回的数据
+        }).catch((error) => {
 
+          console.log(error)       //请求失败返回的数据
+        })
+
+      }
+    }
+  }
 }
 </script>
 
