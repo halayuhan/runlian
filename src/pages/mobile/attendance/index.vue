@@ -70,7 +70,7 @@
           </div>
         </div>
         <center>
-          <button @click="loginSubmit">签到</button>
+          <button @click.prevent="loginSubmit">签到</button>
         </center>
       </form>
     </div>
