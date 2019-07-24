@@ -2,11 +2,11 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:19:27
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-23 20:24:11
+ * @LastEditTime: 2019-07-24 10:23:10
  * @Description: file content
  -->
 <template>
-  <header class="header">
+  <header class="mobile-header">
     <h1>Linksoul读书会签到表</h1>
   </header>
 </template>
@@ -18,9 +18,11 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.mobile-header {
   padding: 0 10px;
-  background-color: #74bb92;
+  background: url("../../assets/mobile-header.png");
+  background-size: 100vw 60px;
+  /* background-color: #74bb92; */
 }
 h1 {
   /* width: 390px; */

@@ -1,3 +1,10 @@
+/*
+ * @Author: liyan
+ * @Date: 2019-07-23 14:44:06
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-07-24 11:12:10
+ * @Description: file content
+ */
 'use strict'
 const utils = require('./utils')
 const webpack = require('webpack')
@@ -10,7 +17,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
-const HOST = process.env.HOST
+const HOST = process.env.HOST || '0.0.0.0'
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
@@ -85,8 +92,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)

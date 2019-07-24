@@ -2,7 +2,7 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-23 20:31:40
+ * @LastEditTime: 2019-07-24 11:08:25
  * @Description: file content
  -->
 <template>
@@ -171,18 +171,5 @@ input:-moz-placeholder {
 input:-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #b6b6b6 !important;
-}
-
-/* 自定义样式 */
-.header {
-  padding: 0 10px;
-  background-color: #74bb92;
-}
-h1 {
-  /* width: 390px; */
-  height: 60px;
-  /* margin: 0 auto; */
-  line-height: 60px;
-  font-size: 20px;
 }
 </style>
