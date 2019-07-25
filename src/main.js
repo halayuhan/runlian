@@ -13,6 +13,9 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
+import store from './store'
+axios.defaults.baseURL = 'http://10.54.26.79:8080'
+axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -22,6 +25,7 @@ Vue.prototype.$axios = axios
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

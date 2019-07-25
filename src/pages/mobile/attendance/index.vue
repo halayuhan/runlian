@@ -21,15 +21,15 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="male" value="male" v-model="sex" />
+                <input type="radio" id="male" value="男" v-model="gender" />
                 <label for="male">男</label>
               </li>
               <li>
-                <input type="radio" id="female" value="female" v-model="sex" />
+                <input type="radio" id="female" value="女" v-model="gender" />
                 <label for="female">女</label>
               </li>
             </ul>
-            <!-- <p class="justify-p" v-if="errors.sex">性别{{errors.sex}}</p> -->
+            <!-- <p class="justify-p" v-if="errors.gender">性别{{errors.gender}}</p> -->
           </div>
         </div>
         <div class="form-item justify-item">
@@ -37,11 +37,11 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="inner" value="inner" v-model="from" />
+                <input type="radio" id="inner" value="内部" v-model="from" />
                 <label for="inner">内部</label>
               </li>
               <li>
-                <input type="radio" id="outer" value="outer" v-model="from" />
+                <input type="radio" id="outer" value="外部" v-model="from" />
                 <label for="outer">外部</label>
               </li>
             </ul>
@@ -51,8 +51,8 @@
         <div class="form-item">
           <span>部门*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.apartment.val" />
-            <!-- <p v-if="errors.apartment">部门{{errors.apartment}}</p> -->
+            <input type="text" v-model="form.department.val" />
+            <!-- <p v-if="errors.department">部门{{errors.department}}</p> -->
           </div>
         </div>
         <div class="form-item">
@@ -85,15 +85,15 @@ export default {
   name: 'Attendance',
   data () {
     return {
-      sex: 'male',
-      from: 'inner',
+      gender: '男',
+      from: '内部',
       form: {
         name: {
           val: '',
           err_msg: '请输入正确姓名',
           rules: [/^[\u4e00-\u9fffa-zA-Z]+$/]
         },
-        apartment: {
+        department: {
           val: '',
           err_msg: '请输入正确部门',
           rules: [/^[\u4e00-\u9fffa-zA-Z]{1,15}$/]
@@ -123,32 +123,34 @@ export default {
           isPass = false
           alert(this.form[key].err_msg)
           this.form[key].val = ''
-          break
-        }
-        return isPass
-      }
+          break;
+        }}
+      return isPass
     },
     loginSubmit () {
       if (!this._validate()) {
-      } else {
-        // this.$axios({
-        //   methods: 'post',
-        //   url: 'api',
-        //   data: {    //这里是发送给后台的数据
-        //     username: this.form['name'].val,
-        //     sex: this.sex,
-        //     from: this.from,
-        //     apartment: this.form['apartment'].val,
-        //     phone: this.form['phone'].val,
-        //     books: this.form['books'].val,
-        //   }
-        // }).then((response) => {
-        //   this.$router.push('/success');
-        //   console.log(response)       //请求成功返回的数据
-        // }).catch((error) => {
-        //   console.log(error)       //请求失败返回的数据
-        // })
-      }
+        return
+      }  
+      // const { name, department, phone, books } = this.form
+      // const params = {
+      //   gender:this.gender,
+      //   isInternal:this.from,
+      //   userName: name.val,
+      //   phoneNumber: phone.val,
+      //   department: department.val,
+      //   books: books.val
+      // }
+
+      // this.$axios({
+      //   methods: 'post',
+      //   url: '/admin/user/addUser',
+      //   params
+      // }).then((response) => {
+      //   this.$router.push('/success');
+      //   console.log(response)       //请求成功返回的数据
+      // }).catch((error) => {
+      //   console.error(error)       //请求失败返回的数据
+      // })
     }
   }
 }
