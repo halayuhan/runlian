@@ -2,12 +2,19 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-24 16:37:32
+ * @LastEditTime: 2019-07-25 16:25:00
  * @Description: file content
  -->
 <template>
   <div class="login">
     <div class="login-wrapper">
+      <div class="slogan">
+        <p>
+          教育是一棵树撼动另一棵树
+          <br />一朵云推动另一朵云
+          <br />一个灵魂唤醒另一个灵魂
+        </p>
+      </div>
       <div class="user-entry">
         <div class="user-entry-header">
           <i>avatar</i>
@@ -23,9 +30,9 @@
               <label for="password">密码</label>
               <input type="password" id="password" />
             </div>
-            <center>
+            <div class="center">
               <button>登录</button>
-            </center>
+            </div>
           </form>
         </div>
       </div>
@@ -42,15 +49,45 @@ export default {
 <style scoped>
 .login {
   height: 100%;
+  position: relative;
+  /* background: url("../../../assets/bc_book.jpg") no-repeat;
+  background-size: 100vw 100vh; */
+}
+
+.login::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .login-wrapper {
   height: 100%;
   padding: 100px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  background-color: #ccc;
+  z-index: 99;
+  /* background-color: #ccc; */
+  background: url("../../../assets/bc_book.jpg") no-repeat;
+  background-size: 100vw 100vh;
+}
+
+.slogan {
+  width: 340px;
+  margin: -30px 200px 0 0;
+  z-index: 99;
+}
+
+.slogan p {
+  color: #fff;
+  font-size: 24px;
+  line-height: 50px;
+  /* font-weight: bold; */
 }
 
 .user-entry {
@@ -58,7 +95,8 @@ export default {
   /* height: 300px; */
   padding: 20px 40px;
   background-color: #fff;
-  border-radius: 3px;
+  border-radius: 10px;
+  z-index: 99;
 }
 
 .user-entry-header {
@@ -78,6 +116,10 @@ export default {
   height: 40px;
   line-height: 40px;
   font-size: 18px;
+}
+
+.user-entry-container .center {
+  text-align: center;
 }
 
 .user-entry-container button {

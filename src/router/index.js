@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-24 17:08:33
+ * @LastEditTime: 2019-07-25 16:29:43
  * @Description: file content
  */
 import Vue from 'vue'
@@ -22,7 +22,19 @@ export default new Router({
         {
           path: '/attendance',
           name: 'Attendance',
-          component: () => import('@/pages/mobile/attendance/index')
+          component: () => import('@/pages/mobile/attendance/index'),
+          // 路由守卫
+          beforeEnter: (to, from, next) => {
+            let hashArr = to.hash.split('')
+            hashArr.shift()
+            let hash = hashArr.join('') // 获取链接哈希值，即二维码创建时间戳
+            let timestamp = Date.parse(new Date()).toString() // 获取当前时间戳
+            let gap = timestamp - hash // 时间戳比较，一小时内可跳转
+            // to.hash === '' 为方便测试
+            if ((gap < 3600000 && gap > 0) || to.hash === '') {
+              next()
+            }
+          }
         },
         {
           path: '/success',

@@ -2,62 +2,13 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:14:12
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-24 16:49:46
+ * @LastEditTime: 2019-07-25 16:23:15
  * @Description: file content
  -->
 <template>
   <div class="portal-item">
     <portal-header></portal-header>
     <portal-container></portal-container>
-    <!-- <header class="portal-header">
-      <div class="header-wrapper">
-        <div class="header-wrapper-left">
-          <h1>Linksoul 读书会</h1>
-          <ul v-show="isLogin">
-            <li>
-              <span></span>
-            </li>
-            <li>
-              <a href>签到管理页面</a>
-            </li>
-            <li>
-              <a href>书单管理页面</a>
-            </li>
-          </ul>
-        </div>
-        <div class="header-wrapper-right" v-show="isLogin">
-          <i>avatar</i>
-          <p>Linksoul</p>
-        </div>
-      </div>
-    </header>
-    <div class="portal-container">
-      <div class="login">
-        <div class="login-wrapper">
-          <div class="user-entry">
-            <div class="user-entry-header">
-              <i>avatar</i>
-              <p>管理员登录</p>
-            </div>
-            <div class="user-entry-container">
-              <form>
-                <div class="form-item">
-                  <label for="user">用户名</label>
-                  <input type="text" id="user" />
-                </div>
-                <div class="form-item">
-                  <label for="password">密码</label>
-                  <input type="password" id="password" />
-                </div>
-                <center>
-                  <button>登录</button>
-                </center>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>-->
   </div>
 </template>
 

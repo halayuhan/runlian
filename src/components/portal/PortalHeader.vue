@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-24 17:26:34
+ * @LastEditTime: 2019-07-25 16:14:37
  * @Description: file content
  -->
 <template>
@@ -10,7 +10,7 @@
     <div class="header-wrapper">
       <div class="header-wrapper-left">
         <h1>Linksoul 读书会</h1>
-        <ul v-show="isLogin">
+        <ul v-if="isLogin">
           <li>
             <span></span>
           </li>
@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <div class="header-wrapper-right" v-show="isLogin">
+      <div class="header-wrapper-right" v-if="isLogin">
         <i>avatar</i>
         <p>Linksoul</p>
       </div>

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-23 20:18:03
+ * @LastEditTime: 2019-07-25 16:26:13
  * @Description: file content
  -->
 <template>
@@ -69,9 +69,12 @@
             <!-- <p v-if="errors.books">在读书籍{{errors.books}}</p> -->
           </div>
         </div>
-        <center>
+        <div class="center">
           <button @click.prevent="loginSubmit">签到</button>
-        </center>
+        </div>
+        <!-- <center>
+          <button @click.prevent="loginSubmit">签到</button>
+        </center>-->
       </form>
     </div>
   </div>
@@ -80,10 +83,10 @@
 <script>
 export default {
   name: 'Attendance',
-  data() {
+  data () {
     return {
-      sex: "male",
-      from: "inner",
+      sex: 'male',
+      from: 'inner',
       form: {
         name: {
           val: '',
@@ -109,45 +112,42 @@ export default {
     }
   },
   methods: {
-    _validate() {
-      let isPass = false;
+    _validate () {
+      let isPass = false
       for (let key in this.form) {
-        let reg = this.form[key].rules[0];
+        let reg = this.form[key].rules[0]
         // console.log(reg.test(this.form[key].val));
         if (reg.test(this.form[key].val) && this.form[key].val != '') {
-          isPass = true;
+          isPass = true
+        } else {
+          isPass = false
+          alert(this.form[key].err_msg)
+          this.form[key].val = ''
+          break
         }
-        else {
-          isPass = false;
-          alert(this.form[key].err_msg);
-          this.form[key].val = '';
-          break;        }
+        return isPass
       }
-      return isPass
     },
-    loginSubmit() {
+    loginSubmit () {
       if (!this._validate()) {
-      }
-      else {
-        this.$axios({
-          methods: 'post',
-          url: 'api',
-          data: {    //这里是发送给后台的数据
-            username: this.form['name'].val,
-            sex: this.sex,
-            from: this.from,
-            apartment: this.form['apartment'].val,
-            phone: this.form['phone'].val,
-            books: this.form['books'].val,
-          }
-        }).then((response) => {
-          this.$router.push('/success');
-          console.log(response)       //请求成功返回的数据
-        }).catch((error) => {
-
-          console.log(error)       //请求失败返回的数据
-        })
-
+      } else {
+        // this.$axios({
+        //   methods: 'post',
+        //   url: 'api',
+        //   data: {    //这里是发送给后台的数据
+        //     username: this.form['name'].val,
+        //     sex: this.sex,
+        //     from: this.from,
+        //     apartment: this.form['apartment'].val,
+        //     phone: this.form['phone'].val,
+        //     books: this.form['books'].val,
+        //   }
+        // }).then((response) => {
+        //   this.$router.push('/success');
+        //   console.log(response)       //请求成功返回的数据
+        // }).catch((error) => {
+        //   console.log(error)       //请求失败返回的数据
+        // })
       }
     }
   }
@@ -163,7 +163,7 @@ export default {
   height: 100%;
   /* width: 390px; */
   /* margin: 30px auto; */
-  padding: 30px 10px;
+  padding: 30px 10px 0 10px;
   /* background-color: #ccc; */
 }
 
@@ -232,13 +232,17 @@ export default {
   width: 270px;
 } */
 
+.center {
+  text-align: center;
+}
+
 button {
   width: 140px;
   height: 40px;
   text-align: center;
   line-height: 40px;
   font-size: 16px;
-  margin: 20px 0;
+  /* margin: 20px 0; */
   border-radius: 4px;
   background-color: #74bb92;
 }
