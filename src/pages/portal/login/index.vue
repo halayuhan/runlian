@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:25:00
+ * @LastEditTime: 2019-07-26 09:10:27
  * @Description: file content
  -->
 <template>
@@ -24,14 +24,14 @@
           <form>
             <div class="form-item">
               <label for="user">用户名</label>
-              <input type="text" id="user" v-model="username"/>
+              <input type="text" id="user" v-model="username" />
             </div>
             <div class="form-item">
               <label for="password">密码</label>
               <input type="password" id="password" v-model="password" />
             </div>
             <div class="center">
-               <button @click.prevent="login_Submit">登录</button>
+              <button @click.prevent="login_Submit">登录</button>
             </div>
           </form>
         </div>
@@ -44,32 +44,33 @@
 export default {
   name: 'Login',
 
-  data() {
+  data () {
     return {
       username: '',
-      password: '',
+      password: ''
     }
   },
   methods: {
-    login_Submit() {
+    login_Submit () {
       const params = {
         adminName: this.username,
         password: this.password
       }
       if (this.username == '' || this.password == '') {
-        alert("用户名与密码不能为空！")
-      }
-      else {
+        alert('用户名与密码不能为空！')
+      } else {
         this.$axios({
           methods: 'get',
           url: '/admin/adminLogin',
           params
         }).then((response) => {
-
-          this.$router.push('/search');
-          console.log(response)       //请求成功返回的数据
+          if (response.data.code == '000') {
+            this.$router.push('/search')
+            console.log(response) // 请求成功返回的数据
+          } else { alert(response.data.msg) }
         }).catch((error) => {
-          console.error(error)       //请求失败返回的数据
+          alert('登录失败')
+          console.error(error) // 请求失败返回的数据
         })
       }
     }

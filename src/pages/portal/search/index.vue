@@ -1,30 +1,98 @@
 <!--
  * @Author: liyan
- * @Date: 2019-07-24 10:14:12
+ * @Date: 2019-07-26 13:46:00
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:22:30
+ * @LastEditTime: 2019-07-29 16:12:51
  * @Description: file content
  -->
 <template>
   <div class="search">
     <div class="search-wrapper">
       <div class="search-nav">
-        <div class="search-nav-left"></div>
-        <div class="search-nav-right">
+        <ul>
+          <li>
+            <span></span>
+          </li>
+          <li>
+            <a href="#">签到管理页面</a>
+          </li>
+          <li>
+            <a href="#">书单管理页面</a>
+          </li>
+        </ul>
+      </div>
+      <div class="search-handle">
+        <div class="search-handle-left">
+          <div class="time-picker">
+            <el-date-picker
+              v-model="timeStart"
+              type="date"
+              placeholder="选择起始时间"
+              :picker-options="pickerOptions"
+            ></el-date-picker>
+            <el-date-picker
+              v-model="timeEnd"
+              type="date"
+              placeholder="选择结束时间"
+              :picker-options="pickerOptions"
+            ></el-date-picker>
+          </div>
+          <div class="data-filter">
+            <el-input placeholder="请输入姓名" v-model="filterInput">
+              <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
+            </el-input>
+          </div>
+        </div>
+        <div class="search-handle-right">
           <ul>
             <li>
-              <button>导出EXCRL表格</button>
+              <el-button type="primary" @click.prevent="downloadVisible = true">导出签到表</el-button>
+              <!-- <button @click.prevent="downloadVisible = true">导出签到表</button> -->
+              <el-dialog title="提示" :visible.sync="downloadVisible" width="30%">
+                <span>是否确认导出签到表</span>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click="downloadVisible = false">取消</el-button>
+                  <el-button type="primary" @click.prevent="downloadExcel">确认</el-button>
+                </span>
+              </el-dialog>
             </li>
             <li>
-              <button @click.prevent="showMask">导出二维码</button>
+              <el-button type="primary" @click.prevent="showMask">导出二维码</el-button>
+              <!-- <button @click.prevent="showMask">导出二维码</button> -->
             </li>
           </ul>
         </div>
       </div>
-      <div class="search-content"></div>
-      <div class="search-footer"></div>
+      <div class="search-content">
+        <el-table :data="pageData" :header-cell-style="{background: '#eee'}" border stripe>
+          <el-table-column label="序号" width="60" align="center">
+            <template slot-scope="scope">
+              <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="姓名" prop="userName"></el-table-column>
+          <el-table-column label="性别" prop="gender"></el-table-column>
+          <el-table-column label="内外部" prop="isInternal"></el-table-column>
+          <el-table-column label="在读书籍" prop="bookName"></el-table-column>
+          <el-table-column label="手机号码" prop="phoneNumber"></el-table-column>
+          <el-table-column label="签到时间" prop="time"></el-table-column>
+        </el-table>
+      </div>
+      <div class="search-footer">
+        <el-pagination
+          background
+          :hide-on-single-page="false"
+          :total="total"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          :page-sizes="[10,20,50]"
+          layout="total,prev,pager,next,sizes,jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </div>
     </div>
-    <div class="mask" v-show="isShow">
+    <div class="mask" v-show="qrcodeVisible">
       <div class="mask-content">
         <div>
           <div id="qrcode"></div>
@@ -43,25 +111,181 @@ import QRCode from 'qrcodejs2'
 export default {
   name: 'Search',
   data: () => ({
-    isShow: false,
-    qrcodeObject: {}
+    qrcodeVisible: false, // 是否显示二维码
+    qrcodeObject: {}, // 二维码封装对象
+    timeStart: '', // 起始时间
+    timeEnd: '', // 结束时间
+    pickerOptions: {
+      disabledDate (time) {
+        return time.getTime() > Date.now()
+      }, 
+      shortcuts: [
+        {
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        },
+        {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        },
+        {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }
+      ]
+    }, // 日期组件配置选项
+    downloadVisible: false, // 是否显示导出Excel对话框
+    filterInput: '', // 用于过滤的输入
+    tableData: [
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '红与黑',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '你一生的故事',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '哈利波特',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '水问',
+        time: '2019-9-10'
+      },
+      {
+        userName: 'lili',
+        gender: '女',
+        isInternal: '是',
+        department: '外部',
+        phoneNumber: '122345677',
+        bookName: '水问',
+        time: '2019-9-10'
+      }
+
+    ], // 所有表格数据
+    currentPage: 1, // 当前页码
+    pageSize: 10 // 每页显示行数
   }),
+  computed: {
+    total () {
+      return this.tableData.length
+    }, // 总数据量
+    pageData () {
+      return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
+    } // 当前页显示数据
+  },
   mounted () {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   methods: {
+    filterSearch () {
+      // 过滤搜索
+      // todo
+      console.log(this.filterInput)
+    },
+    downloadExcel () {
+      // 动态加a标签，链接下载Excel
+      // todo
+      console.log(2)
+      this.downloadVisible = false
+    },
     showMask () {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.30.64:8080/#/attendance' + '#' + timestamp.toString())
-      this.isShow = true
+      this.qrcodeObject.makeCode('http://10.54.26.214:8080/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeVisible = true
     },
     closeMask () {
       // 清除二维码
       this.qrcodeObject.clear()
-      this.isShow = false
+      this.qrcodeVisible = false
     },
     qrcode () {
       // let timestamp = Date.parse(new Date())
@@ -80,6 +304,12 @@ export default {
         colorLight: '#fff'
       })
       this.qrcodeObject = qrcode
+    },
+    handleCurrentChange (index) {
+      this.currentPage = index
+    },
+    handleSizeChange (index) {
+      this.pageSize = index
     }
   }
 }
@@ -89,39 +319,87 @@ export default {
 .search {
   /* position: relative; */
   height: 100%;
-  /* background: #ccc; */
+}
+
+.search-wrapper {
+  margin: 25px;
+  background-color: #fff;
 }
 
 .search-nav {
+  position: absolute;
+  top: 20px;
+  left: 240px;
+}
+
+.search-nav span {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin: 1px 0 0 0;
+  color: transparent;
+  background: url("../../../assets/point.png") no-repeat;
+  background-size: 40px 40px;
+  /* background-color: #eee; */
+}
+
+.search-nav ul {
+  display: flex;
+}
+
+.search-nav li {
+  height: 40px;
+  line-height: 40px;
+  margin: 0 20px 0 10px;
+}
+
+.search-nav a {
+  font-size: 20px;
+}
+
+.search-nav a:hover {
+  font-weight: bold;
+  color: initial;
+  border-bottom: 4px solid #797979;
+}
+
+.search-handle {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 60px;
   padding: 0 50px;
-  background-color: #eee;
+  /* border-bottom: 1px solid #000; */
+  /* background-color: #eee; */
 }
 
-.search-nav-right ul {
+.search-handle-left {
   display: flex;
 }
 
-.search-nav-right li {
-  height: 40px;
-  line-height: 30px;
-  padding: 5px 10px;
-  border-radius: 3px;
-  background-color: #1698d5;
+.search-handle-right ul {
+  display: flex;
 }
 
-.search-nav-right li:first-child {
+.search-handle-left .data-filter {
+  margin: 0 0 0 40px;
+}
+
+.el-input-group__append button.el-button {
+  background-color: #409eff;
+  color: #fff;
+}
+
+.search-handle-right li:first-child {
   margin: 0 20px 0 0;
 }
 
-.search-nav-right button {
+/* .search-handle-right button {
   font-size: 12px;
   color: #fff;
   cursor: "pointer";
-}
+} */
 
 .mask {
   display: flex;
@@ -178,5 +456,15 @@ export default {
 #qrcode img {
   width: 132px;
   height: 132px;
+}
+
+.search-content {
+  padding: 30px 50px 0 50px;
+}
+
+.search-footer {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
 }
 </style>

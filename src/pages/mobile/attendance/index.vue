@@ -2,13 +2,20 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:26:13
+ * @LastEditTime: 2019-07-29 15:31:57
  * @Description: file content
  -->
 <template>
   <div id="attendance">
     <div class="container">
       <form class="form">
+        <div class="form-item">
+          <span>手机号码*</span>
+          <div class="form-item-input">
+            <input type="text" v-model="form.phone.val" />
+            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
+          </div>
+        </div>
         <div class="form-item">
           <span>姓名*</span>
           <div class="form-item-input">
@@ -56,13 +63,6 @@
           </div>
         </div>
         <div class="form-item">
-          <span>手机号码*</span>
-          <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" />
-            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
-          </div>
-        </div>
-        <div class="form-item">
           <span>在读书籍*</span>
           <div class="form-item-input">
             <input type="text" v-model="form.books.val" />
@@ -106,7 +106,7 @@ export default {
         books: {
           val: '',
           err_msg: '请输入正确书名',
-          rules: [/^[\u4e00-\u9fffa-zA-Z]{1,15}$/]
+          rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,15}$/]
         }
       }
     }
@@ -123,14 +123,16 @@ export default {
           isPass = false
           alert(this.form[key].err_msg)
           this.form[key].val = ''
-          break;
-        }}
+          break
+        }
+      }
       return isPass
     },
     loginSubmit () {
       if (!this._validate()) {
         return
-      }  
+      }
+      this.$router.push('/success')
       // const { name, department, phone, books } = this.form
       // const params = {
       //   gender:this.gender,

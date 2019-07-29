@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:29:43
+ * @LastEditTime: 2019-07-29 16:13:08
  * @Description: file content
  */
 import Vue from 'vue'
@@ -58,7 +58,7 @@ const router = new Router({
           path: '/search',
           name: 'Search',
           component: () => import('@/pages/portal/search/index'),
-         meta: {
+          meta: {
             // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
           }
         }
