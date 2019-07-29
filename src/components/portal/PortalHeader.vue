@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:14:37
+ * @LastEditTime: 2019-07-29 16:12:24
  * @Description: file content
  -->
 <template>
@@ -10,21 +10,10 @@
     <div class="header-wrapper">
       <div class="header-wrapper-left">
         <h1>Linksoul 读书会</h1>
-        <ul v-if="isLogin">
-          <li>
-            <span></span>
-          </li>
-          <li>
-            <a href>签到管理页面</a>
-          </li>
-          <li>
-            <a href>书单管理页面</a>
-          </li>
-        </ul>
       </div>
       <div class="header-wrapper-right" v-if="isLogin">
         <i>avatar</i>
-        <p>Linksoul</p>
+        <p>{{userName}}</p>
       </div>
     </div>
   </header>
@@ -34,7 +23,8 @@
 export default {
   name: 'PortalHeader',
   data: () => ({
-    isLogin: true
+    isLogin: true, // 登录状态
+    userName: 'userName' // 登录用户，返回数据存于vuex中
   })
 }
 </script>
@@ -63,37 +53,6 @@ export default {
   font-size: 30px;
 }
 
-.header-wrapper-left span {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  margin: 1px 0 0 0;
-  color: transparent;
-  background: url("../../assets/point.png") no-repeat;
-  background-size: 40px 40px;
-  /* background-color: #eee; */
-}
-
-.header-wrapper-left ul {
-  display: flex;
-}
-
-.header-wrapper-left li {
-  height: 40px;
-  line-height: 40px;
-  margin: 0 20px 0 10px;
-}
-
-.header-wrapper-left a {
-  font-size: 20px;
-}
-.header-wrapper-left a:hover {
-  font-weight: bold;
-  color: initial;
-  border-bottom: 4px solid #797979;
-}
-
 .header-wrapper-right {
   display: flex;
   text-align: center;
@@ -104,9 +63,10 @@ export default {
   width: 50px;
   height: 50px;
   line-height: 50px;
-  margin: 0 5px 0 0;
+  margin: 0 10px 0 0;
   color: transparent;
-  background-color: #eee;
+  background: url("../../assets/avatar.png") no-repeat;
+  background-size: 50px 50px;
 }
 
 .header-wrapper-right p {

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:25:00
+ * @LastEditTime: 2019-07-26 09:10:27
  * @Description: file content
  -->
 <template>
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       username: '',
-      password: '',
+      password: ''
     }
   },
   methods: {
@@ -58,9 +58,8 @@ export default {
       }
       console.log(params)
       if (this.username == '' || this.password == '') {
-        alert("用户名与密码不能为空！")
-      }
-      else {
+        alert('用户名与密码不能为空！')
+      } else {
         this.$axios({
           methods: 'get',
           url: '/admin/adminLogin',
@@ -75,7 +74,8 @@ export default {
 
           console.log(response)       //请求成功返回的数据
         }).catch((error) => {
-          console.error(error)       //请求失败返回的数据
+          alert('登录失败')
+          console.error(error) // 请求失败返回的数据
         })
       }
     }

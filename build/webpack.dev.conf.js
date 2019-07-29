@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 14:44:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-24 11:12:10
+ * @LastEditTime: 2019-07-25 21:22:52
  * @Description: file content
  */
 'use strict'
@@ -17,7 +17,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
-const HOST = process.env.HOST || 'localhost'
+const HOST = process.env.HOST || '0.0.0.0'
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {

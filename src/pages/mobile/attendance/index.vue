@@ -2,13 +2,20 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:26:13
+ * @LastEditTime: 2019-07-29 15:31:57
  * @Description: file content
  -->
 <template>
   <div id="attendance">
     <div class="container">
       <form class="form">
+        <div class="form-item">
+          <span>手机号码*</span>
+          <div class="form-item-input">
+            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
+            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
+          </div>
+        </div>
         <div class="form-item">
           <span>姓名*</span>
           <div class="form-item-input">
@@ -56,6 +63,7 @@
           </div>
         </div>
         <div class="form-item">
+          <<<<<<< HEAD
           <span>手机号码*</span>
           <div class="form-item-input">
             <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
@@ -186,8 +194,9 @@ export default {
           isPass = false
           alert(this.form[key].err_msg)
           this.form[key].val = ''
-          break;
-        }      }
+          break
+        }
+      }
       return isPass
     },
 

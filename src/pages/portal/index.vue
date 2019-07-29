@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:14:12
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-25 16:23:15
+ * @LastEditTime: 2019-07-29 14:16:08
  * @Description: file content
  -->
 <template>
@@ -106,8 +106,9 @@ export default {
 
 /* 内容区域 */
 .portal-container {
-  height: calc(100vh - 80px);
-  /* background-color: #fc0; */
+  /* height: calc(100vh - 80px); */
+  background-color: #eee;
+  overflow: auto;
 }
 
 .login {
