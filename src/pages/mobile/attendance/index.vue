@@ -58,7 +58,7 @@
         <div class="form-item">
           <span>手机号码*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" />
+            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
@@ -83,7 +83,7 @@
 <script>
 export default {
   name: 'Attendance',
-  data () {
+  data() {
     return {
       gender: '男',
       from: '内部',
@@ -106,13 +106,76 @@ export default {
         books: {
           val: '',
           err_msg: '请输入正确书名',
-          rules: [/^[\u4e00-\u9fffa-zA-Z]{1,15}$/]
+          rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,30}$/]
         }
       }
     }
   },
+  mounted: function () {
+    if (window.localStorage.getItem('phone')) {             //判断本地localStorage内是否存有用户历史信息
+      this.gender = window.localStorage.getItem('gender');
+      this.from = window.localStorage.getItem('from');
+      this.form.name.val = window.localStorage.getItem('name');
+      this.form.department.val = window.localStorage.getItem('department');
+      this.form.phone.val = window.localStorage.getItem('phone');
+    }
+    else {
+      alert("当前用户无签到历史")
+    }
+  },
+  computed: {
+    channel() {
+      return this.form.phone.val
+    }
+  },
+
+  // watch: {
+  //   channel: function (newValue, oldValue) {
+  //     if (newValue.length != 11) {
+  //       //alert('输入正确手机号');
+  //     }
+  //     else {
+  //       this.$axios({
+  //         methods: 'get',
+  //         url: '/admin/signIn/getUserinfo',
+  //         data: this.form.phone.val,        })
+  //         .then((response) => {
+  //           this.gender = response.gender;
+  //           this.from = response.from;
+  //           this.form.name.val = response.name;
+  //           this.form.department.val = response.department;
+  //           console.log(response)       //请求成功返回的数据
+  //         }).catch((error) => {
+  //           console.error(error)       //请求失败返回的数据
+  //         })
+  //     }
+  //   }
+  // },
   methods: {
-    _validate () {
+    _getUserinfo() {
+      let reg = /^[1]([3-9])[0-9]{9}$/;
+      if (!reg.test(this.form.phone.val)) {
+        alert(this.form.phone.err_msg)
+      }
+      else {
+        alert("数据绑定中...")
+        // this.$axios({
+        //   methods: 'get',
+        //   url: '/admin/signIn/getUserinfo',
+        //   data: this.form.phone.val,        })
+        //   .then((response) => {
+        //     this.gender = response.gender;
+        //     this.from = response.from;
+        //     this.form.name.val = response.name;
+        //     this.form.department.val = response.department;
+        //     console.log(response)       //请求成功返回的数据
+        //   }).catch((error) => {
+        //     console.error(error)       //请求失败返回的数据
+        //   })
+      }
+    },
+
+    _validate() {
       let isPass = false
       for (let key in this.form) {
         let reg = this.form[key].rules[0]
@@ -124,28 +187,38 @@ export default {
           alert(this.form[key].err_msg)
           this.form[key].val = ''
           break;
-        }}
+        }      }
       return isPass
     },
-    loginSubmit () {
+
+    loginSubmit() {
       if (!this._validate()) {
         return
-      }  
-      // const { name, department, phone, books } = this.form
-      // const params = {
-      //   gender:this.gender,
-      //   isInternal:this.from,
-      //   userName: name.val,
-      //   phoneNumber: phone.val,
-      //   department: department.val,
-      //   books: books.val
-      // }
+      }
+      const { name, department, phone, books } = this.form
+      const params = {
+        gender: this.gender,
+        isInternal: this.from,
+        userName: name.val,
+        phoneNumber: phone.val,
+        department: department.val,
+        books: books.val
+      }
+      window.localStorage.setItem('gender', params.gender);
+      window.localStorage.setItem('from', params.isInternal);
+      window.localStorage.setItem('name', params.userName);
+      window.localStorage.setItem('department', params.department);
+      window.localStorage.setItem('phone', params.phoneNumber);
+      window.localStorage.setItem('books', params.books);
+
 
       // this.$axios({
       //   methods: 'post',
       //   url: '/admin/user/addUser',
       //   params
       // }).then((response) => {
+
+
       //   this.$router.push('/success');
       //   console.log(response)       //请求成功返回的数据
       // }).catch((error) => {

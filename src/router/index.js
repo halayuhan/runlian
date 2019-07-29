@@ -58,7 +58,7 @@ const router = new Router({
           path: '/search',
           name: 'Search',
           component: () => import('@/pages/portal/search/index'),
-         meta: {
+          meta: {
             // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
           }
         }
@@ -67,11 +67,11 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
-  const token = store.state.token
+  const user = window.sessionStorage.getItem('user')
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
-    if (token) {
-      // 通过vuex state获取当前的token是否存在
+    if (user) {
+      // 通过vuex state获取当前的用户是否存在
       next()
     } else {
       console.log('该页面需要登陆')
