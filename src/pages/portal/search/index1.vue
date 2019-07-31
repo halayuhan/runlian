@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-26 13:46:00
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 17:42:45
+ * @LastEditTime: 2019-07-29 17:31:50
  * @Description: file content
  -->
 <template>
@@ -153,6 +153,7 @@ export default {
 }
 
 .search-nav a {
+  font-weight: bold;
   color: #999;
   font-size: 20px;
 }
@@ -163,6 +164,6 @@ export default {
   border-bottom: 4px solid #797979;
 }
 .search-nav a:hover {
-  font-weight: bold;
+  color: initial;
 }
 </style>

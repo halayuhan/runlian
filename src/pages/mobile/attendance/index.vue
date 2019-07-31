@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 15:31:57
+ * @LastEditTime: 2019-07-30 17:58:50
  * @Description: file content
  -->
 <template>
@@ -63,7 +63,6 @@
           </div>
         </div>
         <div class="form-item">
-          <<<<<<< HEAD
           <span>手机号码*</span>
           <div class="form-item-input">
             <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
@@ -91,7 +90,7 @@
 <script>
 export default {
   name: 'Attendance',
-  data() {
+  data () {
     return {
       gender: '男',
       from: '内部',
@@ -120,19 +119,18 @@ export default {
     }
   },
   mounted: function () {
-    if (window.localStorage.getItem('phone')) {             //判断本地localStorage内是否存有用户历史信息
-      this.gender = window.localStorage.getItem('gender');
-      this.from = window.localStorage.getItem('from');
-      this.form.name.val = window.localStorage.getItem('name');
-      this.form.department.val = window.localStorage.getItem('department');
-      this.form.phone.val = window.localStorage.getItem('phone');
-    }
-    else {
-      alert("当前用户无签到历史")
+    if (window.localStorage.getItem('phone')) { // 判断本地localStorage内是否存有用户历史信息
+      this.gender = window.localStorage.getItem('gender')
+      this.from = window.localStorage.getItem('from')
+      this.form.name.val = window.localStorage.getItem('name')
+      this.form.department.val = window.localStorage.getItem('department')
+      this.form.phone.val = window.localStorage.getItem('phone')
+    } else {
+      alert('当前用户无签到历史')
     }
   },
   computed: {
-    channel() {
+    channel () {
       return this.form.phone.val
     }
   },
@@ -160,13 +158,12 @@ export default {
   //   }
   // },
   methods: {
-    _getUserinfo() {
-      let reg = /^[1]([3-9])[0-9]{9}$/;
+    _getUserinfo () {
+      let reg = /^[1]([3-9])[0-9]{9}$/
       if (!reg.test(this.form.phone.val)) {
         alert(this.form.phone.err_msg)
-      }
-      else {
-        alert("数据绑定中...")
+      } else {
+        alert('数据绑定中...')
         // this.$axios({
         //   methods: 'get',
         //   url: '/admin/signIn/getUserinfo',
@@ -183,7 +180,7 @@ export default {
       }
     },
 
-    _validate() {
+    _validate () {
       let isPass = false
       for (let key in this.form) {
         let reg = this.form[key].rules[0]
@@ -200,7 +197,7 @@ export default {
       return isPass
     },
 
-    loginSubmit() {
+    loginSubmit () {
       if (!this._validate()) {
         return
       }
@@ -213,20 +210,18 @@ export default {
         department: department.val,
         books: books.val
       }
-      window.localStorage.setItem('gender', params.gender);
-      window.localStorage.setItem('from', params.isInternal);
-      window.localStorage.setItem('name', params.userName);
-      window.localStorage.setItem('department', params.department);
-      window.localStorage.setItem('phone', params.phoneNumber);
-      window.localStorage.setItem('books', params.books);
-
+      window.localStorage.setItem('gender', params.gender)
+      window.localStorage.setItem('from', params.isInternal)
+      window.localStorage.setItem('name', params.userName)
+      window.localStorage.setItem('department', params.department)
+      window.localStorage.setItem('phone', params.phoneNumber)
+      window.localStorage.setItem('books', params.books)
 
       // this.$axios({
       //   methods: 'post',
       //   url: '/admin/user/addUser',
       //   params
       // }).then((response) => {
-
 
       //   this.$router.push('/success');
       //   console.log(response)       //请求成功返回的数据

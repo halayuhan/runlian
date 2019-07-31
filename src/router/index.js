@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 16:13:08
+ * @LastEditTime: 2019-07-30 16:06:05
  * @Description: file content
  */
 import Vue from 'vue'
@@ -57,10 +57,24 @@ const router = new Router({
         {
           path: '/search',
           name: 'Search',
+          redirect: '/check-in',
           component: () => import('@/pages/portal/search/index'),
           meta: {
             // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          children: [
+            {
+              path: '/check-in',
+              name: 'CheckIn',
+              component: () => import('@/pages/portal/check-in/index')
+            },
+            {
+              path: '/book',
+              name: 'Book',
+              component: () => import('@/pages/portal/book/index')
+            }
+          ]
+
         }
       ]
     }
