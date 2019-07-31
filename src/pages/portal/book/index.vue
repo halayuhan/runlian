@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-30 17:57:52
+ * @LastEditTime: 2019-07-31 16:43:25
  * @Description: file content
  -->
 <template>
@@ -25,7 +25,7 @@
               <el-button type="primary">书目模板下载</el-button>
             </li>
             <li>
-              <el-button type="primary">添加</el-button>
+              <el-button type="primary" @click="handleAddBook">添加</el-button>
             </li>
             <li>
               <el-button type="success">导出书单</el-button>
@@ -37,13 +37,79 @@
         <el-table :data="pageData" :header-cell-style="{background: '#eee'}" border stripe>
           <el-table-column type="expand">
             <template slot-scope="props">
-              <el-form>
-                <el-form-item>
-                  <span>{{props.row.img}}</span>
-                </el-form-item>
-                <el-form-item>
-                  <span>{{props.row.bookName}}</span>
-                </el-form-item>
+              <el-form class="table-expand-form">
+                <div class="expand-form-left">
+                  <el-form-item>
+                    <div>
+                      <p>书籍名称:</p>
+                      <span>{{props.row.bookName}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>作者:</p>
+                      <span>{{props.row.author}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>出版社:</p>
+                      <span>{{props.row.publisher}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>出版日期:</p>
+                      <span>{{props.row.pubDate}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>ISBN:</p>
+                      <span>{{props.row.ISBN}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>页数:</p>
+                      <span>{{props.row.page}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>类型:</p>
+                      <span>{{props.row.type}}</span>
+                    </div>
+                  </el-form-item>
+                </div>
+                <div class="expand-form-center">
+                  <el-form-item>
+                    <div>
+                      <p>描述:</p>
+                      <h1>{{props.row.description}}</h1>
+                    </div>
+                  </el-form-item>
+                </div>
+                <div class="expand-form-right">
+                  <el-form-item>
+                    <div>
+                      <p>库藏数量:</p>
+                      <span>{{props.row.totalNum}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>可借数量:</p>
+                      <span>{{props.row.outNum}}</span>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <div>
+                      <p>可借数量:</p>
+                      <span>{{props.row.haveNum}}</span>
+                    </div>
+                  </el-form-item>
+                </div>
               </el-form>
             </template>
           </el-table-column>
@@ -67,7 +133,13 @@
                   :auto-upload="false"
                 >
                   <div class="cover-uploader-button">
-                    <el-button type="warning" size="mini" slot="trigger" :disabled="!isEdit">上传封面</el-button>
+                    <el-button
+                      type="warning"
+                      size="mini"
+                      slot="trigger"
+                      :disabled="!isEdit"
+                      v-if="isEdit"
+                    >上传封面</el-button>
                   </div>
                 </el-upload>
               </div>
@@ -120,6 +192,7 @@
                   <el-button
                     size="mini"
                     type="primary"
+                    v-if="!isEdit"
                     :disabled="isEdit"
                     @click="handleEditChange"
                   >编辑</el-button>
@@ -127,7 +200,17 @@
                 <li>
                   <el-button
                     size="mini"
+                    type="primary"
+                    v-if="isEdit"
+                    :disabled="!isEdit"
+                    @click="handleEditCancel"
+                  >取消</el-button>
+                </li>
+                <li>
+                  <el-button
+                    size="mini"
                     type="success"
+                    v-if="isEdit"
                     :disabled="!isEdit"
                     @click="handleEditSave"
                   >保存</el-button>
@@ -164,110 +247,28 @@ export default {
         img: '/static/cover/blank_book.png',
         bookName: 'python',
         author: 'aa',
+        ISBN: '12345678901',
         publisher: 'bbb',
+        pubDate: '2018-4-1',
+        page: '335',
         type: 'cc',
+        description: 'wwwwwwwwwwwwssssssssssssssssssssssssssssssssaaaaaaaaaaaassddddddddddsssswwwww',
         totalNum: '3',
         outNum: '1',
         haveNum: '2'
       },
       {
         img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
+        bookName: 'javascript',
+        author: 'bb',
+        ISBN: '12345678901',
         publisher: 'bbb',
+        pubDate: '1993-5-9',
+        page: '68',
         type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2'
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
+        description: 'ddddddddddddssssssssssssssssssssssssssddddddddd',
+        totalNum: '2',
+        outNum: '0',
         haveNum: '2'
       }
     ],
@@ -291,6 +292,9 @@ export default {
   //   this.isEdit.fill(false)
   // },
   methods: {
+    handleAddBook () {
+      this.$router.push('/book/add-book')
+    },
     handleCurrentChange (index) {
       this.currentPage = index
     },
@@ -311,6 +315,9 @@ export default {
       this.isEdit = true
     },
     handleEditSave () {
+      this.isEdit = false
+    },
+    handleEditCancel () {
       this.isEdit = false
     }
   }
@@ -377,6 +384,51 @@ export default {
   width: 85px;
   height: 150px;
   margin: 0 0 5px 0;
+}
+
+.el-table .table-expand-form {
+  display: flex;
+  padding: 0 0 10px 0;
+  /* align-items: flex-end; */
+}
+
+.el-table .table-expand-form .el-form-item {
+  margin: 0;
+  height: 30px;
+}
+
+.el-table .table-expand-form .el-form-item div {
+  display: flex;
+  height: 30px;
+}
+
+.el-table .expand-form-left {
+  width: 220px;
+}
+
+.el-table .expand-form-right {
+  width: 250px;
+}
+
+.el-table .expand-form-center {
+  flex: 1;
+  padding: 0 80px 0 60px;
+  /* align-self: flex-start; */
+}
+
+.el-table .table-expand-form span {
+}
+
+.el-table .table-expand-form p {
+  width: 90px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.el-table .table-expand-form h1 {
+  font-size: 14px;
+  font-weight: normal;
+  word-break: break-all;
 }
 
 .search-footer {

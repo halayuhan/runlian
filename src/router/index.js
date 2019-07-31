@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-30 16:06:05
+ * @LastEditTime: 2019-07-31 14:00:07
  * @Description: file content
  */
 import Vue from 'vue'
@@ -72,9 +72,14 @@ const router = new Router({
               path: '/book',
               name: 'Book',
               component: () => import('@/pages/portal/book/index')
+            },
+            {
+              path: '/book/add-book',
+              name: 'AddBook',
+              component: () => import('@/pages/portal/add-book/index')
+
             }
           ]
-
         }
       ]
     }
