@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 15:31:57
+ * @LastEditTime: 2019-07-30 17:58:50
  * @Description: file content
  -->
 <template>
@@ -154,12 +154,11 @@ export default {
   // },
   methods: {
     _getUserinfo() {
-      let reg = /^[1]([3-9])[0-9]{9}$/;
+      let reg = /^[1]([3-9])[0-9]{9}$/
       if (!reg.test(this.form.phone.val)) {
         alert(this.form.phone.err_msg)
-      }
-      else {
-        alert("数据绑定中...")
+      } else {
+        alert('数据绑定中...')
         // this.$axios({
         //   methods: 'get',
         //   url: '/admin/signIn/getUserinfo',
@@ -206,20 +205,18 @@ export default {
         department: department.val,
         books: books.val
       }
-      window.localStorage.setItem('gender', params.gender);
-      window.localStorage.setItem('from', params.isInternal);
-      window.localStorage.setItem('name', params.userName);
-      window.localStorage.setItem('department', params.department);
-      window.localStorage.setItem('phone', params.phoneNumber);
-      window.localStorage.setItem('books', params.books);
-
+      window.localStorage.setItem('gender', params.gender)
+      window.localStorage.setItem('from', params.isInternal)
+      window.localStorage.setItem('name', params.userName)
+      window.localStorage.setItem('department', params.department)
+      window.localStorage.setItem('phone', params.phoneNumber)
+      window.localStorage.setItem('books', params.books)
 
       // this.$axios({
       //   methods: 'post',
       //   url: '/admin/signIn/submit',
       //   params
       // }).then((response) => {
-
 
       //   this.$router.push('/success');
       //   console.log(response)       //请求成功返回的数据

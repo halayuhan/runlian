@@ -1,3 +1,10 @@
+/*
+ * @Author: liyan
+ * @Date: 2019-07-25 21:11:13
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-07-30 10:39:26
+ * @Description: file content
+ */
 'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
@@ -11,7 +18,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-       '/admin/*': {
+      '/admin/*': {
         target: 'http://10.54.26.79:8080',
         secure: false,
         changeOrigin: true,

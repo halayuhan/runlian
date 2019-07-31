@@ -2,14 +2,14 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 16:12:24
+ * @LastEditTime: 2019-07-29 16:41:09
  * @Description: file content
  -->
 <template>
   <header class="portal-header">
     <div class="header-wrapper">
       <div class="header-wrapper-left">
-        <h1>Linksoul 读书会</h1>
+        <h1>Linksoul 读书会管理平台</h1>
       </div>
       <div class="header-wrapper-right" v-if="isLogin">
         <i>avatar</i>
