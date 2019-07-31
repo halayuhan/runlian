@@ -44,11 +44,11 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="inner" value="内部" v-model="from" />
+                <input type="radio" id="inner" value="Y" v-model="from" />
                 <label for="inner">内部</label>
               </li>
               <li>
-                <input type="radio" id="outer" value="外部" v-model="from" />
+                <input type="radio" id="outer" value="N" v-model="from" />
                 <label for="outer">外部</label>
               </li>
             </ul>
@@ -62,14 +62,7 @@
             <!-- <p v-if="errors.department">部门{{errors.department}}</p> -->
           </div>
         </div>
-        <div class="form-item">
-          <<<<<<< HEAD
-          <span>手机号码*</span>
-          <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
-            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
-          </div>
-        </div>
+
         <div class="form-item">
           <span>在读书籍*</span>
           <div class="form-item-input">
@@ -94,7 +87,7 @@ export default {
   data() {
     return {
       gender: '男',
-      from: '内部',
+      from: 'Y',
       form: {
         name: {
           val: '',
@@ -128,7 +121,7 @@ export default {
       this.form.phone.val = window.localStorage.getItem('phone');
     }
     else {
-      alert("当前用户无签到历史")
+      alert("请输入手机号搜索历史数据")
     }
   },
   computed: {
@@ -145,7 +138,7 @@ export default {
   //     else {
   //       this.$axios({
   //         methods: 'get',
-  //         url: '/admin/signIn/getUserinfo',
+  //         url: '/admin/signIn/getUser',
   //         data: this.form.phone.val,        })
   //         .then((response) => {
   //           this.gender = response.gender;
@@ -223,7 +216,7 @@ export default {
 
       // this.$axios({
       //   methods: 'post',
-      //   url: '/admin/user/addUser',
+      //   url: '/admin/signIn/submit',
       //   params
       // }).then((response) => {
 
