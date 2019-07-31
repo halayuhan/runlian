@@ -66,11 +66,13 @@ export default {
           params
         }).then((response) => {
           if (response.data.code == '000') {
-            this.$store.commit("GET_USER", response.name)
+
             alert(response.data.msg);
             this.$router.push('/search');
           }
-          else { alert(response.data.msg); }
+          else {
+            this.$store.commit("GET_USER", response.name)
+            alert(response.data.msg);          }
 
           console.log(response)       //请求成功返回的数据
         }).catch((error) => {

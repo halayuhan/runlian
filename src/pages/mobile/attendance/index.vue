@@ -44,11 +44,11 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="inner" value="内部" v-model="from" />
+                <input type="radio" id="inner" value="Y" v-model="from" />
                 <label for="inner">内部</label>
               </li>
               <li>
-                <input type="radio" id="outer" value="外部" v-model="from" />
+                <input type="radio" id="outer" value="N" v-model="from" />
                 <label for="outer">外部</label>
               </li>
             </ul>
@@ -62,13 +62,7 @@
             <!-- <p v-if="errors.department">部门{{errors.department}}</p> -->
           </div>
         </div>
-        <div class="form-item">
-          <span>手机号码*</span>
-          <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
-            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
-          </div>
-        </div>
+
         <div class="form-item">
           <span>在读书籍*</span>
           <div class="form-item-input">
@@ -90,10 +84,10 @@
 <script>
 export default {
   name: 'Attendance',
-  data () {
+  data() {
     return {
       gender: '男',
-      from: '内部',
+      from: 'Y',
       form: {
         name: {
           val: '',
@@ -119,18 +113,19 @@ export default {
     }
   },
   mounted: function () {
-    if (window.localStorage.getItem('phone')) { // 判断本地localStorage内是否存有用户历史信息
-      this.gender = window.localStorage.getItem('gender')
-      this.from = window.localStorage.getItem('from')
-      this.form.name.val = window.localStorage.getItem('name')
-      this.form.department.val = window.localStorage.getItem('department')
-      this.form.phone.val = window.localStorage.getItem('phone')
-    } else {
-      alert('当前用户无签到历史')
+    if (window.localStorage.getItem('phone')) {             //判断本地localStorage内是否存有用户历史信息
+      this.gender = window.localStorage.getItem('gender');
+      this.from = window.localStorage.getItem('from');
+      this.form.name.val = window.localStorage.getItem('name');
+      this.form.department.val = window.localStorage.getItem('department');
+      this.form.phone.val = window.localStorage.getItem('phone');
+    }
+    else {
+      alert("请输入手机号搜索历史数据")
     }
   },
   computed: {
-    channel () {
+    channel() {
       return this.form.phone.val
     }
   },
@@ -143,7 +138,7 @@ export default {
   //     else {
   //       this.$axios({
   //         methods: 'get',
-  //         url: '/admin/signIn/getUserinfo',
+  //         url: '/admin/signIn/getUser',
   //         data: this.form.phone.val,        })
   //         .then((response) => {
   //           this.gender = response.gender;
@@ -158,7 +153,7 @@ export default {
   //   }
   // },
   methods: {
-    _getUserinfo () {
+    _getUserinfo() {
       let reg = /^[1]([3-9])[0-9]{9}$/
       if (!reg.test(this.form.phone.val)) {
         alert(this.form.phone.err_msg)
@@ -180,7 +175,7 @@ export default {
       }
     },
 
-    _validate () {
+    _validate() {
       let isPass = false
       for (let key in this.form) {
         let reg = this.form[key].rules[0]
@@ -197,7 +192,7 @@ export default {
       return isPass
     },
 
-    loginSubmit () {
+    loginSubmit() {
       if (!this._validate()) {
         return
       }
@@ -219,7 +214,7 @@ export default {
 
       // this.$axios({
       //   methods: 'post',
-      //   url: '/admin/user/addUser',
+      //   url: '/admin/signIn/submit',
       //   params
       // }).then((response) => {
 

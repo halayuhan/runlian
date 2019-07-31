@@ -15,16 +15,16 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import store from './store'
 import md5 from 'js-md5'
-import { addCookie, getCookie, removeCookie } from './api/cookie'
-axios.defaults.baseURL = 'http://10.54.26.79:8080'
+import { getDate } from './api/dateFormat'
+require('./mock/mock')
+// import { addCookie, getCookie, removeCookie } from './api/cookie'
+// axios.defaults.baseURL = 'http://10.54.26.79:8080'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.$axios = axios
-Vue.prototype.addCookie = addCookie
-Vue.prototype.getCookie = getCookie
-Vue.prototype.removeCookie = removeCookie
+Vue.prototype.getDate = getDate
 
 /* eslint-disable no-new */
 new Vue({
