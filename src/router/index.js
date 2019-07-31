@@ -60,18 +60,24 @@ const router = new Router({
           redirect: '/check-in',
           component: () => import('@/pages/portal/search/index'),
           meta: {
-            // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+            requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
           },
           children: [
             {
               path: '/check-in',
               name: 'CheckIn',
-              component: () => import('@/pages/portal/check-in/index')
+              component: () => import('@/pages/portal/check-in/index'),
+              meta: {
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+              },
             },
             {
               path: '/book',
               name: 'Book',
-              component: () => import('@/pages/portal/book/index')
+              component: () => import('@/pages/portal/book/index'),
+              meta: {
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+              },
             }
           ]
 
@@ -85,6 +91,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
     if (user) {
+
       // 通过vuex state获取当前的用户是否存在
       next()
     } else {
@@ -96,6 +103,15 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     next()
+  }
+  if(to.path=='/login'){
+    if(user){
+      next({
+        path:'/search'
+      })
+    }else{
+      next()
+    }
   }
 })
 

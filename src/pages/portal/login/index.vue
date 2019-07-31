@@ -62,18 +62,15 @@ export default {
       } else {
         this.$axios({
           methods: 'get',
-          url: '/admin/adminLogin',
+          url: '/admin/login',
           params
         }).then((response) => {
-          if (response.data.code == '000') {
-
-            alert(response.data.msg);
-            this.$router.push('/search');
+          if (response.data.code != '000') {
+            alert(response.data.msg);          
           }
           else {
-            this.$store.commit("GET_USER", response.name)
-            alert(response.data.msg);          }
-
+            this.$store.commit("GET_USER", response.data.data.adminName)
+            this.$router.push('/search')          }
           console.log(response)       //请求成功返回的数据
         }).catch((error) => {
           alert('登录失败')

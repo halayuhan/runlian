@@ -137,108 +137,7 @@ export default {
       }, // 日期组件配置选项
       downloadVisible: false, // 是否显示导出Excel对话框
       filterInput: '', // 用于过滤的输入
-      tableData: [
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '你一生的故事',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '哈利波特',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '水问',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '水问',
-        //   time: '2019-9-10'
-        // }
-
-      ], // 所有表格数据
+      tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10 // 每页显示行数
     }
@@ -255,36 +154,35 @@ export default {
   },
   created() {
     const params = {
-      startTime: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-      endTime: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+      start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+      end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
       userName: this.filterInput
     }
     console.log(params)
-
     this.$axios({
       methods: 'get',
-      url: 'https://easy-mock.com/mock/5d3ec513bc6be23df0684d4f/example/mock',
+      url: '/signIn/getRecord',
       params
     }).then((response) => {
-      // console.log(response.data.data.attends)
+
       this.tableData = []
-      // if (response.success == true) {
-      //   alert(response.msg);
-      // }
-      // else {
-      for (let i = 0; i < response.data.data.attends.length; i++) {
-        let tableItem = {
-          userName: response.data.data.attends[i].userName,
-          gender: response.data.data.attends[i].gender,
-          isInternal: response.data.data.attends[i].isInternal,
-          department: response.data.data.attends[i].department,
-          phoneNumber: response.data.data.attends[i].phoneNumber,
-          bookName: response.data.data.attends[i].bookName,
-          time: response.data.data.attends[i].time
-        }
-        this.tableData.push(tableItem)
+      if (response.data.code != '000') {
+        alert(response.data.msg);
       }
-      // }
+      else {
+        for (let i = 0; i < response.data.data.length; i++) {
+          let tableItem = {
+            userName: response.data.data[i].userName,
+            gender: response.data.data[i].gender == 'M' ? '男' : '女',
+            isInternal: response.data.data[i].isInternal == 'Y' ? '内部' : '外部',
+            department: response.data.data[i].department,
+            phoneNumber: response.data.data[i].phoneNumber,
+            bookName: response.data.data[i].book,
+            time: response.data.data[i].timeString
+          }
+          this.tableData.push(tableItem)
+        }
+      }
       //请求成功返回的数据
     }).catch((error) => {
       console.error(error) // 请求失败返回的数据
@@ -297,38 +195,38 @@ export default {
   methods: {
     filterSearch() {
       const params = {
-        startTime: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        endTime: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+        start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+        end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
         userName: this.filterInput
       }
       console.log(params)// 过滤搜索
-      // this.$axios({
-      //   methods: 'get',
-      //   url: '/admin/signIn/getRecord',
-      //   params
-      // }).then((response) => {
-      //   this.tableData = []
-      //   if (response.data.code == '101') {
-      //     alert(response.msg);
-      //   }
-      //   else {
-      //     for (let i = 0; i < response.attends.length; i++) {
-      //       let tableItem = {
-      //         userName: response.attends[i].userName,
-      //         gender: response.attends[i].gender,
-      //         isInternal: response.attends[i].isInternal,
-      //         department: response.attends[i].department,
-      //         phoneNumber: response.attends[i].phoneNumber,
-      //         bookName: response.attends[i].bookName,
-      //         time: response.attends[i].time
-      //       }
-      //       this.tableData.push(tableItem)
-      //     }       
-      //   }
-      //   console.log(response)       //请求成功返回的数据
-      // }).catch((error) => {
-      //   console.error(error) // 请求失败返回的数据
-      // })
+      this.$axios({
+        methods: 'get',
+        url: '/signIn/getRecord',
+        params
+      }).then((response) => {
+        this.tableData = []
+        if (response.data.code != '000') {
+          alert(response.data.msg);
+        }
+        else {
+          for (let i = 0; i < response.data.data.length; i++) {
+            let tableItem = {
+              userName: response.data.data[i].userName,
+              gender: response.data.data[i].gender == 'M' ? '男' : '女',
+              isInternal: response.data.data[i].isInternal == 'Y' ? '内部' : '外部',
+              department: response.data.data[i].department,
+              phoneNumber: response.data.data[i].phoneNumber,
+              bookName: response.data.data[i].book,
+              time: response.data.data[i].timeString
+            }
+            this.tableData.push(tableItem)
+          }
+        }
+        console.log(response)       //请求成功返回的数据
+      }).catch((error) => {
+        console.error(error) // 请求失败返回的数据
+      })
       console.log(this.filterInput)
     },
     downloadExcel() {

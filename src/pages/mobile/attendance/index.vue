@@ -28,11 +28,11 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="male" value="男" v-model="gender" />
+                <input type="radio" id="male" value="M" v-model="gender" />
                 <label for="male">男</label>
               </li>
               <li>
-                <input type="radio" id="female" value="女" v-model="gender" />
+                <input type="radio" id="female" value="W" v-model="gender" />
                 <label for="female">女</label>
               </li>
             </ul>
@@ -44,11 +44,11 @@
           <div class="form-item-input">
             <ul>
               <li>
-                <input type="radio" id="inner" value="Y" v-model="from" />
+                <input type="radio" id="inner" value="Y" v-model="isInternal" />
                 <label for="inner">内部</label>
               </li>
               <li>
-                <input type="radio" id="outer" value="N" v-model="from" />
+                <input type="radio" id="outer" value="N" v-model="isInternal" />
                 <label for="outer">外部</label>
               </li>
             </ul>
@@ -71,10 +71,10 @@
           </div>
         </div>
         <div class="center">
-          <button @click.prevent="loginSubmit">签到</button>
+          <button @click.prevent="attendSubmit">签到</button>
         </div>
         <!-- <center>
-          <button @click.prevent="loginSubmit">签到</button>
+          <button @click.prevent="attendSubmit">签到</button>
         </center>-->
       </form>
     </div>
@@ -86,8 +86,8 @@ export default {
   name: 'Attendance',
   data() {
     return {
-      gender: '男',
-      from: 'Y',
+      gender: 'M',
+      isInternal: 'Y',
       form: {
         name: {
           val: '',
@@ -97,7 +97,7 @@ export default {
         department: {
           val: '',
           err_msg: '请输入正确部门',
-          rules: [/^[\u4e00-\u9fffa-zA-Z]{1,15}$/]
+          rules: [/^[\u4e00-\u9fffa-zA-Z\\-]{1,15}$/]
         },
         phone: {
           val: '',
@@ -115,7 +115,7 @@ export default {
   mounted: function () {
     if (window.localStorage.getItem('phone')) {             //判断本地localStorage内是否存有用户历史信息
       this.gender = window.localStorage.getItem('gender');
-      this.from = window.localStorage.getItem('from');
+      this.isInternal = window.localStorage.getItem('isInternal');
       this.form.name.val = window.localStorage.getItem('name');
       this.form.department.val = window.localStorage.getItem('department');
       this.form.phone.val = window.localStorage.getItem('phone');
@@ -139,7 +139,7 @@ export default {
   //       this.$axios({
   //         methods: 'get',
   //         url: '/admin/signIn/getUser',
-  //         data: this.form.phone.val,        })
+  //         data: {phoneNumber:this.form.phone.val}        })
   //         .then((response) => {
   //           this.gender = response.gender;
   //           this.from = response.from;
@@ -154,24 +154,35 @@ export default {
   // },
   methods: {
     _getUserinfo() {
+      const params = {
+        phoneNumber: this.form.phone.val
+      }
       let reg = /^[1]([3-9])[0-9]{9}$/
       if (!reg.test(this.form.phone.val)) {
         alert(this.form.phone.err_msg)
       } else {
         alert('数据绑定中...')
-        // this.$axios({
-        //   methods: 'get',
-        //   url: '/admin/signIn/getUserinfo',
-        //   data: this.form.phone.val,        })
-        //   .then((response) => {
-        //     this.gender = response.gender;
-        //     this.from = response.from;
-        //     this.form.name.val = response.name;
-        //     this.form.department.val = response.department;
-        //     console.log(response)       //请求成功返回的数据
-        //   }).catch((error) => {
-        //     console.error(error)       //请求失败返回的数据
-        //   })
+        this.$axios({
+          methods: 'get',
+          url: '/signIn/getUser',
+          params,        })
+          .then((response) => {
+            if (response.data.code != '000') {
+              alert("当前用户无签到历史")
+              localStorage.clear()
+              this.form.name.val = ''
+              this.form.department.val = ''
+            }
+            else {
+              this.gender = response.data.data.gender;
+              this.isInternal = response.data.data.isInternal;
+              this.form.name.val = response.data.data.userName;
+              this.form.department.val = response.data.data.department;
+            }
+            console.log(response)       //请求成功返回的数据
+          }).catch((error) => {
+            console.error(error)       //请求失败返回的数据
+          })
       }
     },
 
@@ -192,37 +203,41 @@ export default {
       return isPass
     },
 
-    loginSubmit() {
+    attendSubmit() {
       if (!this._validate()) {
         return
       }
       const { name, department, phone, books } = this.form
       const params = {
         gender: this.gender,
-        isInternal: this.from,
+        isInternal: this.isInternal,
         userName: name.val,
         phoneNumber: phone.val,
         department: department.val,
-        books: books.val
+        bookName: books.val
       }
       window.localStorage.setItem('gender', params.gender)
-      window.localStorage.setItem('from', params.isInternal)
+      window.localStorage.setItem('isInternal', params.isInternal)
       window.localStorage.setItem('name', params.userName)
       window.localStorage.setItem('department', params.department)
       window.localStorage.setItem('phone', params.phoneNumber)
-      window.localStorage.setItem('books', params.books)
+      window.localStorage.setItem('books', params.bookName)
 
-      // this.$axios({
-      //   methods: 'post',
-      //   url: '/admin/signIn/submit',
-      //   params
-      // }).then((response) => {
-
-      //   this.$router.push('/success');
-      //   console.log(response)       //请求成功返回的数据
-      // }).catch((error) => {
-      //   console.error(error)       //请求失败返回的数据
-      // })
+      this.$axios({
+        methods: 'post',
+        url: '/signIn/submit',
+        params
+      }).then((response) => {
+        if (response.data.code != '000') {
+          alert('签到失败')
+        }
+        else {
+          this.$router.push('/success');
+        }
+        console.log(response)       //请求成功返回的数据
+      }).catch((error) => {
+        console.error(error)       //请求失败返回的数据
+      })
     }
   }
 }
