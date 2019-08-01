@@ -2,12 +2,12 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:08:17
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-23 20:40:14
+ * @LastEditTime: 2019-08-01 19:20:07
  * @Description: file content
  -->
 <template>
-  <div id="success">
-    <div class="container">
+  <div class="success">
+    <div class="success-container">
       <div class="success-box">
         <i class="el-icon-check"></i>
         <p>签到成功</p>
@@ -22,12 +22,12 @@ export default {
 }
 </script>
 
-<style scoped>
-#success {
+<style>
+.success {
   height: 100%;
 }
 
-.container {
+.success-container {
   height: 100%;
   /* display: flex;
   justify-content: center; */
@@ -41,15 +41,17 @@ export default {
   height: 120px;
   margin: 160px auto;
   /* border: 2px solid #4d4d4d; */
-  border-radius: 4px;
-  background-color: #4d4d4d;
+  border-radius: 60px;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .success-box i::before {
   font-size: 60px;
-  color: #fff;
+  font-weight: bold;
+  color: #218482;
 }
 
 .success-box p {
-  color: #fff;
+  color: #218482;
+  font-weight: bold;
 }
 </style>

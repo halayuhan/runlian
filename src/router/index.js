@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-31 14:00:07
+ * @LastEditTime: 2019-08-01 19:15:34
  * @Description: file content
  */
 import Vue from 'vue'
@@ -12,7 +12,7 @@ import store from '../store'
 Vue.use(Router)
 
 const router = new Router({
-  // mode:'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -60,24 +60,32 @@ const router = new Router({
           redirect: '/check-in',
           component: () => import('@/pages/portal/search/index'),
           meta: {
-            // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+            requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
           },
           children: [
             {
               path: '/check-in',
               name: 'CheckIn',
-              component: () => import('@/pages/portal/check-in/index')
+              component: () => import('@/pages/portal/check-in/index'),
+              meta: {
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+              }
             },
             {
               path: '/book',
               name: 'Book',
-              component: () => import('@/pages/portal/book/index')
+              component: () => import('@/pages/portal/book/index'),
+              meta: {
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+              }
             },
             {
               path: '/book/add-book',
               name: 'AddBook',
-              component: () => import('@/pages/portal/add-book/index')
-
+              component: () => import('@/pages/portal/add-book/index'),
+              meta: {
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+              }
             }
           ]
         }
@@ -90,7 +98,6 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
     if (user) {
-      // 通过vuex state获取当前的用户是否存在
       next()
     } else {
       console.log('该页面需要登陆')
@@ -101,6 +108,15 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     next()
+  }
+  if (to.path == '/login') {
+    if (user) {
+      next({
+        path: '/search'
+      })
+    } else {
+      next()
+    }
   }
 })
 

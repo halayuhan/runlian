@@ -19,7 +19,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin/*': {
-        target: 'http://10.54.26.79:8080',
+        target: 'http://10.54.24.62:8080',
         secure: false,
         changeOrigin: true,
         pathRewrite: {

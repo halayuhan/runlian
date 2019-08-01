@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-26 09:10:27
+ * @LastEditTime: 2019-08-01 16:55:16
  * @Description: file content
  -->
 <template>
@@ -17,7 +17,7 @@
       </div>
       <div class="user-entry">
         <div class="user-entry-header">
-          <i>avatar</i>
+          <i class="el-icon-user"></i>
           <p>管理员登录</p>
         </div>
         <div class="user-entry-container">
@@ -44,17 +44,17 @@
 export default {
   name: 'Login',
 
-  data() {
+  data () {
     return {
       username: '',
       password: ''
     }
   },
   methods: {
-    login_Submit() {
+    login_Submit () {
       const params = {
         adminName: this.username,
-        password: this.password,
+        password: this.password
       }
       console.log(params)
       if (this.username == '' || this.password == '') {
@@ -62,19 +62,16 @@ export default {
       } else {
         this.$axios({
           methods: 'get',
-          url: '/admin/adminLogin',
+          url: '/admin/login',
           params
         }).then((response) => {
-          if (response.data.code == '000') {
-
-            alert(response.data.msg);
-            this.$router.push('/search');
+          if (response.data.code != '000') {
+            alert(response.data.msg)
+          } else {
+            this.$store.commit('GET_USER', response.data.data.adminName)
+            this.$router.push('/search')
           }
-          else {
-            this.$store.commit("GET_USER", response.name)
-            alert(response.data.msg);          }
-
-          console.log(response)       //请求成功返回的数据
+          console.log(response) // 请求成功返回的数据
         }).catch((error) => {
           alert('登录失败')
           console.error(error) // 请求失败返回的数据
@@ -85,7 +82,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .login {
   height: 100%;
   position: relative;
@@ -101,7 +98,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  /* background-color: rgba(0, 0, 0, 0.4); */
 }
 
 .login-wrapper {
@@ -113,7 +110,7 @@ export default {
   z-index: 99;
   /* background-color: #ccc; */
   background: url("../../../assets/bc_book.jpg") no-repeat;
-  background-size: 100vw 100vh;
+  background-size: 100% 100%;
 }
 
 .slogan {
@@ -123,7 +120,7 @@ export default {
 }
 
 .slogan p {
-  color: #fff;
+  color: #1e8280;
   font-size: 24px;
   line-height: 50px;
   /* font-weight: bold; */
@@ -133,7 +130,7 @@ export default {
   width: 480px;
   /* height: 300px; */
   padding: 20px 40px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   z-index: 99;
 }
@@ -148,13 +145,21 @@ export default {
   display: inline-block;
   width: 60px;
   height: 60px;
-  background-color: #ccc;
+}
+
+.user-entry-header .el-icon-user {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  font-size: 60px;
+  color: #666;
 }
 
 .user-entry-header p {
   height: 40px;
   line-height: 40px;
   font-size: 18px;
+  color: #333;
 }
 
 .user-entry-container .center {
@@ -167,7 +172,7 @@ export default {
   border-radius: 4px;
   margin: 30px 0 0 0;
   color: #fff;
-  background-color: #169bd5;
+  background-color: #5caaab;
 }
 
 .form-item {
@@ -179,13 +184,14 @@ export default {
 .form-item label {
   height: 30px;
   line-height: 30px;
+  color: #333;
 }
 .form-item input {
   display: inline-block;
   height: 40px;
   padding: 5px;
   line-height: 30px;
-  border: 1px solid #000;
+  border: 1px solid #666;
   border-radius: 2px;
 }
 </style>

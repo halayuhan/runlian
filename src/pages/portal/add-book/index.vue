@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-31 16:35:43
+ * @LastEditTime: 2019-08-01 13:46:15
  * @Description: file content
  -->
 <template>
@@ -110,7 +110,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .add-book-wrapper {
   padding: 30px 40px;
 }
@@ -144,7 +144,7 @@ export default {
   align-items: flex-end;
 }
 
-.add-book-form .form-col-2 .cover-uploader >>> .el-upload {
+.add-book-form .form-col-2 .cover-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
@@ -152,7 +152,7 @@ export default {
   overflow: hidden;
 }
 
-.add-book-form .form-col-2 .cover-uploader >>> .el-upload:hover {
+.add-book-form .form-col-2 .cover-uploader .el-upload:hover {
   border-color: #409eff;
 }
 

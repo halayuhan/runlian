@@ -2,12 +2,12 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 17:38:41
+ * @LastEditTime: 2019-08-01 13:43:49
  * @Description: file content
  -->
 <template>
   <div class="check-in">
-    <div class="check-in-wrapper">
+    <div :class="['check-in-wrapper', {'no-scroll': qrcodeVisible}]">
       <div class="search-handle">
         <div class="search-handle-left">
           <div class="time-picker">
@@ -98,7 +98,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data() {
+  data () {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -107,19 +107,19 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
         },
         shortcuts: [
           {
             text: '今天',
-            onClick(picker) {
+            onClick (picker) {
               picker.$emit('pick', new Date())
             }
           },
           {
             text: '昨天',
-            onClick(picker) {
+            onClick (picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24)
               picker.$emit('pick', date)
@@ -127,7 +127,7 @@ export default {
           },
           {
             text: '一周前',
-            onClick(picker) {
+            onClick (picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', date)
@@ -137,108 +137,7 @@ export default {
       }, // 日期组件配置选项
       downloadVisible: false, // 是否显示导出Excel对话框
       filterInput: '', // 用于过滤的输入
-      tableData: [
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '红与黑',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '你一生的故事',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '哈利波特',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '水问',
-        //   time: '2019-9-10'
-        // },
-        // {
-        //   userName: 'lili',
-        //   gender: '女',
-        //   isInternal: '是',
-        //   department: '外部',
-        //   phoneNumber: '122345677',
-        //   bookName: '水问',
-        //   time: '2019-9-10'
-        // }
-
-      ], // 所有表格数据
+      tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10 // 每页显示行数
     }
@@ -246,92 +145,88 @@ export default {
 
   computed: {
 
-    total() {
+    total () {
       return this.tableData.length
     }, // 总数据量
-    pageData() {
+    pageData () {
       return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
     } // 当前页显示数据
   },
-  created() {
+  created () {
     const params = {
-      startTime: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-      endTime: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+      start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+      end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
       userName: this.filterInput
     }
     console.log(params)
-
     this.$axios({
       methods: 'get',
-      url: 'https://easy-mock.com/mock/5d3ec513bc6be23df0684d4f/example/mock',
+      url: '/signIn/getRecord',
       params
     }).then((response) => {
-      // console.log(response.data.data.attends)
       this.tableData = []
-      // if (response.success == true) {
-      //   alert(response.msg);
-      // }
-      // else {
-      for (let i = 0; i < response.data.data.attends.length; i++) {
-        let tableItem = {
-          userName: response.data.data.attends[i].userName,
-          gender: response.data.data.attends[i].gender,
-          isInternal: response.data.data.attends[i].isInternal,
-          department: response.data.data.attends[i].department,
-          phoneNumber: response.data.data.attends[i].phoneNumber,
-          bookName: response.data.data.attends[i].bookName,
-          time: response.data.data.attends[i].time
+      if (response.data.code != '000') {
+        alert(response.data.msg)
+      } else {
+        for (let i = 0; i < response.data.data.length; i++) {
+          let tableItem = {
+            userName: response.data.data[i].userName,
+            gender: response.data.data[i].gender == 'M' ? '男' : '女',
+            isInternal: response.data.data[i].isInternal == 'Y' ? '内部' : '外部',
+            department: response.data.data[i].department,
+            phoneNumber: response.data.data[i].phoneNumber,
+            bookName: response.data.data[i].book,
+            time: response.data.data[i].timeString
+          }
+          this.tableData.push(tableItem)
         }
-        this.tableData.push(tableItem)
       }
-      // }
-      //请求成功返回的数据
+      // 请求成功返回的数据
     }).catch((error) => {
       console.error(error) // 请求失败返回的数据
     })
   },
-  mounted() {
+  mounted () {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   methods: {
-    filterSearch() {
+    filterSearch () {
       const params = {
-        startTime: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        endTime: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+        start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+        end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
         userName: this.filterInput
       }
       console.log(params)// 过滤搜索
-      // this.$axios({
-      //   methods: 'get',
-      //   url: '/admin/signIn/getRecord',
-      //   params
-      // }).then((response) => {
-      //   this.tableData = []
-      //   if (response.data.code == '101') {
-      //     alert(response.msg);
-      //   }
-      //   else {
-      //     for (let i = 0; i < response.attends.length; i++) {
-      //       let tableItem = {
-      //         userName: response.attends[i].userName,
-      //         gender: response.attends[i].gender,
-      //         isInternal: response.attends[i].isInternal,
-      //         department: response.attends[i].department,
-      //         phoneNumber: response.attends[i].phoneNumber,
-      //         bookName: response.attends[i].bookName,
-      //         time: response.attends[i].time
-      //       }
-      //       this.tableData.push(tableItem)
-      //     }       
-      //   }
-      //   console.log(response)       //请求成功返回的数据
-      // }).catch((error) => {
-      //   console.error(error) // 请求失败返回的数据
-      // })
+      this.$axios({
+        methods: 'get',
+        url: '/signIn/getRecord',
+        params
+      }).then((response) => {
+        this.tableData = []
+        if (response.data.code != '000') {
+          alert(response.data.msg)
+        } else {
+          for (let i = 0; i < response.data.data.length; i++) {
+            let tableItem = {
+              userName: response.data.data[i].userName,
+              gender: response.data.data[i].gender == 'M' ? '男' : '女',
+              isInternal: response.data.data[i].isInternal == 'Y' ? '内部' : '外部',
+              department: response.data.data[i].department,
+              phoneNumber: response.data.data[i].phoneNumber,
+              bookName: response.data.data[i].book,
+              time: response.data.data[i].timeString
+            }
+            this.tableData.push(tableItem)
+          }
+        }
+        console.log(response) // 请求成功返回的数据
+      }).catch((error) => {
+        console.error(error) // 请求失败返回的数据
+      })
       console.log(this.filterInput)
     },
-    downloadExcel() {
+    downloadExcel () {
       const params = {
         startTime: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         endTime: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
@@ -343,35 +238,34 @@ export default {
         params,
         responseType: 'blob'
       }).then((response) => {
-
         const link = this.$createElement('a')
-        let blob = new Blob([response.excel], { type: 'application/vnd.ms-excel' });
+        let blob = new Blob([response.excel], { type: 'application/vnd.ms-excel' })
         link.style.display = 'none'
-        link.href = URL.createObjectURL(blob);
+        link.href = URL.createObjectURL(blob)
         link.download = '导出签到列表.xlsx'
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
-        console.log(response)       //请求成功返回的数据
+        console.log(response) // 请求成功返回的数据
       }).catch((error) => {
-        alert("下载失败")
+        alert('下载失败')
         console.error(error) // 请求失败返回的数据
       })
       this.downloadVisible = false
     },
-    showMask() {
+    showMask () {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.26.214:8080/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeObject.makeCode('http://10.54.26.214:8081/#/attendance' + '#' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask() {
+    closeMask () {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode() {
+    qrcode () {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -389,17 +283,22 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       this.currentPage = index
     },
-    handleSizeChange(index) {
+    handleSizeChange (index) {
       this.pageSize = index
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
+.no-scroll {
+  height: calc(100vh - 130px);
+  overflow: hidden;
+}
+
 .search-handle {
   display: flex;
   justify-content: space-between;
@@ -435,7 +334,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0;

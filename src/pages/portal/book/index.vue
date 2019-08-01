@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-31 16:43:25
+ * @LastEditTime: 2019-08-01 13:47:10
  * @Description: file content
  -->
 <template>
@@ -137,8 +137,8 @@
                       type="warning"
                       size="mini"
                       slot="trigger"
-                      :disabled="!isEdit"
-                      v-if="isEdit"
+                      v-if="scope.row.edit"
+                      :disabled="!scope.row.edit"
                     >上传封面</el-button>
                   </div>
                 </el-upload>
@@ -147,25 +147,33 @@
           </el-table-column>
           <el-table-column label="书籍名称" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.bookName" v-if="isEdit"></el-input>
+              <template v-if="scope.row.edit">
+                <el-input v-model="scope.row.bookName"></el-input>
+              </template>
               <span v-else>{{scope.row.bookName}}</span>
             </template>
           </el-table-column>
           <el-table-column label="作者" prop="author" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.author" v-if="isEdit"></el-input>
+              <template v-if="scope.row.edit">
+                <el-input v-model="scope.row.author"></el-input>
+              </template>
               <span v-else>{{scope.row.author}}</span>
             </template>
           </el-table-column>
           <el-table-column label="出版社" prop="publisher" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.publisher" v-if="isEdit"></el-input>
+              <template v-if="scope.row.edit">
+                <el-input v-model="scope.row.publisher"></el-input>
+              </template>
               <span v-else>{{scope.row.publisher}}</span>
             </template>
           </el-table-column>
           <el-table-column label="书籍类型" prop="type" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.type" v-if="isEdit"></el-input>
+              <template v-if="scope.row.edit">
+                <el-input v-model="scope.row.type"></el-input>
+              </template>
               <span v-else>{{scope.row.type}}</span>
             </template>
           </el-table-column>
@@ -174,12 +182,16 @@
               <ul>
                 <li>
                   <p>在库</p>
-                  <el-input v-model="scope.row.haveNum" size="mini" v-if="isEdit"></el-input>
+                  <template v-if="scope.row.edit">
+                    <el-input v-model="scope.row.haveNum" size="mini"></el-input>
+                  </template>
                   <span v-else>{{scope.row.haveNum}}</span>
                 </li>
                 <li>
                   <p>出库</p>
-                  <el-input v-model="scope.row.outNum" size="mini" v-if="isEdit"></el-input>
+                  <template v-if="scope.row.edit">
+                    <el-input v-model="scope.row.outNum" size="mini"></el-input>
+                  </template>
                   <span v-else>{{scope.row.outNum}}</span>
                 </li>
               </ul>
@@ -192,27 +204,26 @@
                   <el-button
                     size="mini"
                     type="primary"
-                    v-if="!isEdit"
-                    :disabled="isEdit"
-                    @click="handleEditChange"
+                    :disabled="scope.row.edit"
+                    @click="handleEditChange(scope.$index,scope.row)"
                   >编辑</el-button>
                 </li>
                 <li>
                   <el-button
                     size="mini"
                     type="primary"
-                    v-if="isEdit"
-                    :disabled="!isEdit"
-                    @click="handleEditCancel"
+                    v-if="scope.row.edit"
+                    :disabled="!scope.row.edit"
+                    @click="handleEditCancel(scope.$index,scope.row)"
                   >取消</el-button>
                 </li>
                 <li>
                   <el-button
                     size="mini"
                     type="success"
-                    v-if="isEdit"
-                    :disabled="!isEdit"
-                    @click="handleEditSave"
+                    :disabled="!scope.row.edit"
+                    v-if="scope.row.edit"
+                    @click="handleEditSave(scope.$index,scope.row)"
                   >保存</el-button>
                 </li>
               </ul>
@@ -255,13 +266,96 @@ export default {
         description: 'wwwwwwwwwwwwssssssssssssssssssssssssssssssssaaaaaaaaaaaassddddddddddsssswwwww',
         totalNum: '3',
         outNum: '1',
+        haveNum: '2',
+        edit: false
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'python',
+        author: 'aa',
+        publisher: 'bbb',
+        type: 'cc',
+        totalNum: '3',
+        outNum: '1',
+        haveNum: '2',
+        edit: false
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'python',
+        author: 'aa',
+        publisher: 'bbb',
+        type: 'cc',
+        totalNum: '3',
+        outNum: '1',
+        haveNum: '2',
+        edit: false
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'js',
+        author: 'xx',
+        publisher: 'yyy',
+        type: 'zz',
+        totalNum: '4',
+        outNum: '2',
+        haveNum: '2',
+        edit: false
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'js',
+        author: 'xx',
+        publisher: 'yyy',
+        type: 'zz',
+        totalNum: '4',
+        outNum: '2',
         haveNum: '2'
       },
       {
         img: '/static/cover/blank_book.png',
-        bookName: 'javascript',
-        author: 'bb',
-        ISBN: '12345678901',
+        bookName: 'python',
+        author: 'aa',
+        publisher: 'bbb',
+        type: 'cc',
+        totalNum: '3',
+        outNum: '1',
+        haveNum: '2'
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'js',
+        author: 'xx',
+        publisher: 'yyy',
+        type: 'zz',
+        totalNum: '4',
+        outNum: '2',
+        haveNum: '2'
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'python',
+        author: 'aa',
+        publisher: 'bbb',
+        type: 'cc',
+        totalNum: '3',
+        outNum: '1',
+        haveNum: '2'
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'js',
+        author: 'xx',
+        publisher: 'yyy',
+        type: 'zz',
+        totalNum: '4',
+        outNum: '2',
+        haveNum: '2'
+      },
+      {
+        img: '/static/cover/blank_book.png',
+        bookName: 'python',
+        author: 'aa',
         publisher: 'bbb',
         pubDate: '1993-5-9',
         page: '68',
@@ -273,8 +367,8 @@ export default {
       }
     ],
     currentPage: 1, // 当前页码
-    pageSize: 10, // 每页显示行数
-    isEdit: false
+    pageSize: 10 // 每页显示行数
+
   }),
   computed: {
     total () {
@@ -311,20 +405,20 @@ export default {
       const imageUrl = '/static/cover/' + file.name
       this.pageData[index].img = imageUrl
     },
-    handleEditChange () {
-      this.isEdit = true
+    handleEditChange (index, row) {
+      row.edit = true
     },
-    handleEditSave () {
-      this.isEdit = false
+    handleEditSave (index, row) {
+      row.edit = false
     },
-    handleEditCancel () {
-      this.isEdit = false
+    handleEditCancel (index, row) {
+      row.edit = false
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 .search-handle {
   display: flex;
   justify-content: space-between;
