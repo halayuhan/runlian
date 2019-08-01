@@ -12,7 +12,7 @@ import store from '../store'
 Vue.use(Router)
 
 const router = new Router({
-  // mode:'history',
+  mode:'history',
   routes: [
     {
       path: '/',
@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
     // 判断该路由是否需要登录权限
     if (user) {
 
-      // 通过vuex state获取当前的用户是否存在
+     
       next()
     } else {
       console.log('该页面需要登陆')
