@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 13:43:49
+ * @LastEditTime: 2019-08-02 11:32:24
  * @Description: file content
  -->
 <template>
@@ -14,12 +14,14 @@
             <el-date-picker
               v-model="timeStart"
               type="date"
+              :clearable="false"
               placeholder="选择起始时间"
               :picker-options="pickerOptions"
             ></el-date-picker>
             <el-date-picker
               v-model="timeEnd"
               type="date"
+              :clearable="false"
               placeholder="选择结束时间"
               :picker-options="pickerOptions"
             ></el-date-picker>
@@ -140,10 +142,10 @@ export default {
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
-      total: 100    //总数据量
+      total: 100 // 总数据量
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
   mounted () {
@@ -151,7 +153,7 @@ export default {
     this.qrcode()
   },
   methods: {
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       // TODO
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
@@ -171,8 +173,7 @@ export default {
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
           return
-        }
-        else {
+        } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
             let { userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
@@ -189,22 +190,22 @@ export default {
         console.error(error) // 请求失败返回的数据
       })
     },
-    filterSearch() {
+    filterSearch () {
       const paramsData = {
         // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
         // userName: this.filterInput,
-        page: 1,
+        page: 1
         // pageSize: this.pageSize
       }
       this.queryData(paramsData)
     },
 
-    downloadExcel() {
+    downloadExcel () {
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
-        userName: this.filterInput,
+        userName: this.filterInput
 
       }
       this.$axios({
@@ -213,19 +214,17 @@ export default {
         params,
         responseType: 'blob'
       }).then((response) => {
-
-        let blob = new Blob([response.data.data.body], { type: 'application/vnd.ms-excel' });
-        const link = document.createElement('a');     // 创建a标签
-        const href = window.URL.createObjectURL(blob);       // 创建下载的链接
-        link.href = href;
-        link.download = '签到信息表.xls';  // 下载后文件名
-        document.body.appendChild(link);
-        link.click();     // 点击下载
-        document.body.removeChild(link); // 下载完成移除元素
+        let blob = new Blob([response.data.data.body], { type: 'application/vnd.ms-excel' })
+        const link = document.createElement('a') // 创建a标签
+        const href = window.URL.createObjectURL(blob) // 创建下载的链接
+        link.href = href
+        link.download = '签到信息表.xls' // 下载后文件名
+        document.body.appendChild(link)
+        link.click() // 点击下载
+        document.body.removeChild(link) // 下载完成移除元素
         window.URL.revokeObjectURL(href) // 释放掉blob对象
 
-
-        console.log(response)       //请求成功返回的数据
+        console.log(response) // 请求成功返回的数据
       }).catch((error) => {
         alert('下载失败')
         console.error(error) // 请求失败返回的数据
@@ -262,7 +261,7 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
@@ -271,9 +270,8 @@ export default {
         //   pageSize: this.pageSize
       }
       this.queryData(paramsData)
-
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
@@ -283,7 +281,6 @@ export default {
         page: 1
       }
       this.queryData(paramsData)
-
     }
   }
 }
@@ -317,10 +314,9 @@ export default {
   margin: 0 0 0 40px;
 }
 
-.el-input-group__append button.el-button {
-  background-color: #409eff;
-  color: #fff;
-}
+/* .el-input-group__append button.el-button {
+  border: 1px solid #5caaab;
+} */
 
 .search-handle-right li:first-child {
   margin: 0 20px 0 0;

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 18:32:16
+ * @LastEditTime: 2019-08-02 10:09:14
  * @Description: file content
  -->
 <template>
@@ -19,7 +19,8 @@
         <div class="form-item">
           <span>手机号码*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
+            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" v-if="!isShow" />
+            <h2 v-if="isShow">{{form.phone.val}}</h2>
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
@@ -93,6 +94,7 @@ export default {
   name: 'Attendance',
   data () {
     return {
+      isShow: true,
       gender: 'M',
       isInternal: 'Y',
       form: {
@@ -117,7 +119,7 @@ export default {
           rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,30}$/]
         },
         ldap: {
-          val: '',
+          val: 'yuhan13',
           err_msg: '请输入正确LDAP账号',
           rules: [/^[1]([3-9])[0-9]{9}$/]
         }
@@ -298,6 +300,13 @@ export default {
   height: 25px;
   margin: 0 0 5px 0;
   border-bottom: 1px solid #ccc;
+}
+
+.attend-container .form-item h2 {
+  height: 30px;
+  line-height: 30px;
+  font-weight: normal;
+  color: initial;
 }
 
 .attend-container .justify-item span {
