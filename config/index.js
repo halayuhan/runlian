@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-25 21:11:13
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-30 10:39:26
+ * @LastEditTime: 2019-08-02 14:25:00
  * @Description: file content
  */
 'use strict'
@@ -18,7 +18,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin/*': {
-        target: 'http://10.54.24.62:8080',
+        target: 'http://10.0.58.22:8080',
         secure: false,
         changeOrigin: true,
         pathRewrite: {

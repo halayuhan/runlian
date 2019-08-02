@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:08:17
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 19:20:07
+ * @LastEditTime: 2019-08-02 14:35:45
  * @Description: file content
  -->
 <template>
@@ -29,6 +29,8 @@ export default {
 
 .success-container {
   height: 100%;
+  overflow: auto;
+  /* 解决BFC */
   /* display: flex;
   justify-content: center; */
 }

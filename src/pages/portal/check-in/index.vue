@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 11:32:24
+ * @LastEditTime: 2019-08-02 15:14:27
  * @Description: file content
  -->
 <template>
@@ -59,6 +59,7 @@
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
             </template>
           </el-table-column>
+          <el-table-column width="90" label="LDAP" prop="ldap"></el-table-column>
           <el-table-column label="姓名" prop="userName"></el-table-column>
           <el-table-column label="性别" prop="gender"></el-table-column>
           <el-table-column label="内外部" prop="isInternal"></el-table-column>
@@ -100,7 +101,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data() {
+  data () {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -109,19 +110,19 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
         },
         shortcuts: [
           {
             text: '今天',
-            onClick(picker) {
+            onClick (picker) {
               picker.$emit('pick', new Date())
             }
           },
           {
             text: '昨天',
-            onClick(picker) {
+            onClick (picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24)
               picker.$emit('pick', date)
@@ -129,7 +130,7 @@ export default {
           },
           {
             text: '一周前',
-            onClick(picker) {
+            onClick (picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', date)
@@ -145,10 +146,10 @@ export default {
       total: 100 // 总数据量
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
-  mounted() {
+  mounted () {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
@@ -156,7 +157,7 @@ export default {
 
   // },
   methods: {
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       // TODO
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
@@ -180,18 +181,16 @@ export default {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
 
-            let { userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
+            let {ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
 
-            if (gender == 'M') { gender = '男' }
-            else {
+            if (gender == 'M') { gender = '男' } else {
               gender = '女'
             }
-            if (isInternal == 'Y') { isInternal = '内部' }
-            else {
+            if (isInternal == 'Y') { isInternal = '内部' } else {
               isInternal = '外部'
             }
 
-            let tableItem = { userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
+            let tableItem = { ldap, userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
@@ -202,7 +201,7 @@ export default {
         console.error(error) // 请求失败返回的数据
       })
     },
-    filterSearch() {
+    filterSearch () {
       const paramsData = {
         // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
@@ -213,7 +212,7 @@ export default {
       this.queryData(paramsData)
     },
 
-    downloadExcel() {
+    downloadExcel () {
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
@@ -230,41 +229,38 @@ export default {
           'chartset': 'utf-8'
         }
       }).then((response) => {
-        console.log(response)       //请求成功返回的数据
+        console.log(response) // 请求成功返回的数据
         console.log(response.data)
-        const blob = new Blob([response.data], { type: 'application/vnd.ms-excel;charset=utf-8' });
-        const link = document.createElement('a');     // 创建a标签
-        const href = window.URL.createObjectURL(blob);
+        const blob = new Blob([response.data], { type: 'application/vnd.ms-excel;charset=utf-8' })
+        const link = document.createElement('a') // 创建a标签
+        const href = window.URL.createObjectURL(blob)
         console.log(href)
         // 创建下载的链接
-        link.href = href;
-        link.download = '签到信息表.xls';  // 下载后文件名
-        document.body.appendChild(link);
-        link.click();     // 点击下载
-        document.body.removeChild(link); // 下载完成移除元素
+        link.href = href
+        link.download = '签到信息表.xls' // 下载后文件名
+        document.body.appendChild(link)
+        link.click() // 点击下载
+        document.body.removeChild(link) // 下载完成移除元素
         window.URL.revokeObjectURL(href) // 释放掉blob对象
-
-
-
       }).catch((error) => {
         alert('下载失败')
         console.error(error) // 请求失败返回的数据
       })
       this.downloadVisible = false
     },
-    showMask() {
+    showMask () {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.26.214:8081/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeObject.makeCode('http://10.54.26.214:8080/#/attendance' + '#' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask() {
+    closeMask () {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode() {
+    qrcode () {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -282,7 +278,7 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
@@ -292,7 +288,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),

@@ -2,7 +2,7 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-22 20:08:33
+ * @LastEditTime: 2019-08-02 14:18:00
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -19,7 +19,7 @@ import md5 from 'js-md5'
 import { getDate } from './api/dateFormat'
 require('./mock/mock')
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
-axios.defaults.baseURL = 'http://10.54.24.62:8080'
+axios.defaults.baseURL = 'http://10.0.58.22:8080'
 // 10.0.58.22:8080
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 

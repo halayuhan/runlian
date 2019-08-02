@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 19:15:34
+ * @LastEditTime: 2019-08-02 14:20:41
  * @Description: file content
  */
 import Vue from 'vue'
@@ -17,7 +17,7 @@ const router = new Router({
     {
       path: '/',
       name: 'MobileItem',
-      // redirect: '/attendance',
+      redirect: '/attendance',
       component: () => import('@/pages/mobile/index'),
       children: [
         {
