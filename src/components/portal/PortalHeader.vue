@@ -2,17 +2,17 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 16:41:09
+ * @LastEditTime: 2019-08-01 19:14:00
  * @Description: file content
  -->
 <template>
   <header class="portal-header">
     <div class="header-wrapper">
       <div class="header-wrapper-left">
-        <h1>Linksoul 读书会管理平台</h1>
+        <span>header-text</span>
       </div>
       <div class="header-wrapper-right" v-if="isLogin">
-        <i>avatar</i>
+        <i class="el-icon-user"></i>
         <p>{{userName}}</p>
       </div>
     </div>
@@ -22,27 +22,28 @@
 <script>
 export default {
   name: 'PortalHeader',
-  data(){
-    return{
+  data () {
+    return {
     // 登录状态
     // 登录用户，返回数据存于vuex中
-  }},
-  computed:{
-    userName(){
+    }
+  },
+  computed: {
+    userName () {
       return this.$store.state.user
     },
-    isLogin(){
-      return this.$store.state.user?true:false
+    isLogin () {
+      return !!this.$store.state.user
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 .portal-header {
   width: 100%;
   height: 80px;
-  background-color: #fff;
+  background-color: #5caaab;
 }
 
 .header-wrapper {
@@ -62,6 +63,15 @@ export default {
   font-size: 30px;
 }
 
+.header-wrapper-left span {
+  display: inline-block;
+  width: 360px;
+  height: 60px;
+  background: url("../../assets/header-text.png") no-repeat;
+  background-size: 360px 60px;
+  color: transparent;
+}
+
 .header-wrapper-right {
   display: flex;
   text-align: center;
@@ -72,15 +82,24 @@ export default {
   width: 50px;
   height: 50px;
   line-height: 50px;
-  margin: 0 10px 0 0;
+  margin: 0 5px 0 0;
   color: transparent;
-  background: url("../../assets/avatar.png") no-repeat;
-  background-size: 50px 50px;
+  /* background: url("../../assets/avatar.png") no-repeat;
+  background-size: 50px 50px; */
+}
+
+.header-wrapper-right .el-icon-user {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
+  color: #eee;
 }
 
 .header-wrapper-right p {
   height: 50px;
   line-height: 50px;
-  font-size: 22px;
+  font-size: 20px;
+  color: #eee;
 }
 </style>

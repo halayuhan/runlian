@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:14:30
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-24 16:35:06
+ * @LastEditTime: 2019-08-01 17:11:30
  * @Description: file content
  -->
 <template>
@@ -17,5 +17,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.portal-container {
+  height: calc(100% - 80px);
+  background-color: #eee;
+  overflow: auto;
+  /* 清除BFC的影响 */
+}
 </style>

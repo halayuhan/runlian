@@ -2,12 +2,12 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 17:38:41
+ * @LastEditTime: 2019-08-01 13:43:49
  * @Description: file content
  -->
 <template>
   <div class="check-in">
-    <div class="check-in-wrapper">
+    <div :class="['check-in-wrapper', {'no-scroll': qrcodeVisible}]">
       <div class="search-handle">
         <div class="search-handle-left">
           <div class="time-picker">
@@ -98,7 +98,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data() {
+  data () {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -107,19 +107,19 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
         },
         shortcuts: [
           {
             text: '今天',
-            onClick(picker) {
+            onClick (picker) {
               picker.$emit('pick', new Date())
             }
           },
           {
             text: '昨天',
-            onClick(picker) {
+            onClick (picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24)
               picker.$emit('pick', date)
@@ -127,7 +127,7 @@ export default {
           },
           {
             text: '一周前',
-            onClick(picker) {
+            onClick (picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', date)
@@ -146,7 +146,7 @@ export default {
   created() {
     this.queryData()
   },
-  mounted() {
+  mounted () {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
@@ -184,7 +184,7 @@ export default {
           this.currentPage = response.data.page
           this.total = response.data.count
         }
-        console.log(response)       //请求成功返回的数据
+        console.log(response) // 请求成功返回的数据
       }).catch((error) => {
         console.error(error) // 请求失败返回的数据
       })
@@ -227,24 +227,24 @@ export default {
 
         console.log(response)       //请求成功返回的数据
       }).catch((error) => {
-        alert("下载失败")
+        alert('下载失败')
         console.error(error) // 请求失败返回的数据
       })
       this.downloadVisible = false
     },
-    showMask() {
+    showMask () {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.26.214:8080/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeObject.makeCode('http://10.54.26.214:8081/#/attendance' + '#' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask() {
+    closeMask () {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode() {
+    qrcode () {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -289,7 +289,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.no-scroll {
+  height: calc(100vh - 130px);
+  overflow: hidden;
+}
+
 .search-handle {
   display: flex;
   justify-content: space-between;
@@ -325,7 +330,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0;

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-30 16:06:05
+ * @LastEditTime: 2019-08-01 19:15:34
  * @Description: file content
  */
 import Vue from 'vue'
@@ -12,7 +12,7 @@ import store from '../store'
 Vue.use(Router)
 
 const router = new Router({
-  mode:'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -69,7 +69,7 @@ const router = new Router({
               component: () => import('@/pages/portal/check-in/index'),
               meta: {
                 requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
-              },
+              }
             },
             {
               path: '/book',
@@ -77,10 +77,17 @@ const router = new Router({
               component: () => import('@/pages/portal/book/index'),
               meta: {
                 requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
-              },
+              }
+            },
+            {
+              path: '/book/add-book',
+              name: 'AddBook',
+              component: () => import('@/pages/portal/add-book/index'),
+              meta: {
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+              }
             }
           ]
-
         }
       ]
     }
@@ -91,8 +98,6 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
     if (user) {
-
-     
       next()
     } else {
       console.log('该页面需要登陆')
@@ -104,12 +109,12 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-  if(to.path=='/login'){
-    if(user){
+  if (to.path == '/login') {
+    if (user) {
       next({
-        path:'/search'
+        path: '/search'
       })
-    }else{
+    } else {
       next()
     }
   }
