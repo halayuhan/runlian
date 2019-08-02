@@ -214,42 +214,16 @@ export default {
     },
 
     downloadExcel() {
+      const baseurl = "http://10.0.58.22:8080/signIn/getExcel?"
+
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
         userName: this.filterInput
-
       }
-      this.$axios({
-        methods: 'post',
-        url: '/signIn/getExcel',
-        params,
-        responseType: 'blob',
-        headers: {
-          'Content-Type': 'application/json',
-          'chartset': 'utf-8'
-        }
-      }).then((response) => {
-        console.log(response)       //请求成功返回的数据
-        console.log(response.data)
-        const blob = new Blob([response.data], { type: 'application/vnd.ms-excel;charset=utf-8' });
-        const link = document.createElement('a');     // 创建a标签
-        const href = window.URL.createObjectURL(blob);
-        console.log(href)
-        // 创建下载的链接
-        link.href = href;
-        link.download = '签到信息表.xls';  // 下载后文件名
-        document.body.appendChild(link);
-        link.click();     // 点击下载
-        document.body.removeChild(link); // 下载完成移除元素
-        window.URL.revokeObjectURL(href) // 释放掉blob对象
-
-
-
-      }).catch((error) => {
-        alert('下载失败')
-        console.error(error) // 请求失败返回的数据
-      })
+      const url = baseurl + "start=" + params.start + "&end=" + params.end + "&userName=" + params.userName
+      // const params = "http://10.54.24.62:8080/signIn/getExcel?start=2019-07-01 00:00:00&end=2019-08-01 00:00:00";// 地址?aaa=aaa  [get请求]
+      window.open(url);
       this.downloadVisible = false
     },
     showMask() {
