@@ -98,7 +98,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data () {
+  data() {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -107,19 +107,19 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() > Date.now()
         },
         shortcuts: [
           {
             text: '今天',
-            onClick (picker) {
+            onClick(picker) {
               picker.$emit('pick', new Date())
             }
           },
           {
             text: '昨天',
-            onClick (picker) {
+            onClick(picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24)
               picker.$emit('pick', date)
@@ -127,7 +127,7 @@ export default {
           },
           {
             text: '一周前',
-            onClick (picker) {
+            onClick(picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', date)
@@ -146,10 +146,13 @@ export default {
   created() {
     this.queryData()
   },
-  mounted () {
+  mounted() {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
+  // filters(value) {
+
+  // },
   methods: {
     queryData(paramsData = {}) {
       // TODO
@@ -175,9 +178,18 @@ export default {
         else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
+
             let { userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
-            // gender == 'M' ? '男' : '女'
-            // isInternal == 'Y' ? '内部' : '外部'
+
+            if (gender == 'M') { gender = '男' }
+            else {
+              gender = '女'
+            }
+            if (isInternal == 'Y') { isInternal = '内部' }
+            else {
+              isInternal = '外部'
+            }
+
             let tableItem = { userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
           }
@@ -211,10 +223,15 @@ export default {
         methods: 'post',
         url: '/signIn/getExcel',
         params,
-        responseType: 'blob'
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'application/json',
+          'chartset': 'UTF-8'
+        }
       }).then((response) => {
-
-        let blob = new Blob([response.data.data.body], { type: 'application/vnd.ms-excel' });
+        console.log(response)       //请求成功返回的数据
+        console.log(response.data)
+        const blob = new Blob([response.data], { type: 'application/vnd.ms-excel;charset=UTF-8' });
         const link = document.createElement('a');     // 创建a标签
         const href = window.URL.createObjectURL(blob);       // 创建下载的链接
         link.href = href;
@@ -225,26 +242,26 @@ export default {
         window.URL.revokeObjectURL(href) // 释放掉blob对象
 
 
-        console.log(response)       //请求成功返回的数据
+
       }).catch((error) => {
         alert('下载失败')
         console.error(error) // 请求失败返回的数据
       })
       this.downloadVisible = false
     },
-    showMask () {
+    showMask() {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
       this.qrcodeObject.makeCode('http://10.54.26.214:8081/#/attendance' + '#' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask () {
+    closeMask() {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode () {
+    qrcode() {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {

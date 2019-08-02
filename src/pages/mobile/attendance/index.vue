@@ -12,14 +12,14 @@
         <div class="form-item">
           <span>LDAP账号*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.ldap.val" />
+            <input type="text" v-model="form.ldap.val" @blur="_getUserinfo()" />
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
         <div class="form-item">
           <span>手机号码*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" @blur="_getUserinfo()" />
+            <input type="text" v-model="form.phone.val" />
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
@@ -91,11 +91,16 @@
 <script>
 export default {
   name: 'Attendance',
-  data () {
+  data() {
     return {
       gender: 'M',
       isInternal: 'Y',
       form: {
+        ldap: {
+          val: '',
+          err_msg: '请输入正确LDAP账号',
+          rules: [/^[_a-zA-Z0-9]+$/]
+        },
         name: {
           val: '',
           err_msg: '请输入正确姓名',
@@ -116,28 +121,26 @@ export default {
           err_msg: '请输入正确书名',
           rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,30}$/]
         },
-        ldap: {
-          val: '',
-          err_msg: '请输入正确LDAP账号',
-          rules: [/^[1]([3-9])[0-9]{9}$/]
-        }
+
       }
     }
   },
   mounted: function () {
-    if (window.localStorage.getItem('phone')) { // 判断本地localStorage内是否存有用户历史信息
+    if (window.localStorage.getItem('ladp')) { // 判断本地localStorage内是否存有用户历史信息
+
       this.gender = window.localStorage.getItem('gender')
       this.isInternal = window.localStorage.getItem('isInternal')
       this.form.name.val = window.localStorage.getItem('name')
       this.form.department.val = window.localStorage.getItem('department')
       this.form.phone.val = window.localStorage.getItem('phone')
+      this.form.ldap.val = window.localStorage.getItem('ldap')
     } else {
-      alert('请输入手机号搜索历史数据')
+      this.$message.info('请输入LDAP账号搜索签到历史')
     }
   },
   computed: {
-    channel () {
-      return this.form.phone.val
+    channel() {
+      return this.form.ladp.val
     }
   },
 
@@ -164,22 +167,22 @@ export default {
   //   }
   // },
   methods: {
-    _getUserinfo () {
+    _getUserinfo() {
       const params = {
-        phoneNumber: this.form.phone.val
+        ldap: this.form.ldap.val
       }
-      let reg = /^[1]([3-9])[0-9]{9}$/
-      if (!reg.test(this.form.phone.val)) {
-        alert(this.form.phone.err_msg)
+      let reg = /^[_a-zA-Z0-9]+$/
+      if (!reg.test(this.form.ldap.val)) {
+        this.$message.error(this.form.ldap.err_msg)
       } else {
-        // alert('数据绑定中...')
+
         this.$axios({
           methods: 'get',
           url: '/signIn/getUser',
-          params })
+          params        })
           .then((response) => {
             if (response.data.code != '000') {
-              alert('当前用户无签到历史')
+              this.$message.error('当前用户无签到历史')
               localStorage.clear()
               this.form.name.val = ''
               this.form.department.val = ''
@@ -188,6 +191,7 @@ export default {
               this.isInternal = response.data.data.isInternal
               this.form.name.val = response.data.data.userName
               this.form.department.val = response.data.data.department
+              this.form.phone.val = response.data.data.phone
             }
             console.log(response) // 请求成功返回的数据
           }).catch((error) => {
@@ -196,7 +200,7 @@ export default {
       }
     },
 
-    _validate () {
+    _validate() {
       let isPass = false
       for (let key in this.form) {
         let reg = this.form[key].rules[0]
@@ -205,7 +209,7 @@ export default {
           isPass = true
         } else {
           isPass = false
-          alert(this.form[key].err_msg)
+          this.$message.error(this.form[key].err_msg)
           this.form[key].val = ''
           break
         }
@@ -213,19 +217,22 @@ export default {
       return isPass
     },
 
-    attendSubmit () {
+    attendSubmit() {
       if (!this._validate()) {
         return
       }
-      const { name, department, phone, books } = this.form
+      const { ldap, name, department, phone, books } = this.form
       const params = {
+
         gender: this.gender,
         isInternal: this.isInternal,
+        ldap: ldap.val,
         userName: name.val,
         phoneNumber: phone.val,
         department: department.val,
         bookName: books.val
       }
+      window.localStorage.setItem('ldap', params.ldap)
       window.localStorage.setItem('gender', params.gender)
       window.localStorage.setItem('isInternal', params.isInternal)
       window.localStorage.setItem('name', params.userName)
