@@ -224,7 +224,8 @@ export default {
         type: 'zz',
         totalNum: '4',
         outNum: '2',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       },
       {
         img: '/static/cover/blank_book.png',
@@ -234,7 +235,8 @@ export default {
         type: 'cc',
         totalNum: '3',
         outNum: '1',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       },
       {
         img: '/static/cover/blank_book.png',
@@ -244,7 +246,8 @@ export default {
         type: 'zz',
         totalNum: '4',
         outNum: '2',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       },
       {
         img: '/static/cover/blank_book.png',
@@ -254,7 +257,8 @@ export default {
         type: 'cc',
         totalNum: '3',
         outNum: '1',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       },
       {
         img: '/static/cover/blank_book.png',
@@ -264,7 +268,8 @@ export default {
         type: 'zz',
         totalNum: '4',
         outNum: '2',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       },
       {
         img: '/static/cover/blank_book.png',
@@ -274,7 +279,8 @@ export default {
         type: 'cc',
         totalNum: '3',
         outNum: '1',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       },
       {
         img: '/static/cover/blank_book.png',
@@ -284,7 +290,8 @@ export default {
         type: 'zz',
         totalNum: '4',
         outNum: '2',
-        haveNum: '2'
+        haveNum: '2',
+         edit: false
       }
     ],
     currentPage: 1, // 当前页码

@@ -26,7 +26,7 @@
           </div>
           <div class="data-filter">
             <el-input placeholder="请输入姓名" v-model="filterInput">
-              <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>
             </el-input>
           </div>
         </div>
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="search-content">
-        <el-table :data="pageData" :header-cell-style="{background: '#eee'}" border stripe>
+        <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
           <el-table-column label="序号" width="60" align="center">
             <template slot-scope="scope">
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
@@ -139,67 +139,29 @@ export default {
       filterInput: '', // 用于过滤的输入
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
-      pageSize: 10 // 每页显示行数
+      pageSize: 10, // 每页显示行数
+      total: 100    //总数据量
     }
-  },
-
-  computed: {
-
-    total() {
-      return this.tableData.length
-    }, // 总数据量
-    pageData() {
-      return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-    } // 当前页显示数据
   },
   created() {
-    const params = {
-      start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-      end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-      userName: this.filterInput
-    }
-    console.log(params)
-    this.$axios({
-      methods: 'get',
-      url: '/signIn/getRecord',
-      params
-    }).then((response) => {
-
-      this.tableData = []
-      if (response.data.code != '000') {
-        alert(response.data.msg);
-      }
-      else {
-        for (let i = 0; i < response.data.data.length; i++) {
-          let tableItem = {
-            userName: response.data.data[i].userName,
-            gender: response.data.data[i].gender == 'M' ? '男' : '女',
-            isInternal: response.data.data[i].isInternal == 'Y' ? '内部' : '外部',
-            department: response.data.data[i].department,
-            phoneNumber: response.data.data[i].phoneNumber,
-            bookName: response.data.data[i].book,
-            time: response.data.data[i].timeString
-          }
-          this.tableData.push(tableItem)
-        }
-      }
-      //请求成功返回的数据
-    }).catch((error) => {
-      console.error(error) // 请求失败返回的数据
-    })
+    this.queryData()
   },
   mounted() {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   methods: {
-    filterSearch() {
-      const params = {
+    queryData(paramsData = {}) {
+      // TODO
+      const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        userName: this.filterInput
+        userName: this.filterInput,
+        page: this.currentPage,
+        pageSize: this.pageSize
       }
-      console.log(params)// 过滤搜索
+      const params = Object.assign({}, defaultParams, paramsData)
+      console.log(params)
       this.$axios({
         methods: 'get',
         url: '/signIn/getRecord',
@@ -207,49 +169,62 @@ export default {
       }).then((response) => {
         this.tableData = []
         if (response.data.code != '000') {
-          alert(response.data.msg);
+          this.$message.error(response.data.msg)
+          return
         }
         else {
           for (let i = 0; i < response.data.data.length; i++) {
-            let tableItem = {
-              userName: response.data.data[i].userName,
-              gender: response.data.data[i].gender == 'M' ? '男' : '女',
-              isInternal: response.data.data[i].isInternal == 'Y' ? '内部' : '外部',
-              department: response.data.data[i].department,
-              phoneNumber: response.data.data[i].phoneNumber,
-              bookName: response.data.data[i].book,
-              time: response.data.data[i].timeString
-            }
+            const currentData = response.data.data[i]
+            let { userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
+            // gender == 'M' ? '男' : '女'
+            // isInternal == 'Y' ? '内部' : '外部'
+            let tableItem = { userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
           }
+          this.currentPage = response.data.page
+          this.total = response.data.count
         }
         console.log(response)       //请求成功返回的数据
       }).catch((error) => {
         console.error(error) // 请求失败返回的数据
       })
-      console.log(this.filterInput)
     },
+    filterSearch() {
+      const paramsData = {
+        // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+        // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+        // userName: this.filterInput,
+        page: 1,
+        // pageSize: this.pageSize
+      }
+      this.queryData(paramsData)
+    },
+
     downloadExcel() {
       const params = {
-        startTime: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
-        endTime: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
-        userName: this.filterInput
+        start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
+        end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
+        userName: this.filterInput,
+
       }
       this.$axios({
         methods: 'post',
-        url: '/admin/signIn/getExcel',
+        url: '/signIn/getExcel',
         params,
         responseType: 'blob'
       }).then((response) => {
 
-        const link = this.$createElement('a')
-        let blob = new Blob([response.excel], { type: 'application/vnd.ms-excel' });
-        link.style.display = 'none'
-        link.href = URL.createObjectURL(blob);
-        link.download = '导出签到列表.xlsx'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        let blob = new Blob([response.data.data.body], { type: 'application/vnd.ms-excel' });
+        const link = document.createElement('a');     // 创建a标签
+        const href = window.URL.createObjectURL(blob);       // 创建下载的链接
+        link.href = href;
+        link.download = '签到信息表.xls';  // 下载后文件名
+        document.body.appendChild(link);
+        link.click();     // 点击下载
+        document.body.removeChild(link); // 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+
+
         console.log(response)       //请求成功返回的数据
       }).catch((error) => {
         alert("下载失败")
@@ -288,10 +263,27 @@ export default {
       this.qrcodeObject = qrcode
     },
     handleCurrentChange(index) {
-      this.currentPage = index
+      const paramsData = {
+        //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+        //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+        //   userName: this.filterInput,
+        page: index
+        //   pageSize: this.pageSize
+      }
+      this.queryData(paramsData)
+
     },
-    handleSizeChange(index) {
-      this.pageSize = index
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize
+      const paramsData = {
+        //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
+        //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
+        //   userName: this.filterInput,
+        pageSize,
+        page: 1
+      }
+      this.queryData(paramsData)
+
     }
   }
 }
