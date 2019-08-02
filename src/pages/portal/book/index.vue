@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 13:47:10
+ * @LastEditTime: 2019-08-02 11:06:34
  * @Description: file content
  -->
 <template>
@@ -205,6 +205,7 @@
                     size="mini"
                     type="primary"
                     :disabled="scope.row.edit"
+                    v-if="!scope.row.edit"
                     @click="handleEditChange(scope.$index,scope.row)"
                   >编辑</el-button>
                 </li>
@@ -376,10 +377,10 @@ export default {
 
   }),
   computed: {
-    total() {
+    total () {
       return this.tableData.length
     }, // 总数据量
-    pageData() {
+    pageData () {
       return this.tableData.slice(
         (this.currentPage - 1) * this.pageSize,
         this.currentPage * this.pageSize
@@ -391,16 +392,16 @@ export default {
   //   this.isEdit.fill(false)
   // },
   methods: {
-    handleAddBook() {
+    handleAddBook () {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       this.currentPage = index
     },
-    handleSizeChange(index) {
+    handleSizeChange (index) {
       this.pageSize = index
     },
-    handleAvatarSuccess(scope, file) {
+    handleAvatarSuccess (scope, file) {
       // console.log(file)
       // console.log(fileList)
       console.log(arguments)
@@ -410,13 +411,13 @@ export default {
       const imageUrl = '/static/cover/' + file.name
       this.pageData[index].img = imageUrl
     },
-    handleEditChange(index, row) {
+    handleEditChange (index, row) {
       row.edit = true
     },
-    handleEditSave(index, row) {
+    handleEditSave (index, row) {
       row.edit = false
     },
-    handleEditCancel(index, row) {
+    handleEditCancel (index, row) {
       row.edit = false
     }
   }
@@ -442,10 +443,10 @@ export default {
   display: flex;
 }
 
-.el-input-group__append button.el-button {
-  background-color: #409eff;
+/* .el-input-group__append button.el-button {
+  background-color: #5caaab;
   color: #fff;
-}
+} */
 
 .search-handle-right li {
   margin: 0 20px 0 0;

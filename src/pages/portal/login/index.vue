@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 16:55:16
+ * @LastEditTime: 2019-08-02 10:20:06
  * @Description: file content
  -->
 <template>
@@ -105,7 +105,7 @@ export default {
   height: 100%;
   padding: 100px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   align-items: center;
   z-index: 99;
   /* background-color: #ccc; */
@@ -115,7 +115,7 @@ export default {
 
 .slogan {
   width: 340px;
-  margin: -30px 200px 0 0;
+  /* margin: -30px 0 0 20%; */
   z-index: 99;
 }
 

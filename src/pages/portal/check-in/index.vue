@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 13:43:49
+ * @LastEditTime: 2019-08-02 11:32:24
  * @Description: file content
  -->
 <template>
@@ -14,12 +14,14 @@
             <el-date-picker
               v-model="timeStart"
               type="date"
+              :clearable="false"
               placeholder="选择起始时间"
               :picker-options="pickerOptions"
             ></el-date-picker>
             <el-date-picker
               v-model="timeEnd"
               type="date"
+              :clearable="false"
               placeholder="选择结束时间"
               :picker-options="pickerOptions"
             ></el-date-picker>
@@ -140,7 +142,7 @@ export default {
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
-      total: 100    //总数据量
+      total: 100 // 总数据量
     }
   },
   created() {
@@ -174,8 +176,7 @@ export default {
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
           return
-        }
-        else {
+        } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
 
@@ -206,7 +207,7 @@ export default {
         // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
         // userName: this.filterInput,
-        page: 1,
+        page: 1
         // pageSize: this.pageSize
       }
       this.queryData(paramsData)
@@ -216,7 +217,7 @@ export default {
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
-        userName: this.filterInput,
+        userName: this.filterInput
 
       }
       this.$axios({
@@ -226,14 +227,16 @@ export default {
         responseType: 'blob',
         headers: {
           'Content-Type': 'application/json',
-          'chartset': 'UTF-8'
+          'chartset': 'utf-8'
         }
       }).then((response) => {
         console.log(response)       //请求成功返回的数据
         console.log(response.data)
-        const blob = new Blob([response.data], { type: 'application/vnd.ms-excel;charset=UTF-8' });
+        const blob = new Blob([response.data], { type: 'application/vnd.ms-excel;charset=utf-8' });
         const link = document.createElement('a');     // 创建a标签
-        const href = window.URL.createObjectURL(blob);       // 创建下载的链接
+        const href = window.URL.createObjectURL(blob);
+        console.log(href)
+        // 创建下载的链接
         link.href = href;
         link.download = '签到信息表.xls';  // 下载后文件名
         document.body.appendChild(link);
@@ -288,7 +291,6 @@ export default {
         //   pageSize: this.pageSize
       }
       this.queryData(paramsData)
-
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize
@@ -300,7 +302,6 @@ export default {
         page: 1
       }
       this.queryData(paramsData)
-
     }
   }
 }
@@ -334,10 +335,9 @@ export default {
   margin: 0 0 0 40px;
 }
 
-.el-input-group__append button.el-button {
-  background-color: #409eff;
-  color: #fff;
-}
+/* .el-input-group__append button.el-button {
+  border: 1px solid #5caaab;
+} */
 
 .search-handle-right li:first-child {
   margin: 0 20px 0 0;

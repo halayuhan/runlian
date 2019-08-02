@@ -2,7 +2,7 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-07-29 21:07:23
+ * @LastEditTime: 2019-08-02 11:39:24
  * @Description: file content
  -->
 <template>
@@ -171,5 +171,69 @@ input:-moz-placeholder {
 input:-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #b6b6b6 !important;
+}
+
+/* 更改默认样式 */
+.el-button--primary {
+  color: #fff;
+  background-color: #5caaab;
+  border-color: #5caaab;
+}
+.el-button--primary:hover {
+  background-color: #5caaab;
+  border-color: #5caaab;
+}
+.el-button--primary:focus {
+  background-color: #5caaab;
+  border-color: #5caaab;
+}
+
+.el-button--warning {
+  color: #fff;
+  background-color: #ee9e25;
+  border-color: #ee9e25;
+}
+.el-button--warning:hover {
+  background-color: #ee9e25;
+  border-color: #ee9e25;
+}
+.el-button--warning:focus {
+  background-color: #ee9e25;
+  border-color: #ee9e25;
+}
+
+.el-button--success {
+  color: #fff;
+  background-color: #68a8ea;
+  border-color: #68a8ea;
+}
+.el-button--success:hover {
+  background-color: #68a8ea;
+  border-color: #68a8ea;
+}
+.el-button--success:focus {
+  background-color: #68a8ea;
+  border-color: #68a8ea;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #5caaab;
+  color: #fff;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: #5caaab;
+}
+
+/* .el-pagination .el-input__inner:hover {
+  border-color: #5caaab;
+} */
+
+.el-pagination__sizes .el-input .el-input__inner:hover {
+  border-color: #5caaab;
+}
+
+.el-input__inner:hover {
+  border-color: #5caaab;
 }
 </style>

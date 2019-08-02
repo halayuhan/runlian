@@ -19,7 +19,8 @@ import md5 from 'js-md5'
 import { getDate } from './api/dateFormat'
 require('./mock/mock')
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
-axios.defaults.baseURL = 'http://10.0.58.22:8080'
+axios.defaults.baseURL = 'http://10.54.24.62:8080'
+// 10.0.58.22:8080
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false

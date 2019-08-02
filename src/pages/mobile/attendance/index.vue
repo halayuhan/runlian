@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 18:32:16
+ * @LastEditTime: 2019-08-02 10:09:14
  * @Description: file content
  -->
 <template>
@@ -19,15 +19,16 @@
         <div class="form-item">
           <span>手机号码*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" />
+            <input type="text" v-model="form.phone.val" v-if="isShow" />
+            <h2 v-if="!isShow">{{form.phone.val}}</h2>
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
         <div class="form-item">
           <span>姓名*</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.name.val" />
-            <!-- <p v-if="errors.name">姓名{{errors.name}}</p> -->
+            <input type="text" v-model="form.name.val" v-if="isShow" />
+            <h2 v-if="!isShow">{{form.name.val}}</h2>
           </div>
         </div>
         <div class="form-item justify-item">
@@ -93,6 +94,7 @@ export default {
   name: 'Attendance',
   data() {
     return {
+      isShow: true,
       gender: 'M',
       isInternal: 'Y',
       form: {
@@ -121,12 +123,11 @@ export default {
           err_msg: '请输入正确书名',
           rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,30}$/]
         },
-
       }
     }
   },
   mounted: function () {
-    if (window.localStorage.getItem('ladp')) { // 判断本地localStorage内是否存有用户历史信息
+    if (window.localStorage.getItem('ldap')) { // 判断本地localStorage内是否存有用户历史信息
 
       this.gender = window.localStorage.getItem('gender')
       this.isInternal = window.localStorage.getItem('isInternal')
@@ -134,6 +135,7 @@ export default {
       this.form.department.val = window.localStorage.getItem('department')
       this.form.phone.val = window.localStorage.getItem('phone')
       this.form.ldap.val = window.localStorage.getItem('ldap')
+      this.isShow = false
     } else {
       this.$message.info('请输入LDAP账号搜索签到历史')
     }
@@ -191,7 +193,8 @@ export default {
               this.isInternal = response.data.data.isInternal
               this.form.name.val = response.data.data.userName
               this.form.department.val = response.data.data.department
-              this.form.phone.val = response.data.data.phone
+              this.form.phone.val = response.data.data.phoneNumber
+              this.isShow = false
             }
             console.log(response) // 请求成功返回的数据
           }).catch((error) => {
@@ -305,6 +308,13 @@ export default {
   height: 25px;
   margin: 0 0 5px 0;
   border-bottom: 1px solid #ccc;
+}
+
+.attend-container .form-item h2 {
+  height: 30px;
+  line-height: 30px;
+  font-weight: normal;
+  color: initial;
 }
 
 .attend-container .justify-item span {
