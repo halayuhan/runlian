@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 10:09:14
+ * @LastEditTime: 2019-08-02 15:25:33
  * @Description: file content
  -->
 <template>
@@ -188,6 +188,8 @@ export default {
               localStorage.clear()
               this.form.name.val = ''
               this.form.department.val = ''
+              this.form.phone.val = ''
+              this.isShow = true
             } else {
               this.gender = response.data.data.gender
               this.isInternal = response.data.data.isInternal
