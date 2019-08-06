@@ -19,7 +19,7 @@ export default {
 
 <style>
 .portal-container {
-  height: calc(100% - 80px);
+  /* height: calc(100% - 80px); */
   background-color: #eee;
   overflow: auto;
   /* 清除BFC的影响 */

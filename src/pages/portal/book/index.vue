@@ -19,7 +19,17 @@
         <div class="search-handle-right">
           <ul>
             <li>
-              <el-button type="primary">上传书目</el-button>
+              <el-button type="primary" @click="handleOpen">上传书目</el-button>
+              <ex-import
+                :fields="fields"
+                :requestFn="requestFn"
+                :rules="rules"
+                :tips="tips"
+                :title="title"
+                :visible.sync="visible"
+                @close="handleCloseImport"
+                @finish="handleFinishImport"
+              />
             </li>
             <li>
               <el-button type="primary">书目模板下载</el-button>
@@ -252,135 +262,40 @@
 <script>
 export default {
   name: 'Book',
-  data: () => ({
+  data () {
+    return{
+    title: '批量导入书单',
+    tips: ['ISBN必填', '数量必填', '书籍类型必填'],
+    fields: {
+      series: '序号',
+      isbn: 'ISBN/书籍编号*',
+      bookName: '书籍名称*',
+      author: '作者*',
+      publisher: '出版社*',
+      publishTime: '出版时间*',
+      bookNum: '数量*',
+      category: '书籍类型*',
+      bookInfo: '书籍简介'
+    },
+    rules: {
+      series: { type: 'number' },
+      isbn: { type: 'number', required: true, message: '书籍ISBN必填' },
+      bookNum: { type: 'number', required: true, message: '书籍数量必填' },
+      category: { type: 'string', required: true, message: '书籍类型必填' }
+    },
+    visible: false,
     filterInput: '',
-    tableData: [
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        ISBN: '12345678901',
-        publisher: 'bbb',
-        pubDate: '2018-4-1',
-        page: '335',
-        type: 'cc',
-        description: 'wwwwwwwwwwwwssssssssssssssssssssssssssssssssaaaaaaaaaaaassddddddddddsssswwwww',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        type: 'cc',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'js',
-        author: 'xx',
-        publisher: 'yyy',
-        type: 'zz',
-        totalNum: '4',
-        outNum: '2',
-        haveNum: '2',
-        edit: false
-      },
-      {
-        img: '/static/cover/blank_book.png',
-        bookName: 'python',
-        author: 'aa',
-        publisher: 'bbb',
-        pubDate: '1993-5-9',
-        page: '68',
-        type: 'cc',
-        description: 'ddddddddddddssssssssssssssssssssssssssddddddddd',
-        totalNum: '2',
-        outNum: '0',
-        haveNum: '2'
-      }
-    ],
+    tableData: [],
     currentPage: 1, // 当前页码
     pageSize: 10 // 每页显示行数
 
-  }),
+  }
+  },
   computed: {
-    total () {
+    total() {
       return this.tableData.length
     }, // 总数据量
-    pageData () {
+    pageData() {
       return this.tableData.slice(
         (this.currentPage - 1) * this.pageSize,
         this.currentPage * this.pageSize
@@ -392,16 +307,32 @@ export default {
   //   this.isEdit.fill(false)
   // },
   methods: {
-    handleAddBook () {
+    async requestFn(data) {
+      this.tableData = JSON.stringify(data)
+      console.log(data)
+      // eslint-disable-next-line
+      // return Promise.reject({ 1: { age: '名字错了' } })
+      return Promise.resolve()
+    },
+    handleCloseImport() {
+      console.log('弹窗关闭了~')
+    },
+    handleFinishImport() {
+      console.log('导入完毕了~')
+    },
+    handleOpen() {
+      this.visible = true
+    },
+    handleAddBook() {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       this.currentPage = index
     },
-    handleSizeChange (index) {
+    handleSizeChange(index) {
       this.pageSize = index
     },
-    handleAvatarSuccess (scope, file) {
+    handleAvatarSuccess(scope, file) {
       // console.log(file)
       // console.log(fileList)
       console.log(arguments)
@@ -411,13 +342,13 @@ export default {
       const imageUrl = '/static/cover/' + file.name
       this.pageData[index].img = imageUrl
     },
-    handleEditChange (index, row) {
+    handleEditChange(index, row) {
       row.edit = true
     },
-    handleEditSave (index, row) {
+    handleEditSave(index, row) {
       row.edit = false
     },
-    handleEditCancel (index, row) {
+    handleEditCancel(index, row) {
       row.edit = false
     }
   }

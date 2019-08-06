@@ -17,7 +17,8 @@ import axios from 'axios'
 import store from './store'
 import md5 from 'js-md5'
 import { getDate } from './api/dateFormat'
-require('./mock/mock')
+import ExImport from '../src/pages/portal/ExImport'
+
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
 axios.defaults.baseURL = 'http://10.0.58.22:8080'
 // 10.0.58.22:8080
@@ -27,6 +28,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.$axios = axios
 Vue.prototype.getDate = getDate
+Vue.component(ExImport.name, ExImport)
+
 
 /* eslint-disable no-new */
 new Vue({

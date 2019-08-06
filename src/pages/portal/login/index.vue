@@ -44,21 +44,21 @@
 export default {
   name: 'Login',
 
-  data () {
+  data() {
     return {
       username: '',
       password: ''
     }
   },
   methods: {
-    login_Submit () {
+    login_Submit() {
       const params = {
         adminName: this.username,
         password: this.password
       }
       console.log(params)
       if (this.username == '' || this.password == '') {
-        alert('用户名与密码不能为空！')
+        this.$message.error('用户名与密码不能为空！')
       } else {
         this.$axios({
           methods: 'get',
@@ -66,14 +66,14 @@ export default {
           params
         }).then((response) => {
           if (response.data.code != '000') {
-            alert(response.data.msg)
+            this.$message.error(response.data.msg)
           } else {
             this.$store.commit('GET_USER', response.data.data.adminName)
             this.$router.push('/search')
           }
           console.log(response) // 请求成功返回的数据
         }).catch((error) => {
-          alert('登录失败')
+          this.$message.error('登录失败')
           console.error(error) // 请求失败返回的数据
         })
       }

@@ -14,7 +14,7 @@
 <script>
 export default {
   name: 'App',
-  data: () => ({ })
+  data: () => ({})
 }
 </script>
 
@@ -187,6 +187,12 @@ input:-ms-input-placeholder {
   background-color: #5caaab;
   border-color: #5caaab;
 }
+.el-button:focus,
+.el-button:hover {
+  color: #fff;
+  border-color: #5caaab;
+  background-color: #5caaab;
+}
 
 .el-button--warning {
   color: #fff;
@@ -222,6 +228,23 @@ input:-ms-input-placeholder {
 }
 
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
+  background-color: #5caaab;
+  color: #fff;
+}
+.el-select-dropdown__item.selected {
+  color: #5caaab;
+}
+.el-date-table td.current:not(.disabled) span {
+  background-color: #5caaab;
+}
+.el-date-table td.available:hover {
+  color: #5caaab;
+}
+.el-picker-panel__shortcut:hover {
+  color: #5caaab;
+}
+.el-date-picker__header-label.active,
+.el-date-picker__header-label:hover {
   color: #5caaab;
 }
 
