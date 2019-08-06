@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 14:20:41
+ * @LastEditTime: 2019-08-06 16:27:49
  * @Description: file content
  */
 import Vue from 'vue'
@@ -74,7 +74,8 @@ const router = new Router({
             {
               path: '/book',
               name: 'Book',
-              component: () => import('@/pages/portal/book/index'),
+              component: () => import('@/pages/mobile/404'),
+              // component: () => import('@/pages/portal/book/index'),
               meta: {
                 requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
               }

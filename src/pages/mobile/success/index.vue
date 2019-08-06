@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:08:17
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-05 19:28:35
+ * @LastEditTime: 2019-08-06 13:57:12
  * @Description: file content
  -->
 <template>
@@ -23,37 +23,4 @@ export default {
 </script>
 
 <style>
-.success {
-  height: 100%;
-}
-
-.success-container {
-  height: 100%;
-  overflow: auto;
-  /* 解决BFC */
-  /* display: flex;
-  justify-content: center; */
-}
-.success-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 120px;
-  height: 120px;
-  margin: 160px auto;
-  /* border: 2px solid #4d4d4d; */
-  border-radius: 60px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-.success-box i::before {
-  font-size: 60px;
-  font-weight: bold;
-  color: #218482;
-}
-
-.success-box p {
-  color: #218482;
-  font-weight: bold;
-}
 </style>

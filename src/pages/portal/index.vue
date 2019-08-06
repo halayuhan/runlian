@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:14:12
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 17:09:30
+ * @LastEditTime: 2019-08-06 13:52:01
  * @Description: file content
  -->
 <template>
@@ -29,7 +29,5 @@ export default {
 </script>
 
 <style>
-.portal-item {
-  height: 100%;
-}
+@import "../../assets/less/portal/pages.css";
 </style>

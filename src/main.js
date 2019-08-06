@@ -2,20 +2,21 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-05 19:20:12
+ * @LastEditTime: 2019-08-06 15:01:12
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import './assets/less/public.css'
 import 'element-ui/lib/index.js'
 import axios from './util/http.js'
 import store from './store'
 import md5 from 'js-md5'
+import router from './router'
 import { getDate } from './api/dateFormat'
 
 // require('./mock/mock')

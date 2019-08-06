@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 13:46:15
+ * @LastEditTime: 2019-08-06 13:56:52
  * @Description: file content
  -->
 <template>
@@ -111,77 +111,4 @@ export default {
 }
 </script>
 <style>
-.add-book-wrapper {
-  padding: 30px 40px;
-}
-
-.add-book-header {
-  height: 40px;
-  line-height: 40px;
-  margin: 0 0 40px 0;
-}
-
-.add-book-header h1 {
-  font-size: 28px;
-}
-
-.add-book-form {
-  width: 100%;
-}
-
-.add-book-form .form-item-group {
-  display: flex;
-  margin: 0 0 30px 0;
-}
-
-.add-book-form .form-col-1 {
-  width: 50%;
-  padding: 0 100px 0 0;
-}
-
-.add-book-form .form-col-2 {
-  display: flex;
-  align-items: flex-end;
-}
-
-.add-book-form .form-col-2 .cover-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.add-book-form .form-col-2 .cover-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-
-.add-book-form .form-col-2 .cover-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 150px;
-  height: 150px;
-  line-height: 150px;
-  text-align: center;
-}
-
-.add-book-form .form-col-2 .cover {
-  display: inline-block;
-  width: 85px;
-  height: 150px;
-}
-
-.form-btn-group .el-form-item {
-  display: flex;
-  justify-content: center;
-}
-
-.form-btn-group >>> .el-form-item__content {
-  margin: 0 auto !important;
-}
-
-.el-form-item >>> .el-form-item__label {
-  font-size: 16px;
-  font-weight: bold;
-}
 </style>

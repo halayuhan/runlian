@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-25 21:11:13
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-05 14:32:42
+ * @LastEditTime: 2019-08-06 16:15:28
  * @Description: file content
  */
 'use strict'
@@ -25,12 +25,12 @@ module.exports = {
           '^/admin': ''
         },
       },
-      '/isbn/*': {
-        target: 'https://api.jisuapi.com/isbn/query',
+      '/isbn': {
+        target: 'https://api.jisuapi.com',
         secure: false,
         changeOrigin: true,
         pathRewrite: {
-          '^/isbn': ''
+          '^/isbn': '/isbn'
         }
       }
     },

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-26 13:46:00
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-05 17:22:35
+ * @LastEditTime: 2019-08-06 13:56:35
  * @Description: file content
  -->
 <template>
@@ -114,66 +114,4 @@ export default {
 </script>
 
 <style>
-.search {
-  /* position: relative; */
-  /* height: 100%; */
-}
-
-.search-wrapper {
-  margin: 25px;
-  background-color: #fff;
-}
-
-.search-nav {
-  position: absolute;
-  top: 20px;
-  left: 380px;
-}
-
-.search-nav span {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  margin: 1px 0 0 0;
-  color: transparent;
-  /* background: url("../../../assets/point.png") no-repeat;
-  background-size: 40px 40px; */
-  /* background-color: #eee; */
-}
-
-.search-nav .el-icon-arrow-right {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  font-size: 40px;
-  color: #eee;
-}
-
-.search-nav ul {
-  display: flex;
-}
-
-.search-nav li {
-  height: 40px;
-  line-height: 40px;
-  margin: 0 10px 0 20px;
-}
-
-.search-nav a {
-  color: #eee;
-  font-size: 22px;
-}
-
-.search-nav .active-link {
-  /* font-weight: bold; */
-  /* color: #aaa; */
-  letter-spacing: 2px;
-  color: rgba(255, 255, 255, 1);
-  border-bottom: 4px solid #86c4c3;
-  font-size: 24px;
-}
-.search-nav a:hover {
-  color: rgba(255, 255, 255, 1);
-}
 </style>

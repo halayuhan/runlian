@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:08:17
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 18:29:41
+ * @LastEditTime: 2019-08-06 14:05:14
  * @Description: file content
  -->
 <template>
@@ -26,8 +26,5 @@ export default {
 </script>
 
 <style>
-.mobile-item {
-  background: url("../../assets/bc_attend3.png") no-repeat;
-  background-size: 100vw 100vh;
-}
+@import "../../assets/less/mobile/pages.css";
 </style>

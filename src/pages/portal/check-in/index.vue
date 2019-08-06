@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-05 19:27:51
+ * @LastEditTime: 2019-08-06 16:30:50
  * @Description: file content
  -->
 <template>
@@ -27,7 +27,7 @@
             ></el-date-picker>
           </div>
           <div class="data-filter">
-            <el-input placeholder="请输入姓名" v-model="filterInput">
+            <el-input placeholder="请输入姓名搜索" v-model="filterInput">
               <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>
             </el-input>
           </div>
@@ -59,26 +59,26 @@
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="90" label="LDAP" prop="ldap"></el-table-column>
-          <el-table-column label="姓名" prop="userName"></el-table-column>
-          <el-table-column label="性别" prop="gender"></el-table-column>
-          <el-table-column label="内外部" prop="isInternal"></el-table-column>
+          <el-table-column width="140" label="LDAP" prop="ldap"></el-table-column>
+          <el-table-column width="140" label="姓名" prop="userName"></el-table-column>
+          <el-table-column width="90" label="性别" prop="gender"></el-table-column>
+          <el-table-column width="90" label="内外部" prop="isInternal"></el-table-column>
           <el-table-column label="在读书籍" prop="bookName"></el-table-column>
-          <el-table-column label="手机号码" prop="phoneNumber"></el-table-column>
-          <el-table-column label="签到时间" prop="time"></el-table-column>
+          <el-table-column width="160" label="手机号码" prop="phoneNumber"></el-table-column>
+          <el-table-column width="160" label="签到时间" prop="time" sortable></el-table-column>
         </el-table>
       </div>
       <div class="search-footer">
         <el-pagination
           background
-          :hide-on-single-page="total == 0"
           :total="total"
           :current-page="currentPage"
           :page-size="pageSize"
           :page-sizes="[10,20,50]"
-          layout="total,prev,pager,next,sizes,jumper"
+          layout="total,prev,pager,next,jumper,sizes"
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
+          v-show="isShow"
         ></el-pagination>
       </div>
     </div>
@@ -105,6 +105,7 @@ export default {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
+      isShow: true,
       qrcodeVisible: false, // 是否显示二维码
       qrcodeObject: {}, // 二维码封装对象
       timeStart, // 起始时间
@@ -142,7 +143,7 @@ export default {
       filterInput: '', // 用于过滤的输入
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
-      pageSize: 0, // 每页显示行数
+      pageSize: 10, // 每页显示行数
       total: 0 // 总数据量
     }
   },
@@ -176,13 +177,13 @@ export default {
         this.tableData = []
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
-          this.total = 0
+          this.isShow = false
           return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
 
-            let {ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
+            let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
 
             if (gender == 'M') { gender = '男' } else {
               gender = '女'
@@ -196,9 +197,12 @@ export default {
           }
           this.currentPage = response.data.page
           this.total = response.data.count
+          this.isShow = true
         }
         console.log(response) // 请求成功返回的数据
       }).catch((error) => {
+        this.$message.error('网络错误，请重试')
+        this.isShow = false
         console.error(error) // 请求失败返回的数据
       })
     },
@@ -230,7 +234,8 @@ export default {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.26.214:8080/#/attendance' + '#' + timestamp.toString())
+      // this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeObject.makeCode('http://10.0.58.22:8090/' + encodeURI('#') + '/attendance' + encodeURI('#') + timestamp.toString())
       this.qrcodeVisible = true
     },
     closeMask () {
@@ -282,106 +287,4 @@ export default {
 </script>
 
 <style>
-.no-scroll {
-  height: calc(100vh - 130px);
-  overflow: hidden;
-}
-
-.search-handle {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 60px;
-  padding: 0 50px;
-  /* border-bottom: 1px solid #000; */
-  /* background-color: #eee; */
-}
-
-.search-handle-left {
-  display: flex;
-  margin: 0 20px 0 0;
-}
-
-.search-handle-right ul {
-  display: flex;
-}
-
-.search-handle-left .data-filter {
-  margin: 0 0 0 40px;
-}
-
-/* .el-input-group__append button.el-button {
-  border: 1px solid #5caaab;
-} */
-
-.search-handle-right li:first-child {
-  margin: 0 20px 0 0;
-}
-
-.mask {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 99;
-}
-
-.mask-content {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 260px;
-  height: 320px;
-  text-align: center;
-  background-color: #fff;
-}
-
-.mask-content p {
-  margin: 10px 0 0 0;
-  font-size: 16px;
-}
-
-.mask-content .icon {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-.mask-content i::before {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-#qrcode {
-  width: 142px;
-  height: 142px;
-  padding: 5px;
-  /* border: 1px solid #000; */
-  background-color: #fff;
-}
-
-#qrcode img {
-  width: 132px;
-  height: 132px;
-}
-
-.search-content {
-  padding: 30px 50px 0 50px;
-}
-
-.search-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 30px 50px;
-}
 </style>

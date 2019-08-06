@@ -2,21 +2,21 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-05 19:43:16
+ * @LastEditTime: 2019-08-06 16:15:49
  * @Description: file content
  -->
 <template>
   <div class="book" v-loading.fullscreen.lock="this.$store.state.loading">
     <div class="book-wrapper">
-      <div class="search-handle">
-        <div class="search-handle-left">
-          <div class="data-filter">
+      <div class="book-search-handle">
+        <div class="book-search-handle-left">
+          <div class="book-filter">
             <el-input placeholder="请输入书籍名称/作者/出版社" v-model="filterInput" width="250">
               <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
             </el-input>
           </div>
         </div>
-        <div class="search-handle-right">
+        <div class="book-search-handle-right">
           <ul>
             <li>
               <el-upload
@@ -41,15 +41,15 @@
               </el-dialog>
             </li>
             <li>
-              <el-button type="primary" @click="handleAddBook">添加</el-button>
+              <el-button type="primary" @click.prevent="handleAddBook">添加</el-button>
             </li>
             <li>
-              <el-button type="success">导出书单</el-button>
+              <el-button type="success" @click.prevent="isbnTest">导出书单</el-button>
             </li>
           </ul>
         </div>
       </div>
-      <div class="search-content">
+      <div class="book-search-content">
         <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
           <el-table-column type="expand">
             <template slot-scope="props">
@@ -323,7 +323,7 @@ export default {
       console.log(params)
       this.$axios({
         methods: 'get',
-        url: process.env.API_HOST + '/query/query',
+        url: process.env.API_HOST + '/book/query',
         params
       }).then((response) => {
         this.tableData = []
@@ -351,19 +351,21 @@ export default {
         page: 1
       }
       this.queryData(paramsData)
-      // const params = {
-      //   appkey: 'b979ae09bbbff4a2',
-      //   isbn: this.filterInput
-      // }
-      // this.$axios({
-      //   methods: 'get',
-      //   url: '/isbn/',
-      //   params
-      // }).then(response => {
-      //   console.log(response.data.result)
-      // }).catch((error) => {
-      //   console.log(error)
-      // })
+    },
+    isbnTest () {
+      const params = {
+        appkey: 'b979ae09bbbff4a2',
+        isbn: this.filterInput
+      }
+      this.$axios({
+        methods: 'get',
+        url: '/isbn/query',
+        params
+      }).then(response => {
+        console.log(response.data.result)
+      }).catch((error) => {
+        console.log(error)
+      })
     },
     readExcel (file) {
       const fileReader = new FileReader()
@@ -441,122 +443,4 @@ export default {
 </script>
 
 <style>
-.search-handle {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 60px;
-  padding: 0 50px;
-  /* border-bottom: 1px solid #000; */
-  /* background-color: #eee; */
-}
-
-.search-handle-left {
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 20px 0 0;
-}
-
-.search-handle-left .el-input__inner {
-  width: 240px;
-}
-
-.search-handle-right ul {
-  display: flex;
-}
-
-/* .el-input-group__append button.el-button {
-  background-color: #5caaab;
-  color: #fff;
-} */
-
-.search-handle-right li {
-  margin: 0 20px 0 0;
-}
-.search-handle-right li:last-child {
-  margin: 0;
-}
-
-.search-content {
-  padding: 30px 50px 0 50px;
-}
-
-.el-table .cell ul {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.el-table .cell li {
-  display: flex;
-  margin: 0 0 5px 0;
-}
-
-.el-table .cell li p {
-  margin: 0 3px 0 0;
-  width: 40px;
-}
-/* .el-table .cell li .el-input {
-  margin: 0 0 0 5px;
-  width: 40px;
-} */
-
-.el-table .cell img {
-  display: inline-block;
-  width: 90px;
-  height: 150px;
-  margin: 0 0 5px 0;
-}
-
-.el-table .table-expand-form {
-  display: flex;
-  padding: 0 0 10px 0;
-  /* align-items: flex-end; */
-}
-
-.el-table .table-expand-form .el-form-item {
-  margin: 0;
-  height: 30px;
-}
-
-.el-table .table-expand-form .el-form-item div {
-  display: flex;
-  height: 30px;
-}
-
-.el-table .table-expand-form .el-form-item .flex-column {
-  flex-direction: column;
-}
-
-.el-table .expand-form-left {
-  width: 240px;
-}
-
-.el-table .expand-form-right {
-  width: 250px;
-}
-
-.el-table .expand-form-center {
-  flex: 1;
-  padding: 0 80px 0 60px;
-  /* align-self: flex-start; */
-}
-
-.el-table .table-expand-form p {
-  width: 90px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.el-table .table-expand-form h1 {
-  font-size: 14px;
-  font-weight: normal;
-  word-break: break-all;
-}
-
-.search-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 30px 50px;
-}
 </style>
