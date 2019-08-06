@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .mobile-header {
   height: 60px;
   padding: 0 10px;

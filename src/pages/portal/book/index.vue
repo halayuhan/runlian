@@ -307,6 +307,7 @@ export default {
   //   this.isEdit.fill(false)
   // },
   methods: {
+
     async requestFn(data) {
       this.tableData = JSON.stringify(data)
       console.log(data)
@@ -323,6 +324,7 @@ export default {
     handleOpen() {
       this.visible = true
     },
+
     handleAddBook() {
       this.$router.push('/book/add-book')
     },

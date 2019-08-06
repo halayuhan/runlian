@@ -198,6 +198,7 @@ export default {
           }
           this.currentPage = response.data.page
           this.total = response.data.count
+          this.isShow = true
         }
         console.log(response) // 请求成功返回的数据
       }).catch((error) => {
@@ -234,7 +235,9 @@ export default {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.24.140:8080/#/attendance' + '#' + timestamp.toString())
+
+      this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance' + '#' + timestamp.toString())
+
       this.qrcodeVisible = true
     },
     closeMask() {

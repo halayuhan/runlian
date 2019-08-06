@@ -247,7 +247,6 @@ input:-ms-input-placeholder {
 .el-date-picker__header-label:hover {
   color: #5caaab;
 }
-
 /* .el-pagination .el-input__inner:hover {
   border-color: #5caaab;
 } */
