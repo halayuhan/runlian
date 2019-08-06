@@ -44,6 +44,7 @@ export default {
   margin: 160px auto;
   /* border: 2px solid #4d4d4d; */
   border-radius: 60px;
+  /* margin-top: 40px; */
   background-color: rgba(255, 255, 255, 0.7);
 }
 .success-box i::before {

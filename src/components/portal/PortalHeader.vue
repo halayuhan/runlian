@@ -22,17 +22,17 @@
 <script>
 export default {
   name: 'PortalHeader',
-  data () {
+  data() {
     return {
-    // 登录状态
-    // 登录用户，返回数据存于vuex中
+      // 登录状态
+      // 登录用户，返回数据存于vuex中
     }
   },
   computed: {
-    userName () {
+    userName() {
       return this.$store.state.user
     },
-    isLogin () {
+    isLogin() {
       return !!this.$store.state.user
     }
   }

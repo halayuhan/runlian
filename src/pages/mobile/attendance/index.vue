@@ -10,29 +10,30 @@
     <div class="attend-container">
       <form class="form">
         <div class="form-item">
-          <span>LDAP账号*</span>
+          <span>LDAP账号</span>
           <div class="form-item-input">
             <input type="text" v-model="form.ldap.val" @blur="_getUserinfo()" />
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
         <div class="form-item">
-          <span>手机号码*</span>
+          <span>手机号码</span>
           <div class="form-item-input">
             <input type="text" v-model="form.phone.val" v-if="isShow" />
             <h2 v-if="!isShow">{{form.phone.val}}</h2>
-            <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
+            <p v-if="isCorrect">请谨慎填写，提交后不可修改</p>
           </div>
         </div>
         <div class="form-item">
-          <span>姓名*</span>
+          <span>姓名</span>
           <div class="form-item-input">
             <input type="text" v-model="form.name.val" v-if="isShow" />
             <h2 v-if="!isShow">{{form.name.val}}</h2>
+            <p v-if="isCorrect">请谨慎填写，提交后不可修改</p>
           </div>
         </div>
         <div class="form-item justify-item">
-          <span>性别*</span>
+          <span>性别</span>
           <div class="form-item-input">
             <ul>
               <li>
@@ -48,7 +49,7 @@
           </div>
         </div>
         <div class="form-item justify-item">
-          <span>内外部*</span>
+          <span>内外部</span>
           <div class="form-item-input">
             <ul>
               <li>
@@ -64,7 +65,7 @@
           </div>
         </div>
         <div class="form-item">
-          <span>部门*</span>
+          <span>部门</span>
           <div class="form-item-input">
             <input type="text" v-model="form.department.val" />
             <!-- <p v-if="errors.department">部门{{errors.department}}</p> -->
@@ -72,7 +73,7 @@
         </div>
 
         <div class="form-item">
-          <span>在读书籍*</span>
+          <span>在读书籍</span>
           <div class="form-item-input">
             <input type="text" v-model="form.books.val" />
             <!-- <p v-if="errors.books">在读书籍{{errors.books}}</p> -->
@@ -94,6 +95,7 @@ export default {
   name: 'Attendance',
   data() {
     return {
+      isCorrect: false,
       isShow: true,
       gender: 'M',
       isInternal: 'Y',
@@ -135,6 +137,7 @@ export default {
       this.form.department.val = window.localStorage.getItem('department')
       this.form.phone.val = window.localStorage.getItem('phone')
       this.form.ldap.val = window.localStorage.getItem('ldap')
+      this.form.books.val = window.localStorage.getItem('books')
       this.isShow = false
     } else {
       this.$message.info('请输入LDAP账号搜索签到历史')
@@ -184,19 +187,24 @@ export default {
           params        })
           .then((response) => {
             if (response.data.code != '000') {
-              this.$message.error('当前用户无签到历史')
+
               localStorage.clear()
               this.form.name.val = ''
               this.form.department.val = ''
               this.form.phone.val = ''
+              this.form.books.val = ''
+              this.gender = 'M'
               this.isShow = true
+              this.isCorrect = true
             } else {
               this.gender = response.data.data.gender
               this.isInternal = response.data.data.isInternal
               this.form.name.val = response.data.data.userName
               this.form.department.val = response.data.data.department
               this.form.phone.val = response.data.data.phoneNumber
+              this.form.books.val = response.data.data.book
               this.isShow = false
+              this.isCorrect = false
             }
             console.log(response) // 请求成功返回的数据
           }).catch((error) => {
@@ -317,6 +325,10 @@ export default {
   line-height: 30px;
   font-weight: normal;
   color: initial;
+}
+
+.form-item-input p {
+  font-size: 10px;
 }
 
 .attend-container .justify-item span {

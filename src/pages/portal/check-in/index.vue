@@ -27,7 +27,7 @@
             ></el-date-picker>
           </div>
           <div class="data-filter">
-            <el-input placeholder="请输入姓名" v-model="filterInput">
+            <el-input placeholder="请输入姓名搜索" v-model="filterInput">
               <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>
             </el-input>
           </div>
@@ -59,13 +59,13 @@
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="90" label="LDAP" prop="ldap"></el-table-column>
-          <el-table-column label="姓名" prop="userName"></el-table-column>
-          <el-table-column label="性别" prop="gender"></el-table-column>
-          <el-table-column label="内外部" prop="isInternal"></el-table-column>
+          <el-table-column width="140" label="LDAP" prop="ldap"></el-table-column>
+          <el-table-column width="140" label="姓名" prop="userName"></el-table-column>
+          <el-table-column width="90" label="性别" prop="gender"></el-table-column>
+          <el-table-column width="90" label="内外部" prop="isInternal"></el-table-column>
           <el-table-column label="在读书籍" prop="bookName"></el-table-column>
-          <el-table-column label="手机号码" prop="phoneNumber"></el-table-column>
-          <el-table-column label="签到时间" prop="time"></el-table-column>
+          <el-table-column width="160" label="手机号码" prop="phoneNumber"></el-table-column>
+          <el-table-column width="160" label="签到时间" prop="time" sortable></el-table-column>
         </el-table>
       </div>
       <div class="search-footer">
@@ -76,9 +76,10 @@
           :current-page="currentPage"
           :page-size="pageSize"
           :page-sizes="[10,20,50]"
-          layout="total,prev,pager,next,sizes,jumper"
+          layout="total,prev,pager,next,jumper,sizes"
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
+          v-show="isShow"
         ></el-pagination>
       </div>
     </div>
@@ -101,28 +102,29 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data () {
+  data() {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
+      isShow: true,
       qrcodeVisible: false, // 是否显示二维码
       qrcodeObject: {}, // 二维码封装对象
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() > Date.now()
         },
         shortcuts: [
           {
             text: '今天',
-            onClick (picker) {
+            onClick(picker) {
               picker.$emit('pick', new Date())
             }
           },
           {
             text: '昨天',
-            onClick (picker) {
+            onClick(picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24)
               picker.$emit('pick', date)
@@ -130,7 +132,7 @@ export default {
           },
           {
             text: '一周前',
-            onClick (picker) {
+            onClick(picker) {
               const date = new Date()
               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', date)
@@ -146,10 +148,10 @@ export default {
       total: 100 // 总数据量
     }
   },
-  created () {
+  created() {
     this.queryData()
   },
-  mounted () {
+  mounted() {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
@@ -157,7 +159,7 @@ export default {
 
   // },
   methods: {
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       // TODO
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
@@ -176,12 +178,13 @@ export default {
         this.tableData = []
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
+          this.isShow = false
           return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
 
-            let {ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
+            let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
 
             if (gender == 'M') { gender = '男' } else {
               gender = '女'
@@ -195,13 +198,16 @@ export default {
           }
           this.currentPage = response.data.page
           this.total = response.data.count
+          this.isShow = true
         }
         console.log(response) // 请求成功返回的数据
       }).catch((error) => {
+        this.$message.error('网络错误，请重试')
+        this.isShow = false
         console.error(error) // 请求失败返回的数据
       })
     },
-    filterSearch () {
+    filterSearch() {
       const paramsData = {
         // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
@@ -212,7 +218,7 @@ export default {
       this.queryData(paramsData)
     },
 
-    downloadExcel () {
+    downloadExcel() {
       const baseurl = 'http://10.0.58.22:8080/signIn/getExcel?'
 
       const params = {
@@ -225,19 +231,19 @@ export default {
       window.open(url)
       this.downloadVisible = false
     },
-    showMask () {
+    showMask() {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      this.qrcodeObject.makeCode('http://10.54.26.214:8080/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance' + '#' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask () {
+    closeMask() {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode () {
+    qrcode() {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -255,7 +261,7 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       const paramsData = {
         //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
@@ -265,7 +271,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
@@ -282,7 +288,7 @@ export default {
 
 <style>
 .no-scroll {
-  height: calc(100vh - 130px);
+  height: calc(100vh - 100px);
   overflow: hidden;
 }
 
@@ -308,9 +314,11 @@ export default {
   margin: 0 0 0 40px;
 }
 
-/* .el-input-group__append button.el-button {
+.el-input-group__append button.el-button {
+  background: #5caaab;
+  color: #fff;
   border: 1px solid #5caaab;
-} */
+}
 
 .search-handle-right li:first-child {
   margin: 0 20px 0 0;

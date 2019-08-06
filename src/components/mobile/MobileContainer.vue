@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .mobile-container {
   /* background-color: #61acab; */
   height: calc(100vh - 60px);

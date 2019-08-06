@@ -377,10 +377,10 @@ export default {
 
   }),
   computed: {
-    total () {
+    total() {
       return this.tableData.length
     }, // 总数据量
-    pageData () {
+    pageData() {
       return this.tableData.slice(
         (this.currentPage - 1) * this.pageSize,
         this.currentPage * this.pageSize
@@ -392,16 +392,16 @@ export default {
   //   this.isEdit.fill(false)
   // },
   methods: {
-    handleAddBook () {
+    handleAddBook() {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       this.currentPage = index
     },
-    handleSizeChange (index) {
+    handleSizeChange(index) {
       this.pageSize = index
     },
-    handleAvatarSuccess (scope, file) {
+    handleAvatarSuccess(scope, file) {
       // console.log(file)
       // console.log(fileList)
       console.log(arguments)
@@ -411,13 +411,13 @@ export default {
       const imageUrl = '/static/cover/' + file.name
       this.pageData[index].img = imageUrl
     },
-    handleEditChange (index, row) {
+    handleEditChange(index, row) {
       row.edit = true
     },
-    handleEditSave (index, row) {
+    handleEditSave(index, row) {
       row.edit = false
     },
-    handleEditCancel (index, row) {
+    handleEditCancel(index, row) {
       row.edit = false
     }
   }

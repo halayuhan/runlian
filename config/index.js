@@ -17,14 +17,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/admin/*': {
-        target: 'http://10.0.58.22:8080',
-        secure: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/admin': ''
-        }
-      }
+      // '/admin/*': {
+      //   target: 'http://10.0.58.22:8080',
+      //   secure: false,
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/admin': ''
+      //   }
+      // }
     },
 
     // Various Dev Server settings
