@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 10:20:06
+ * @LastEditTime: 2019-08-05 17:52:14
  * @Description: file content
  -->
 <template>
@@ -62,7 +62,7 @@ export default {
       } else {
         this.$axios({
           methods: 'get',
-          url: '/admin/login',
+          url: process.env.API_HOST + '/admin/login',
           params
         }).then((response) => {
           if (response.data.code != '000') {

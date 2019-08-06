@@ -2,7 +2,7 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 11:39:24
+ * @LastEditTime: 2019-08-05 19:46:47
  * @Description: file content
  -->
 <template>
@@ -174,6 +174,14 @@ input:-ms-input-placeholder {
 }
 
 /* 更改默认样式 */
+.el-input-group__append button.el-button {
+  color: #fff;
+  background-color: #5caaab;
+  border-color: #5caaab;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
 .el-button--primary {
   color: #fff;
   background-color: #5caaab;
@@ -203,17 +211,19 @@ input:-ms-input-placeholder {
 }
 
 .el-button--success {
-  color: #fff;
-  background-color: #68a8ea;
-  border-color: #68a8ea;
+  color: #5caaab;
+  background-color: #fff;
+  border-color: #5caaab;
 }
 .el-button--success:hover {
-  background-color: #68a8ea;
-  border-color: #68a8ea;
+  color: #5caaab;
+  background-color: #fff;
+  border-color: #5caaab;
 }
 .el-button--success:focus {
-  background-color: #68a8ea;
-  border-color: #68a8ea;
+  color: #5caaab;
+  background-color: #fff;
+  border-color: #5caaab;
 }
 
 .el-pagination.is-background .el-pager li:not(.disabled).active {
@@ -233,7 +243,33 @@ input:-ms-input-placeholder {
   border-color: #5caaab;
 }
 
+.el-select-dropdown__item.selected {
+  color: #5caaab;
+}
+
+.el-select .el-input.is-focus .el-input__inner {
+  border-color: #5caaab;
+}
+.el-select .el-input__inner:focus {
+  border-color: #5caaab;
+}
 .el-input__inner:hover {
   border-color: #5caaab;
+}
+
+.el-input__inner:active {
+  border-color: #5caaab;
+}
+
+.el-input__inner:focus {
+  border-color: #5caaab;
+}
+
+.el-loading-mask {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.el-loading-spinner .path {
+  stroke-width: 3;
+  stroke: #5caaab;
 }
 </style>

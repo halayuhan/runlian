@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-26 13:46:00
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-01 19:14:34
+ * @LastEditTime: 2019-08-05 17:22:35
  * @Description: file content
  -->
 <template>
@@ -116,7 +116,7 @@ export default {
 <style>
 .search {
   /* position: relative; */
-  height: 100%;
+  /* height: 100%; */
 }
 
 .search-wrapper {

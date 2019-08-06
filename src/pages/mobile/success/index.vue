@@ -2,11 +2,11 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:08:17
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 14:35:45
+ * @LastEditTime: 2019-08-05 19:28:35
  * @Description: file content
  -->
 <template>
-  <div class="success">
+  <div class="success" v-loading.fullscreen.lock="this.$store.state.loading">
     <div class="success-container">
       <div class="success-box">
         <i class="el-icon-check"></i>

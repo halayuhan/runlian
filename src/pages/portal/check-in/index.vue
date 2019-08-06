@@ -2,11 +2,11 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 15:18:11
+ * @LastEditTime: 2019-08-05 19:27:51
  * @Description: file content
  -->
 <template>
-  <div class="check-in">
+  <div class="check-in" v-loading.fullscreen.lock="this.$store.state.loading">
     <div :class="['check-in-wrapper', {'no-scroll': qrcodeVisible}]">
       <div class="search-handle">
         <div class="search-handle-left">
@@ -71,7 +71,7 @@
       <div class="search-footer">
         <el-pagination
           background
-          :hide-on-single-page="false"
+          :hide-on-single-page="total == 0"
           :total="total"
           :current-page="currentPage"
           :page-size="pageSize"
@@ -142,8 +142,8 @@ export default {
       filterInput: '', // 用于过滤的输入
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
-      pageSize: 10, // 每页显示行数
-      total: 100 // 总数据量
+      pageSize: 0, // 每页显示行数
+      total: 0 // 总数据量
     }
   },
   created () {
@@ -170,12 +170,13 @@ export default {
       console.log(params)
       this.$axios({
         methods: 'get',
-        url: '/signIn/getRecord',
+        url: process.env.API_HOST + '/signIn/getRecord',
         params
       }).then((response) => {
         this.tableData = []
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
+          this.total = 0
           return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
@@ -288,7 +289,7 @@ export default {
 
 .search-handle {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   height: 60px;
   padding: 0 50px;
@@ -298,6 +299,7 @@ export default {
 
 .search-handle-left {
   display: flex;
+  margin: 0 20px 0 0;
 }
 
 .search-handle-right ul {
@@ -379,7 +381,7 @@ export default {
 
 .search-footer {
   display: flex;
-  justify-content: center;
-  padding: 30px 0;
+  justify-content: flex-end;
+  padding: 30px 50px;
 }
 </style>

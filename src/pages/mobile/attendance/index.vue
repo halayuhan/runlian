@@ -2,11 +2,11 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 15:25:33
+ * @LastEditTime: 2019-08-05 19:28:37
  * @Description: file content
  -->
 <template>
-  <div class="attendance">
+  <div class="attendance" v-loading.fullscreen.lock="this.$store.state.loading">
     <div class="attend-container">
       <form class="form">
         <div class="form-item">
@@ -92,7 +92,7 @@
 <script>
 export default {
   name: 'Attendance',
-  data() {
+  data () {
     return {
       isShow: true,
       gender: 'M',
@@ -122,13 +122,12 @@ export default {
           val: '',
           err_msg: '请输入正确书名',
           rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,30}$/]
-        },
+        }
       }
     }
   },
   mounted: function () {
     if (window.localStorage.getItem('ldap')) { // 判断本地localStorage内是否存有用户历史信息
-
       this.gender = window.localStorage.getItem('gender')
       this.isInternal = window.localStorage.getItem('isInternal')
       this.form.name.val = window.localStorage.getItem('name')
@@ -141,7 +140,7 @@ export default {
     }
   },
   computed: {
-    channel() {
+    channel () {
       return this.form.ladp.val
     }
   },
@@ -169,7 +168,7 @@ export default {
   //   }
   // },
   methods: {
-    _getUserinfo() {
+    _getUserinfo () {
       const params = {
         ldap: this.form.ldap.val
       }
@@ -177,11 +176,11 @@ export default {
       if (!reg.test(this.form.ldap.val)) {
         this.$message.error(this.form.ldap.err_msg)
       } else {
-
         this.$axios({
           methods: 'get',
-          url: '/signIn/getUser',
-          params        })
+          url: process.env.API_HOST + '/signIn/getUser',
+          params
+        })
           .then((response) => {
             if (response.data.code != '000') {
               this.$message.error('当前用户无签到历史')
@@ -205,7 +204,7 @@ export default {
       }
     },
 
-    _validate() {
+    _validate () {
       let isPass = false
       for (let key in this.form) {
         let reg = this.form[key].rules[0]
@@ -222,7 +221,7 @@ export default {
       return isPass
     },
 
-    attendSubmit() {
+    attendSubmit () {
       if (!this._validate()) {
         return
       }
@@ -247,7 +246,7 @@ export default {
 
       this.$axios({
         methods: 'post',
-        url: '/signIn/submit',
+        url: process.env.API_HOST + '/signIn/submit',
         params
       }).then((response) => {
         if (response.data.code != '000') {

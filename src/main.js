@@ -2,7 +2,7 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-02 14:18:00
+ * @LastEditTime: 2019-08-05 19:20:12
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -13,14 +13,16 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/index.js'
-import axios from 'axios'
+import axios from './util/http.js'
 import store from './store'
 import md5 from 'js-md5'
 import { getDate } from './api/dateFormat'
-require('./mock/mock')
+
+// require('./mock/mock')
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
-axios.defaults.baseURL = 'http://10.0.58.22:8080'
-// 10.0.58.22:8080
+// axios.defaults.baseURL = 'http://10.54.24.45:8080'
+// axios.defaults.baseURL = 'http://10.0.58.22:8080'
+// 服务器
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false

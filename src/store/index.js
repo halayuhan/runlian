@@ -1,3 +1,10 @@
+/*
+ * @Author: liyan
+ * @Date: 2019-07-29 16:34:42
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-05 19:30:41
+ * @Description: file content
+ */
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -5,7 +12,8 @@ Vue.use(Vuex)
 //  用sessionStorage.getItem('token')
 const state = {
   user: window.sessionStorage.getItem('user'),
-  token: window.sessionStorage.getItem('token')
+  token: window.sessionStorage.getItem('token'),
+  loading: false
 }
 const mutations = {
   // 将token保存到sessionStorage里，token表示登陆状态
@@ -26,6 +34,9 @@ const mutations = {
     state.user = null
     window.sessionStorage.removeItem('token')
     window.sessionStorage.removeItem('user')
+  },
+  LOADING: (state, data) => {
+    state.loading = data
   }
 }
 
