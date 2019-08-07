@@ -16,8 +16,6 @@
       :http-request="Requeset"
       :limit="1"
       :show-file-list="false"
-      :on-success="uploadSuceess"
-      :on-error="uploadError"
       action="/"
       class="ele-import-upload-uploader"
       drag
@@ -31,9 +29,9 @@
     </el-upload>
 
     <!-- 操作 -->
-    <div class="ele-import-action">
+    <!-- <div class="ele-import-action">
       <el-button :loading="isLoading" @click="handleGoNext" type="primary">下一步</el-button>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -61,28 +59,40 @@ export default {
     // 上传
     Requeset(file) {
       let formdata = new FormData();
-      formdata.append('file',file.file);
+      formdata.append('file', file.file);
       console.log(formdata.get('file'));
       this.$axios({
-         method: 'post',
-         url:'http://10.54.24.176:8080/book/leadExcel',
-         data:formdata,
-         headers:{
-            'Content-Type':'application/vnd.ms-excel' }
+        method: 'post',
+        url: '/book/uploadExcel',
+        data: formdata,
+        headers: {
+          'Content-Type': 'multipart/form-data'        }
       }).then((response) => {
-         
-          console.log(response) // 请求成功返回的数据
-        }).catch((error) => {
-          this.$message.error('上传失败')
-          console.error(error) // 请求失败返回的数据
-        })
+        console.log(response)
+        let tableData = [];
+        let errorDate = [];
+
+        for (let i = 0; i < response.data.data.length; i++) {
+          const bookData = response.data.data[i];
+          let { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum } = bookData
+          if (bookData.haveNum === 0) {
+            errorDate.push({ bookData })
+            this.$emit('errorRow', errorDate)
+          }
+          let tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum }
+          tableData.push(tableItem)
+        }
+
+        this.$emit('upload', tableData)
+        this.goNext()
+
+        // 请求成功返回的数据
+      }).catch((error) => {
+        this.$message.error('上传失败')
+        console.error(error) // 请求失败返回的数据
+      })
     },
-    uploadSuceess(){
-      
-    },  
-    uploadError(){
-      this.uploadError('上传失败')
-    },
+
     // 检测文件类型
     checkType(file) {
       const fileExt = file.name.split('.').pop().toLocaleLowerCase()
@@ -135,26 +145,7 @@ export default {
         this.uploadError('文件：' + file.name + ' 文件类型错误，请在模板文件上修改后上传')
         return false
       }
-
       this.isLoading = true
-      try {
-        // const { columns, tableData } = await excel(file)
-
-        // if (!(columns.length && tableData.length)) {
-        //   this.uploadError('请打开模板文件, 并填写数据')
-        // } else {
-        //   this.checkTableTitle(columns, this.fields)
-        //   this.$emit('upload', columns, this.changeDatakeyAndFilter(tableData))
-        //   this.goNext()
-        // }
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e)
-        this.uploadError('文件读取出错，请重新上传')
-      } finally {
-        this.isLoading = false
-      }
-
       return false
     }
   }
@@ -171,5 +162,10 @@ export default {
 .ele-import-upload-uploader {
   margin-top: 20px;
   text-align: center;
+}
+.el-step__head.is-finish,
+.el-step__title.is-finish {
+  color: #5caaab;
+  border-color: #5caaab;
 }
 </style>

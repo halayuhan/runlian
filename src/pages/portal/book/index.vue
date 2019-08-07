@@ -23,7 +23,6 @@
               <ex-import
                 :fields="fields"
                 :requestFn="requestFn"
-                :rules="rules"
                 :tips="tips"
                 :title="title"
                 :visible.sync="visible"
@@ -262,34 +261,35 @@
 <script>
 export default {
   name: 'Book',
-  data () {
-    return{
-    title: '批量导入书单',
-    tips: ['ISBN必填', '数量必填', '书籍类型必填'],
-    fields: {
-      series: '序号',
-      isbn: 'ISBN/书籍编号*',
-      bookName: '书籍名称*',
-      author: '作者*',
-      publisher: '出版社*',
-      publishTime: '出版时间*',
-      bookNum: '数量*',
-      category: '书籍类型*',
-      bookInfo: '书籍简介'
-    },
-    rules: {
-      series: { type: 'number' },
-      isbn: { type: 'number', required: true, message: '书籍ISBN必填' },
-      bookNum: { type: 'number', required: true, message: '书籍数量必填' },
-      category: { type: 'string', required: true, message: '书籍类型必填' }
-    },
-    visible: false,
-    filterInput: '',
-    tableData: [],
-    currentPage: 1, // 当前页码
-    pageSize: 10 // 每页显示行数
+  data() {
+    return {
+      title: '批量导入书单',
+      tips: ['ISBN必填', '书籍类型必填'],
+      fields: {
+        // id: '序号',
+        isbn: 'ISBN/书籍编号*',
+        bookName: '书籍名称*',
+        author: '作者*',
+        publisher: '出版社*',
+        pubDate: '出版时间*',
+        totalNum: '数量*',
+        type: '书籍类型*',
+        description: '书籍简介',
 
-  }
+      },
+      // rules: {
+      //   id: { type: 'string' },
+      //   isbn: { type: 'string', required: true, message: '书籍ISBN必填' },
+      //   bookNum: { type: 'number', required: true, message: '书籍数量必填' },
+      //   category: { type: 'string', required: true, message: '书籍类型必填' }
+      // },
+      visible: false,
+      filterInput: '',
+      tableData: [],
+      currentPage: 1, // 当前页码
+      pageSize: 10 // 每页显示行数
+
+    }
   },
   computed: {
     total() {
