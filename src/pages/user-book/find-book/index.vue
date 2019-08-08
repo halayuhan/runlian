@@ -45,7 +45,7 @@
               <div class="cell-content">
                 <div class="item-header-group">
                   <div class="item-bookName">
-                    <span>红与黑黑黑黑黑黑黑黑黑黑黑黑</span>
+                    <span>红与黑</span>
                     <!-- <span>{{item.bookName}}</span> -->
                   </div>
                   <div class="item-type">
@@ -54,11 +54,13 @@
                   </div>
                 </div>
                 <div class="item-author">
-                  <span>作者:罗斯福妥耶夫斯基罗斯福妥耶夫斯基</span>
-
+                  <span>作者:罗斯福妥耶夫斯基</span>
                   <!-- <span>作者：{{item.author}}</span> -->
                 </div>
-
+                <div class="item-publisher">
+                  <span>出版社:人民文学出版社</span>
+                  <!-- <span>{{出版社:item.publisher}}</span> -->
+                </div>
                 <div class="item-bookNum">
                   <div class="item-booktotal">
                     <van-tag plain color="#5caaab">库藏</van-tag>
@@ -74,10 +76,6 @@
               </div>
             </div>
             <div slot="default">
-              <div class="item-publisher">
-                <span>出版社:人民文学出版社</span>
-                <!-- <span>{{出版社:item.publisher}}</span> -->
-              </div>
               <div class="item-pubDate">
                 <span>出版时间 :</span>
                 <span>2018/08/08</span>
@@ -273,10 +271,12 @@ h1 {
 }
 .cell-content {
   text-align: left;
-
   -webkit-flex: 3;
   flex: 3;
+  display: flex;
+  flex-direction: column;
 }
+
 .cell-title {
   -webkit-flex: 1;
   flex: 1;
