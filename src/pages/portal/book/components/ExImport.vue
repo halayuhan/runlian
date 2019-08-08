@@ -1,3 +1,10 @@
+<!--
+ * @Author: liyan
+ * @Date: 2019-08-06 17:07:50
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-06 21:06:28
+ * @Description: file content
+ -->
 <template>
   <div>
     <el-dialog
@@ -5,60 +12,52 @@
       :visible="visible"
       :width="dialogWidth"
       @close="handlClose"
-      append-to-body
       v-if="visible"
     >
       <ele-steps
         :active="currentStep"
-        :steps="['下载模板', '上传文件', '确认数据', '完成']"
+        :steps="['上传文件', '确认数据', '完成']"
         :stepsAttrs="{
           'align-center': true
         }"
       />
       <!-- 下载模板 -->
-      <ele-import-download :filepath="filepath" v-if="currentStep === 1" />
 
       <!-- 上传Excel -->
       <ele-import-upload
         :fields="fields"
         :tips="tips"
         @upload="handleUpload"
-        v-if="currentStep === 2"
+        v-if="currentStep === 1"
       />
 
       <!-- 数据展示 -->
       <ele-import-data
-        :append="append"
         :fields="fields"
         :formatter="formatter"
         :request-fn="requestFn"
         :rules="rules"
         :table-data="tableData"
         @pre="handleStep3Pre"
-        v-if="currentStep === 3"
+        v-if="currentStep === 2"
       />
 
       <!-- 导入结束 -->
-      <ele-import-finish @finish="handleFinish" v-if="currentStep === 4" />
+      <ele-import-finish @finish="handleFinish" v-if="currentStep === 3" />
     </el-dialog>
   </div>
 </template>
 
 <script>
 import EleSteps from 'vue-ele-steps'
-import EleImportDownload from './components/EleImportDownload'
-import EleImportUpload from './components/EleImportUpload'
-import EleImportData from './components/EleImportData'
-import EleImportFinish from './components/EleImportFinish'
+import EleImportUpload from '@/components/portal/excel/EleImportUpload'
+import EleImportData from '@/components/portal/excel/EleImportData'
+import EleImportFinish from '@/components/portal/excel/EleImportFinish'
 
 export default {
-  name: 'ExcelImport',
+  name: 'ExImport',
   props: {
-    // 文件路径
-    filepath: {
-      type: String,
-      required: true
-    },
+
     // 请求方法
     requestFn: {
       type: Function,
@@ -77,28 +76,15 @@ export default {
     // 标题
     title: {
       type: String,
-      default: '批量书单导入'
+      default: '批量导入书单'
     },
-    // 增加附加数据
-    append: Object,
+
     // 提示信息，数组
     tips: Array,
     // 验证规则
     rules: Object,
     // 格式化数据
-    formatter: {
-      type: Object,
-      validator(formatter) {
-        for (const key in formatter) {
-          if (!(formatter[key] instanceof Object)) {
-            // eslint-disable-next-line
-            console.error(`${key}的值必须为 对象 或 函数`)
-            return false
-          }
-        }
-        return true
-      }
-    },
+
     // 弹窗宽度
     dialogWidth: {
       type: String,
@@ -109,16 +95,16 @@ export default {
     EleSteps,
     EleImportData,
     EleImportUpload,
-    EleImportFinish,
-    EleImportDownload
+    EleImportFinish
+
   },
-  provide() {
+  provide () {
     return {
       goPre: this.preStep,
       goNext: this.nextStep
     }
   },
-  data() {
+  data () {
     return {
       tableData: [],
       columns: [],
@@ -127,43 +113,43 @@ export default {
   },
   methods: {
     // 上传
-    handleUpload(columns, tableData) {
+    handleUpload (columns, tableData) {
       this.columns = columns
       this.tableData = tableData
     },
     // 初始化数据
-    initData() {
+    initData () {
       this.tableData = []
       this.columns = []
       this.currentStep = 1
     },
     // 关闭
-    handlClose() {
+    handlClose () {
       this.initData()
       this.$emit('close')
       this.$emit('update:visible', false)
     },
     // 结束
-    handleFinish() {
+    handleFinish () {
       this.handlClose()
       this.$emit('finish')
     },
     // 下一步
-    nextStep() {
+    nextStep () {
       this.currentStep++
     },
     // 上一步
-    preStep() {
+    preStep () {
       this.currentStep--
     },
     // 第3步 -> 第2步
-    handleStep3Pre() {
+    handleStep3Pre () {
       this.tableData = []
       this.columns = []
       this.preStep()
     }
   },
-  mounted() { }
+  mounted () { }
 }
 </script>
 

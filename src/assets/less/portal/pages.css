@@ -273,16 +273,19 @@
 }
 
 .search-handle-left .data-filter {
-  margin: 0 0 0 40px;
+  margin: 0 0 0 5px;
 }
 
-.check-in .el-input-group__append button.el-button {
-  background: #5caaab;
-  color: #fff;
+/* .check-in .el-input-group__append button.el-button {
+  background-color:#fff;
+  color:  #5caaab;
   border: 1px solid #5caaab;
-}
+} */
 
-.check-in .search-handle-right li:first-child {
+/* .check-in .search-handle-right li:first-child {
+  margin: 0 20px 0 0;
+} */
+.check-in .search-handle-right li {
   margin: 0 20px 0 0;
 }
 
@@ -545,4 +548,16 @@
 .add-book-wrapper .el-form-item >>> .el-form-item__label {
   font-size: 16px;
   font-weight: bold;
+}
+
+
+/* 404页面 */
+.error-body {
+  width: 100%;
+  text-align: center;
+}
+.error-body h1,
+.error-body h2 {
+  font-size: 54px;
+  color: teal;
 }

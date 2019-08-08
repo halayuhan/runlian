@@ -168,14 +168,3 @@
   color: #218482;
   font-weight: bold;
 }
-
-/* 404页面 */
-.error-body {
-  width: 100%;
-  text-align: center;
-}
-.error-body h1,
-.error-body h2 {
-  font-size: 54px;
-  color: teal;
-}

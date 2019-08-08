@@ -2,7 +2,7 @@
  * @Author: todo
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 15:01:12
+ * @LastEditTime: 2019-08-07 17:01:34
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -18,8 +18,10 @@ import store from './store'
 import md5 from 'js-md5'
 import router from './router'
 import { getDate } from './api/dateFormat'
+import infiniteScroll from 'vue-infinite-scroll'
 
-// require('./mock/mock')
+// import ExImport from './pages/portal/book/components/ExImport'
+
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
 // axios.defaults.baseURL = 'http://10.54.24.45:8080'
 // axios.defaults.baseURL = 'http://10.0.58.22:8080'
@@ -28,8 +30,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.use(infiniteScroll)
 Vue.prototype.$axios = axios
 Vue.prototype.getDate = getDate
+// Vue.component(ExImport.name, ExImport)
 
 /* eslint-disable no-new */
 new Vue({

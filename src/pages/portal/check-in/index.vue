@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 16:30:50
+ * @LastEditTime: 2019-08-06 18:32:30
  * @Description: file content
  -->
 <template>
@@ -27,13 +27,20 @@
             ></el-date-picker>
           </div>
           <div class="data-filter">
-            <el-input placeholder="请输入姓名搜索" v-model="filterInput">
-              <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>
+            <el-input
+              placeholder="请输入姓名搜索"
+              v-model="filterInput"
+              @keyup.enter.native="filterSearch"
+            >
+              <!-- <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button> -->
             </el-input>
           </div>
         </div>
         <div class="search-handle-right">
           <ul>
+            <li>
+              <el-button type="primary" @click.prevent="filterSearch">搜索</el-button>
+            </li>
             <li>
               <el-button type="primary" @click.prevent="downloadVisible = true">导出签到表</el-button>
               <!-- <button @click.prevent="downloadVisible = true">导出签到表</button> -->
@@ -163,7 +170,7 @@ export default {
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        userName: this.filterInput,
+        userName: this.filterInput.trim(),
         page: this.currentPage,
         pageSize: this.pageSize
       }

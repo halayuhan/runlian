@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 16:15:49
+ * @LastEditTime: 2019-08-07 17:56:59
  * @Description: file content
  -->
 <template>
@@ -11,7 +11,12 @@
       <div class="book-search-handle">
         <div class="book-search-handle-left">
           <div class="book-filter">
-            <el-input placeholder="请输入书籍名称/作者/出版社" v-model="filterInput" width="250">
+            <el-input
+              placeholder="请输入书籍名称/作者/出版社"
+              v-model="filterInput"
+              width="250"
+              @keyup.enter.native="filterSearch"
+            >
               <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
             </el-input>
           </div>
@@ -19,16 +24,17 @@
         <div class="book-search-handle-right">
           <ul>
             <li>
-              <el-upload
-                ref="upload"
-                action
-                :show-file-list="false"
-                :on-change="readExcel"
-                :auto-upload="false"
-              >
-                <el-button type="primary" slot="trigger">上传书目</el-button>
-              </el-upload>
-              <!-- <el-button type="primary">上传书目</el-button> -->
+              <el-button type="primary" @click="handleOpen">上传书目</el-button>
+              <ex-import
+                :fields="fields"
+                :requestFn="requestFn"
+                :rules="rules"
+                :tips="tips"
+                :title="title"
+                :visible.sync="visible"
+                @close="handleCloseImport"
+                @finish="handleFinishImport"
+              />
             </li>
             <li>
               <el-button type="primary" @click.prevent="downloadVisible = true">书目模板下载</el-button>
@@ -44,7 +50,14 @@
               <el-button type="primary" @click.prevent="handleAddBook">添加</el-button>
             </li>
             <li>
-              <el-button type="success" @click.prevent="isbnTest">导出书单</el-button>
+              <el-button type="success" @click.prevent="importVisible = true">导出书单</el-button>
+              <el-dialog title="提示" :visible.sync="importVisible" width="30%">
+                <span>是否确认导出书单</span>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click.prevent="importVisible = false">取消</el-button>
+                  <el-button type="primary" @click.prevent="importBook">确认</el-button>
+                </span>
+              </el-dialog>
             </li>
           </ul>
         </div>
@@ -82,7 +95,7 @@
                   <el-form-item>
                     <div>
                       <p>ISBN:</p>
-                      <span>{{props.row.ISBN}}</span>
+                      <span>{{props.row.isbn}}</span>
                     </div>
                   </el-form-item>
                   <el-form-item>
@@ -141,17 +154,17 @@
           </el-table-column>
           <el-table-column label="书籍封面" align="center">
             <template slot-scope="scope">
-              <div class="book-cover">
+              <!-- <div class="book-cover">
                 <img :src="scope.row.img" alt="cover" />
-              </div>
-              <!-- <img :src="scope.row.img" alt="cover" />
+              </div>-->
+              <img :src="scope.row.img" alt="cover" />
               <div class="upload-div">
                 <el-upload
                   class="cover-uploader"
                   action="#"
                   :show-file-list="false"
-                  :on-change="handleAvatarSuccess.bind(this,[...arguments])"
-                  :auto-upload="false"
+                  :http-request="handleUploadCover.bind(this,[...arguments])"
+                  :before-upload="beforeUploadCover"
                 >
                   <div class="cover-uploader-button">
                     <el-button
@@ -163,7 +176,7 @@
                     >上传封面</el-button>
                   </div>
                 </el-upload>
-              </div>-->
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="书籍名称" align="center">
@@ -272,42 +285,45 @@
     </div>
   </div>
 </template>
-
 <script>
-import XLSX from 'xlsx'
+import ExImport from './components/ExImport'
+
 export default {
   name: 'Book',
-  data: () => ({
-    tableData: [
-      {
-        img: 'http://api.jisuapi.com/isbn/upload/1/201.jpg',
-        bookName: 'python',
-        author: 'aa',
-        isbn: '12345678901',
-        publisher: 'bbb',
-        pubDate: '2018-4-1',
-        page: '335',
-        type: 'cc',
-        description: 'wwwwwwwwwwwwssssssssssssssssssssssssssssssssaaaaaaaaaaaassddddddddddsssswwwww',
-        totalNum: '3',
-        outNum: '1',
-        haveNum: '2',
-        edit: false,
-        temp: {
-          type: '',
-          totalNum: '',
-          outNum: '',
-          haveNum: ''
-        }
-      }
-    ],
-    total: 0,
-    filterInput: '',
-    downloadVisible: false,
-    currentPage: 1, // 当前页码
-    pageSize: 10, // 每页显示行数,
-    isLoading: true
-  }),
+  components: {
+    ExImport
+  },
+  data () {
+    return {
+      title: '批量导入书单',
+      tips: ['ISBN必填', '数量必填', '书籍类型必填'],
+      fields: {
+        series: '序号',
+        isbn: 'ISBN/书籍编号*',
+        bookName: '书籍名称*',
+        author: '作者*',
+        publisher: '出版社*',
+        publishTime: '出版时间*',
+        bookNum: '数量*',
+        category: '书籍类型*',
+        bookInfo: '书籍简介'
+      },
+      rules: {
+        series: { type: 'number' },
+        isbn: { type: 'number', required: true, message: '书籍ISBN必填' },
+        bookNum: { type: 'number', required: true, message: '书籍数量必填' },
+        category: { type: 'string', required: true, message: '书籍类型必填' }
+      },
+      downloadVisible: false,
+      importVisible: false,
+      visible: false,
+      filterInput: '',
+      tableData: [],
+      currentPage: 1, // 当前页码
+      pageSize: 10, // 每页显示行数
+      total: 0
+    }
+  },
   created () {
     this.queryData()
   },
@@ -315,7 +331,7 @@ export default {
     queryData (paramsData = {}) {
       const defaultParams = {
         isExist: 0,
-        keyword: this.filterInput,
+        keyword: this.filterInput.trim(),
         page: this.currentPage,
         pageSize: this.pageSize
       }
@@ -367,30 +383,32 @@ export default {
         console.log(error)
       })
     },
-    readExcel (file) {
-      const fileReader = new FileReader()
-      fileReader.onload = (ev) => {
-        try {
-          const data = ev.target.result
-          const workbook = XLSX.read(data, {
-            type: 'binary'
-          })
-          for (let sheet in workbook.Sheets) {
-            const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
-            console.log(sheetArray)
-          }
-        } catch (e) {
-          this.$message.warning('文件类型不正确!')
-          return false
-        }
-      }
-      fileReader.readAsBinaryString(file.raw)
+    importBook () {
+      const baseurl = process.env.API_HOST + '/book/getBookList'
+      const url = baseurl
+      window.open(url)
+      this.importVisible = false
     },
     downloadTemplate () {
-      const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
+      // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
+      const baseurl = process.env.API_HOST + '/book/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
+    },
+    async requestFn (data) {
+      this.tableData = JSON.stringify(data)
+      console.log(data)
+      return Promise.resolve()
+    },
+    handleCloseImport () {
+      console.log('弹窗关闭了~')
+    },
+    handleFinishImport () {
+      console.log('导入完毕了~')
+    },
+    handleOpen () {
+      this.visible = true
     },
     handleAddBook () {
       this.$router.push('/book/add-book')
@@ -409,15 +427,35 @@ export default {
       }
       this.queryData(paramsData)
     },
-    handleAvatarSuccess (scope, file) {
-      // console.log(file)
-      // console.log(fileList)
-      console.log(arguments)
-      console.log(scope[0].$index)
-      console.log(file.name)
-      const index = scope[0].$index
-      const imageUrl = '/static/cover/' + file.name
-      this.pageData[index].img = imageUrl
+    beforeUploadCover (file) {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('上传封面图片只能是JPG格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传封面图片大小不能超过2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    handleUploadCover (scope, file) {
+      const fileName = scope[0].row.isbn
+      let formdata = new FormData()
+      formdata.append('name', fileName)
+      formdata.append('file', file.file)
+      // this.$axios({
+      //   method: 'post',
+      //   url: 'http://10.54.24.45:8080/book/addImage',
+      //   data: formdata,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data'
+      //   }
+      // }).then((response) => {
+      //   console.log(response) // 存储返回的路径到row.img
+      // }).catch((error) => {
+      //   this.$message.error('上传失败')
+      //   console.log(error)
+      // })
     },
     handleEditChange (index, row) {
       row.edit = true
@@ -430,9 +468,59 @@ export default {
     },
     handleEditSave (index, row) {
       row.edit = false
+      row.totalNum = +row.haveNum + row.outNum
+      const params = {
+        author: row.author,
+        bookName: row.bookName,
+        description: row.description,
+        img: row.img,
+        isbn: row.isbn,
+        outNum: row.outNum,
+        page: row.page,
+        pubDate: row.pubDate,
+        publisher: row.publisher,
+        totalNum: row.totalNum,
+        type: row.type
+      }
+
+      console.log(params)
+
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/update',
+        params
+      }).then(response => {
+        console.log(response)
+        if (response.data.code === '000') {
+          this.$message({
+            message: response.data.msg,
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$message({
+            message: response.data.msg,
+            type: 'error',
+            duration: 2000
+          })
+          row.img = row.temp.img
+          row.type = row.temp.type
+          row.totalNum = row.temp.totalNum
+          row.outNum = row.temp.outNum
+          row.haveNum = row.temp.haveNum
+        }
+      }).catch((error) => {
+        console.log(error)
+        row.img = row.temp.img
+        row.type = row.temp.type
+        row.totalNum = row.temp.totalNum
+        row.outNum = row.temp.outNum
+        row.haveNum = row.temp.haveNum
+      })
     },
     handleEditCancel (index, row) {
       row.edit = false
+      row.img = row.temp.img
       row.type = row.temp.type
       row.totalNum = row.temp.totalNum
       row.outNum = row.temp.outNum

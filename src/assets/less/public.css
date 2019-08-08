@@ -183,16 +183,16 @@ input:-ms-input-placeholder {
 
 .el-button--warning {
   color: #fff;
-  background-color: #ee9e25;
-  border-color: #ee9e25;
+  background-color: #e6a23c;
+  border-color: #e6a23c;
 }
 .el-button--warning:hover {
-  background-color: #ee9e25;
+  background-color: #e6a23c;
   border-color: #ee9e25;
 }
 .el-button--warning:focus {
-  background-color: #ee9e25;
-  border-color: #ee9e25;
+  background-color: #e6a23c;
+  border-color:  #e6a23c;
 }
 
 .el-button--success {
@@ -234,6 +234,9 @@ input:-ms-input-placeholder {
 }
 .el-date-picker__header-label.active,
 .el-date-picker__header-label:hover {
+  color: #5caaab;
+}
+.el-date-table td.today span {
   color: #5caaab;
 }
 /* .el-pagination .el-input__inner:hover {
