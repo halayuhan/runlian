@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 21:06:28
+ * @LastEditTime: 2019-08-08 16:17:18
  * @Description: file content
  -->
 <template>
@@ -28,16 +28,16 @@
         :fields="fields"
         :tips="tips"
         @upload="handleUpload"
+        @errorRow="handleError"
         v-if="currentStep === 1"
       />
 
       <!-- 数据展示 -->
       <ele-import-data
         :fields="fields"
-        :formatter="formatter"
         :request-fn="requestFn"
-        :rules="rules"
         :table-data="tableData"
+        :error-data="errorData"
         @pre="handleStep3Pre"
         v-if="currentStep === 2"
       />
@@ -82,7 +82,7 @@ export default {
     // 提示信息，数组
     tips: Array,
     // 验证规则
-    rules: Object,
+    // rules: Object,
     // 格式化数据
 
     // 弹窗宽度
@@ -108,24 +108,20 @@ export default {
     return {
       tableData: [],
       columns: [],
+      errorData: [],
       currentStep: 1
     }
   },
   methods: {
     // 上传
-    handleUpload (columns, tableData) {
-      this.columns = columns
+    handleUpload (tableData) {
       this.tableData = tableData
     },
-    // 初始化数据
-    initData () {
-      this.tableData = []
-      this.columns = []
-      this.currentStep = 1
+
+    handleError (errorData) {
+      this.errorData = errorData
     },
-    // 关闭
     handlClose () {
-      this.initData()
       this.$emit('close')
       this.$emit('update:visible', false)
     },
@@ -133,6 +129,7 @@ export default {
     handleFinish () {
       this.handlClose()
       this.$emit('finish')
+      this.currentStep = 1
     },
     // 下一步
     nextStep () {

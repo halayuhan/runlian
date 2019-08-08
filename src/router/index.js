@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-08 13:42:38
+ * @LastEditTime: 2019-08-08 16:17:12
  * @Description: file content
  */
 import Vue from 'vue'
@@ -43,6 +43,11 @@ const router = new Router({
           component: () => import('@/pages/mobile/success/index')
         }
       ]
+    },
+    {
+      path: '/user-book/find-book',
+      name: 'FindBook',
+      component: () => import('@/pages/user-book/find-book/index')
     },
     {
       path: '/portal',

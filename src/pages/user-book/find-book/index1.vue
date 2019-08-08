@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-07 16:04:56
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-08 13:36:40
+ * @LastEditTime: 2019-08-08 14:29:43
  * @Description: file content
  -->
 
@@ -31,23 +31,52 @@
         </van-col>
       </van-row>
     </div>
-
+    <!-- <el-input placeholder="请输入姓名搜索" v-model="filterInput" @keyup.enter.native="handleSearch">
+    <!-- <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>-->
+    <!-- </el-input>  -->
     <div class="findBook_content">
-      <van-cell-group>
-        <van-cell>
-          <div class="findBook_left">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+        <van-collapse v-model="activeNames">
+          <van-cell v-for="item in list" :key="item">
+            <!-- <van-collapse-item>
+            <div slot="title">-->
             <template slot="title">
               <van-image width="80" height="100" src="https://img.yzcdn.cn/vant/cat.jpeg" />
             </template>
-          </div>
-          <template slot="default">
-            <P>红与黑</P>
-            <p>作者</p>
-          </template>
-        </van-cell>
+            <template slot="default">
+              <div class="item-bookName">
+                <span>红与黑</span>
+                <!-- <span>{{item.bookName}}</span> -->
+              </div>
+              <div class="item-type">
+                <van-tag color="#5caaab">文学类</van-tag>
+                <!-- <van-tag color="#5caaab">{{item.type}}</van-tag> -->
+              </div>
+              <div class="item-author">
+                <span>作者：罗斯福妥耶夫斯基</span>
+                <!-- <span>{{item.author}}</span> -->
+              </div>
 
-        <van-cell title="单元格" value="内容" label="描述信息" />
-      </van-cell-group>
+              <div class="item-publisher">
+                <span>出版社：人民文学出版社</span>
+                <!-- <span>{{item.publisher}}</span> -->
+              </div>
+              <div class="item-booktotal">
+                <van-tag plain color="#5caaab">库藏</van-tag>
+                <span>3本</span>
+                <!-- <span>{{item.totalNum}}</span> -->
+              </div>
+              <div class="item-bookstatus">
+                <van-tag plain color="#5caaab">在库</van-tag>
+                <span>2本</span>
+                <!-- <span>{{item.haveNum}}</span> -->
+              </div>
+            </template>
+            <!-- </div>
+            </van-collapse-item>-->
+          </van-cell>
+        </van-collapse>
+      </van-list>
     </div>
   </div>
   <!-- <el-button type="primary" @click.prevent="handleSearch"></el-button>
@@ -61,7 +90,7 @@
 </template>
 
 <script>
-import { Row, Col, Image, Search, Collapse, CollapseItem, List, Skeleton, NavBar, Card, Button, Cell, CellGroup, DropdownMenu, DropdownItem } from 'vant'
+import { Row, Col, Image, Search, Collapse, CollapseItem, List, Tag, Skeleton, Card, Button, Cell, CellGroup, DropdownMenu, DropdownItem } from 'vant'
 
 export default {
   name: 'FindBook',
@@ -73,17 +102,26 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [Row.name]: Row,
     [Col.name]: Col,
-    [Image.name]: Image
-
+    [Image.name]: Image,
+    [List.name]: List,
+    [Tag.name]: Tag,
+    [Collapse.name]: Collapse,
+    [CollapseItem.name]: CollapseItem
   },
   data () {
     return {
+      // --下拉菜单的属性值--
       value: 0,
       droplist: [
         { text: '全部书籍', value: 0 },
         { text: '可借书籍', value: 1 }
       ],
       listData: [1, 2, 3, 4, 5],
+      // --列表属性值--
+      list: [],
+      loading: false,
+      finished: false,
+      activeNames: ['1'],
       tableData: [],
       filterInput: '',
       total: 0,
@@ -106,6 +144,22 @@ export default {
     onCancel () {
 
     },
+    onLoad () {
+      // 异步更新数据
+      setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+          this.list.push(this.list.length + 1)
+        }
+        // 加载状态结束
+        this.loading = false
+
+        // 数据全部加载完成
+        if (this.list.length >= 20) {
+          this.finished = true
+        }
+      }, 500)
+    },
+
     queryData (params = {}) {
       const defaultParams = {
         isExist: 0,
@@ -192,6 +246,31 @@ h1 {
   height: 100%;
   background-color: #ccc;
 }
-.findBook_left {
+.van-cell__value {
+  text-align: left;
+  width: 200px;
+  -webkit-flex: 3;
+  flex: 3;
+}
+.van-cell__title {
+  -webkit-flex: 1;
+  flex: 1;
+}
+.item-bookName {
+  font-size: 18px;
+  color: #5caaab;
+  letter-spacing: 2px;
+  float: left;
+}
+.item-booktotal,
+.item-bookstatus {
+  float: left;
+  padding-right: 20px;
+}
+.item-type {
+  text-align: right;
+}
+.van-tag {
+  font-size: 12px;
 }
 </style>

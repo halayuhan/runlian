@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-07 17:56:59
+ * @LastEditTime: 2019-08-08 16:16:27
  * @Description: file content
  -->
 <template>
@@ -28,7 +28,6 @@
               <ex-import
                 :fields="fields"
                 :requestFn="requestFn"
-                :rules="rules"
                 :tips="tips"
                 :title="title"
                 :visible.sync="visible"
@@ -298,22 +297,22 @@ export default {
       title: '批量导入书单',
       tips: ['ISBN必填', '数量必填', '书籍类型必填'],
       fields: {
-        series: '序号',
+        // id: '序号',
         isbn: 'ISBN/书籍编号*',
         bookName: '书籍名称*',
         author: '作者*',
         publisher: '出版社*',
-        publishTime: '出版时间*',
-        bookNum: '数量*',
-        category: '书籍类型*',
-        bookInfo: '书籍简介'
+        pubDate: '出版时间*',
+        totalNum: '数量*',
+        type: '书籍类型*',
+        description: '书籍简介'
       },
-      rules: {
-        series: { type: 'number' },
-        isbn: { type: 'number', required: true, message: '书籍ISBN必填' },
-        bookNum: { type: 'number', required: true, message: '书籍数量必填' },
-        category: { type: 'string', required: true, message: '书籍类型必填' }
-      },
+      // rules: {
+      //   series: { type: 'number' },
+      //   isbn: { type: 'number', required: true, message: '书籍ISBN必填' },
+      //   bookNum: { type: 'number', required: true, message: '书籍数量必填' },
+      //   category: { type: 'string', required: true, message: '书籍类型必填' }
+      // },
       downloadVisible: false,
       importVisible: false,
       visible: false,
@@ -403,6 +402,7 @@ export default {
     },
     handleCloseImport () {
       console.log('弹窗关闭了~')
+      this.$forceUpdate()
     },
     handleFinishImport () {
       console.log('导入完毕了~')
