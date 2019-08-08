@@ -37,44 +37,67 @@
     <div class="findBook_content">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <van-collapse v-model="activeNames">
-          <van-cell v-for="item in list" :key="item">
-            <!-- <van-collapse-item>
-            <div slot="title">-->
-            <template slot="title">
-              <van-image width="80" height="100" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-            </template>
-            <template slot="default">
-              <div class="item-bookName">
-                <span>红与黑</span>
-                <!-- <span>{{item.bookName}}</span> -->
+          <van-collapse-item v-for="item in list" :key="item">
+            <div slot="title" class="item_single">
+              <div class="cell-title">
+                <van-image width="80" height="100" src="https://img.yzcdn.cn/vant/cat.jpeg" />
               </div>
-              <div class="item-type">
-                <van-tag color="#5caaab">文学类</van-tag>
-                <!-- <van-tag color="#5caaab">{{item.type}}</van-tag> -->
-              </div>
-              <div class="item-author">
-                <span>作者：罗斯福妥耶夫斯基</span>
-                <!-- <span>{{item.author}}</span> -->
-              </div>
+              <div class="cell-content">
+                <div class="item-header-group">
+                  <div class="item-bookName">
+                    <span>红与黑黑黑黑黑黑黑黑黑黑黑黑</span>
+                    <!-- <span>{{item.bookName}}</span> -->
+                  </div>
+                  <div class="item-type">
+                    <van-tag color="#5caaab">文学类</van-tag>
+                    <!-- <van-tag color="#5caaab">{{item.type}}</van-tag> -->
+                  </div>
+                </div>
+                <div class="item-author">
+                  <span>作者:罗斯福妥耶夫斯基罗斯福妥耶夫斯基</span>
 
+                  <!-- <span>作者：{{item.author}}</span> -->
+                </div>
+
+                <div class="item-bookNum">
+                  <div class="item-booktotal">
+                    <van-tag plain color="#5caaab">库藏</van-tag>
+                    <span>3本</span>
+                    <!-- <span>{{item.totalNum}}</span> -->
+                  </div>
+                  <div class="item-bookstatus">
+                    <van-tag plain color="#5caaab">在库</van-tag>
+                    <span>2本</span>
+                    <!-- <span>{{item.haveNum}}</span> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div slot="default">
               <div class="item-publisher">
-                <span>出版社：人民文学出版社</span>
-                <!-- <span>{{item.publisher}}</span> -->
+                <span>出版社:人民文学出版社</span>
+                <!-- <span>{{出版社:item.publisher}}</span> -->
               </div>
-              <div class="item-booktotal">
-                <van-tag plain color="#5caaab">库藏</van-tag>
-                <span>3本</span>
-                <!-- <span>{{item.totalNum}}</span> -->
+              <div class="item-pubDate">
+                <span>出版时间 :</span>
+                <span>2018/08/08</span>
+                <!-- <span>{{item.pubDate}}</span> -->
               </div>
-              <div class="item-bookstatus">
-                <van-tag plain color="#5caaab">在库</van-tag>
-                <span>2本</span>
-                <!-- <span>{{item.haveNum}}</span> -->
+              <div class="item-isbn">
+                <span>ISBN :</span>
+                <span>97878989892</span>
+                <!-- <span>{{item.isbn}}</span> -->
               </div>
-            </template>
-            <!-- </div>
-            </van-collapse-item>-->
-          </van-cell>
+              <div class="item-description">
+                <span>书籍简介 :</span>
+                <p>
+                  小说主人公于连,是一个木匠的儿子,年轻英俊,意志坚强,精明能干,从小就希望借助个人的努力与奋斗跻身上流社会。
+                  在法国与瑞士接壤的维立叶尔城，坐落在山坡上，美丽的杜伯河绕城而过，河岸上矗立着许多锯木厂。 市长德瑞那是个出身贵族，在扣上挂满勋章的人。
+                </p>
+                <!-- <p>{{item.description}}</p> -->
+              </div>
+            </div>
+          </van-collapse-item>
         </van-collapse>
       </van-list>
     </div>
@@ -248,31 +271,48 @@ h1 {
   height: 100%;
   background-color: #ccc;
 }
-.van-cell__value {
+.cell-content {
   text-align: left;
-  width: 200px;
+
   -webkit-flex: 3;
   flex: 3;
 }
-.van-cell__title {
+.cell-title {
   -webkit-flex: 1;
   flex: 1;
+  padding-right: 10px;
+}
+
+.item-header-group,
+.item_single {
+  display: flex;
 }
 .item-bookName {
   font-size: 18px;
   color: #5caaab;
   letter-spacing: 2px;
-  float: left;
+  flex: 1;
+}
+.item-bookNum {
+  display: flex;
 }
 .item-booktotal,
 .item-bookstatus {
-  float: left;
-  padding-right: 20px;
+  flex: 1;
+  -webkit-flex: 1;
+  padding-right: 10px;
 }
 .item-type {
   text-align: right;
 }
 .van-tag {
   font-size: 12px;
+}
+.van-collapse-item__content {
+  padding: 16px;
+  color: #272727;
+}
+.item-description {
+  padding-top: 8px;
 }
 </style>
