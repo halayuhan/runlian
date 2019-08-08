@@ -125,6 +125,7 @@ export default {
     handleFinish() {
       this.handlClose()
       this.$emit('finish')
+      this.currentStep = 1
     },
     // 下一步
     nextStep() {

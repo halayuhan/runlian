@@ -156,37 +156,53 @@ export default {
     },
 
     // 发送请求
-    async handleRequest() {
+    handleRequest() {
       if (this.isLoading) return
       this.$message.info("已帮您自动下载错误信息表")
-      downloadError()
+      // downloadError()
+      const paramArray = this.tableData
+      let param = []
+      paramArray.forEach((element, index, elArray) => {
+        for (let key in element) {
+          if (element[key] === null) {
+            element[key] = ''
+          }
+          if (element[key] === undefined) {
+            element[key] = 0
+          }
+        }
 
-      // this.isLoading = true
-      // let tableData = cloneDeep(this.tableData)
-      // // 改变值
-      // tableData = this.changeData(tableData)
-      // // 增加附加数据
-      // const appendData = this.append
-      // if (appendData) {
-      //   tableData = tableData.map((item) => {
-      //     return Object.assign({}, item, appendData)
-      //   })
-      // }
-      try {
-        await this.requestFn(tableData)
-        this.$message.success('导入成功')
-        this.goNext()
-      } catch (error) {
-        //this.errorData = error
-        this.$message.error('导入失败, 请重试')
-      } finally {
-        this.isLoading = false
+        // if (element.haveNum === 1) {
+        let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, num, type } = element
+        let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, num, type }
+        console.log(elItem)
+        param.push(elItem)
+        // }
+      })
+      console.log(param)
+      const data = {
+        books: param
       }
+
+      // debugger
+      this.$axios({
+        method: 'post',
+        url: '/book/adds',
+        data: JSON.stringify(param)
+      }).then((response) => {
+        if (response.data.code != '000') {
+          this.$message.error(response.data.msg)
+        } else {
+          this.$message.success('导入成功')
+          this.goNext()
+        }
+        console.log(response) // 请求成功返回的数据
+      }).catch((error) => {
+        this.$message.error('导入失败, 请重试')
+        console.error(error) // 请求失败返回的数据
+      })
     }
   },
-  mounted() {
-    // this.validateData()
-  }
 }
 </script>
 

@@ -20,7 +20,7 @@ import { getDate } from './api/dateFormat'
 import ExImport from '../src/pages/portal/ExImport'
 
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
-axios.defaults.baseURL = 'http://10.0.58.22:8080'
+axios.defaults.baseURL = 'http://10.54.24.45:8080'
 // 10.0.58.22:8080
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -29,7 +29,6 @@ Vue.use(ElementUI)
 Vue.prototype.$axios = axios
 Vue.prototype.getDate = getDate
 Vue.component(ExImport.name, ExImport)
-
 
 /* eslint-disable no-new */
 new Vue({

@@ -74,13 +74,14 @@ export default {
 
         for (let i = 0; i < response.data.data.length; i++) {
           const bookData = response.data.data[i];
-          let { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum } = bookData
+          let { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num } = bookData
           if (bookData.haveNum === 0) {
             errorDate.push({ bookData })
             this.$emit('errorRow', errorDate)
           }
-          let tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum }
+          let tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num }
           tableData.push(tableItem)
+
         }
 
         this.$emit('upload', tableData)

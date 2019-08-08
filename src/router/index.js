@@ -45,6 +45,11 @@ const router = new Router({
       ]
     },
     {
+      path: '/user-book/find-book',
+      name: 'FindBook',
+      component: () => import('@/pages/user-book/find-book/index')
+    },
+    {
       path: '/portal',
       name: 'PortalItem',
       component: () => import('@/pages/portal/index'),
@@ -77,7 +82,7 @@ const router = new Router({
               component: () => import('@/pages/portal/book/index'),
               // @/pages/portal/book/index
               meta: {
-               // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+                // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
               }
             },
             {

@@ -317,6 +317,7 @@ export default {
     },
     handleCloseImport() {
       console.log('弹窗关闭了~')
+      this.$forceUpdate()
     },
     handleFinishImport() {
       console.log('导入完毕了~')
