@@ -15,32 +15,35 @@
         <el-form ref="form" :model="formData" label-width="100px" label-position="left">
           <div class="form-item-group">
             <div class="form-col-1">
-              <el-form-item label="ISBN">
+              <el-form-item label="ISBN*">
                 <el-input v-model="formData.ISBN"></el-input>
               </el-form-item>
-              <el-form-item label="书籍名称">
+              <el-form-item label="书籍名称*">
                 <el-input v-model="formData.bookName"></el-input>
               </el-form-item>
-              <el-form-item label="作者">
+              <el-form-item label="作者*">
                 <el-input v-model="formData.author"></el-input>
               </el-form-item>
-              <el-form-item label="出版社">
-                <el-input v-model="formData.publisher"></el-input>
+              <el-form-item label="书籍类型*">
+                <el-input v-model="formData.type"></el-input>
               </el-form-item>
               <el-form-item label="页数">
                 <el-input v-model="formData.page"></el-input>
-              </el-form-item>
-              <el-form-item label="书籍类型">
-                <el-input v-model="formData.type"></el-input>
-              </el-form-item>
-              <el-form-item label="数量">
-                <el-input v-model="formData.addNum"></el-input>
               </el-form-item>
               <el-form-item label="书籍详情">
                 <el-input type="textarea" v-model="formData.description"></el-input>
               </el-form-item>
             </div>
             <div class="form-col-2">
+              <el-form-item label="数量*">
+                <el-input v-model="formData.addNum"></el-input>
+              </el-form-item>
+              <el-form-item label="出版社*">
+                <el-input v-model="formData.publisher"></el-input>
+              </el-form-item>
+              <el-form-item label="出版时间*">
+                <el-input v-model="formData.pubDate"></el-input>
+              </el-form-item>
               <el-form-item label="上传封面">
                 <div class="upload-div">
                   <el-upload
@@ -87,10 +90,10 @@ export default {
     }
   }),
   methods: {
-    handleCoverChange (file) {
+    handleCoverChange(file) {
       this.formData.img = '/static/cover/' + file.name
     },
-    handleCancel () {
+    handleCancel() {
       this.formData = {
         img: '',
         bookName: '',
@@ -104,7 +107,7 @@ export default {
         addNum: ''
       }
     },
-    handleSave () {
+    handleSave() {
 
     }
   }
