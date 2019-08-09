@@ -253,7 +253,7 @@ export default {
   background-color: #5caaab;
   border: 1px solid #eee;
 }
-h1 {
+.findBook_header h1 {
   /* width: 390px; */
   height: 50px;
   line-height: 48px;

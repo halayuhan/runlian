@@ -26,7 +26,7 @@ export default {
   /* background-color: #5caaab; */
   border: 1px solid #eee;
 }
-h1 {
+.mobile-header h1 {
   /* width: 390px; */
   height: 60px;
   line-height: 60px;

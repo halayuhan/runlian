@@ -30,7 +30,6 @@
         :fields="fields"
         :request-fn="requestFn"
         :table-data="tableData"
-        :error-data="errorData"
         @pre="handleStep3Pre"
         v-if="currentStep === 2"
       />
@@ -76,6 +75,7 @@ export default {
 
     // 提示信息，数组
     tips: Array,
+
     // 验证规则
     // rules: Object,
     // 格式化数据
@@ -103,7 +103,6 @@ export default {
     return {
       tableData: [],
       columns: [],
-      errorData: [],
       currentStep: 1
     }
   },
@@ -113,10 +112,7 @@ export default {
       this.tableData = tableData
     },
 
-    handleError(errorData) {
 
-      this.errorData = errorData
-    },
     handlClose() {
       this.$emit('close')
       this.$emit('update:visible', false)

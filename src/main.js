@@ -20,8 +20,9 @@ import { getDate } from './api/dateFormat'
 import ExImport from '../src/pages/portal/ExImport'
 
 // import { addCookie, getCookie, removeCookie } from './api/cookie'
-axios.defaults.baseURL = 'http://10.54.24.45:8080'
+axios.defaults.baseURL = 'http://10.0.58.22:8080'
 // 10.0.58.22:8080
+// 10.54.24.176:8080
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false
