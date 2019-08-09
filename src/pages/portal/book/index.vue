@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 11:10:24
+ * @LastEditTime: 2019-08-09 14:20:24
  * @Description: file content
  -->
 <template>
@@ -294,6 +294,7 @@ export default {
   },
   data () {
     return {
+
       title: '批量导入书单',
       tips: ['ISBN必填', '数量必填', '书籍类型必填'],
       fields: {
@@ -349,11 +350,11 @@ export default {
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
-            let {bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum} = currentData
+            let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
             if (img === '') {
               img = '../../../../static/cover/blank_book.png'
             }
-            let tableItem = {bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false}
+            let tableItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
