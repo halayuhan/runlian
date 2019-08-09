@@ -2,13 +2,7 @@
   <div>
     <!-- 数据列表 -->
     <h1>数据列表</h1>
-    <el-table
-      :data="tableData"
-      border
-      style="width: 100%"
-      v-loading="isLoading"
-      :row-class-name="tableRowStyle"
-    >
+    <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowStyle">
       <el-table-column align="center" label="行号" type="index" width="50"></el-table-column>
 
       <el-table-column
@@ -23,8 +17,8 @@
 
     <div class="ele-import-action">
       <el-button @click="handlePre">重新上传</el-button>
-      <el-button :loading="isLoading" @click="handleRequest" type="primary">一键导入</el-button>
-      <el-button @click="downloadError" type="primary">下载错误信息表</el-button>
+      <el-button @click="handleRequest" type="primary">一键导入</el-button>
+      <el-button @click="downloadError" type="primary" v-if="hasError">下载错误信息表</el-button>
     </div>
   </div>
 </template>
@@ -62,46 +56,37 @@ export default {
   inject: ['goNext', 'goPre'],
   data() {
     return {
-      isLoading: false,
-      isDownload: false
+      isDownload: false,
+      hasError: true,
       // errorData: {}
     }
   },
   computed: {
 
-    // errorTableData() {
-    //   const errorData = this.errorData
-    //   const errorTableData = []
-    //   for (const index in errorData) {
-    //     let messageArr = []
-    //     for (const field in errorData[index]) {
-    //       messageArr.push(errorData[index][field])
-    //     }
-    //     errorTableData.push({
-    //       row: Number(index) + 1,
-    //       reason: messageArr.join('、')
-    //     })
-    //   }
-
-    //   return errorTableData
-    // }
   },
   methods: {
     tableRowStyle({ row, rowIndex }) {
 
       if (this.tableData[rowIndex]["haveNum"] === 0) {
-
+        this.hasError = true
+        this.isDownload = false
         return 'ele-import-error'
+
       }
       else {
+        this.hasError = false
+        this.isDownload = true
         return ''
+
       }
     },
 
     handlePre() {
       this.$emit('pre')
     },
+    hasError() {
 
+    },
     _getParam() {
       const paramArray = this.tableData
       var paramC = []
@@ -173,7 +158,7 @@ export default {
 
     // 发送请求
     handleRequest() {
-      if (this.isLoading) return
+
 
       if (!this.isDownload) {
         this.$message.error("请先下载错误信息表")

@@ -24,7 +24,6 @@
       action="/"
       class="ele-import-upload-uploader"
       drag
-      v-loading="isLoading"
     >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">
@@ -54,10 +53,10 @@ export default {
     }
   },
   inject: ['goNext', 'goPre'],
-  data () {
+  data() {
     return {
       fileList: [],
-      isLoading: false
+
     }
   },
   methods: {
@@ -100,20 +99,20 @@ export default {
     },
 
     // 检测文件类型
-    checkType (file) {
+    checkType(file) {
       const fileExt = file.name.split('.').pop().toLocaleLowerCase()
       const extArr = ['xlsx', 'xls', 'csv']
       return extArr.includes(fileExt)
     },
     // 上传错处提示
-    uploadError (message) {
+    uploadError(message) {
       this.$notify.error({
         title: '上传出错了',
         message: message
       })
     },
     // 检测表头
-    checkTableTitle (columns, fields) {
+    checkTableTitle(columns, fields) {
       const titles = Object.values(fields)
       titles.forEach((item) => {
         if (!columns.includes(item)) {
@@ -124,7 +123,7 @@ export default {
         }
       })
     },
-    handleGoNext () {
+    handleGoNext() {
       this.$notify.error({
         title: '提示',
         message: '请先上传数据'
@@ -132,7 +131,7 @@ export default {
     },
 
     // 改变 tableData 的 key, 并且过滤掉不需要的字段
-    changeDatakeyAndFilter (arr) {
+    changeDatakeyAndFilter(arr) {
       const fields = this.fields
       return arr.map((item) => {
         let res = {}
@@ -143,16 +142,15 @@ export default {
       })
     },
 
-    async beforeUpload (file) {
-      if (this.isLoading) return
+    async beforeUpload(file) {
+
 
       // 检测文件类型
       if (!this.checkType(file)) {
         this.uploadError('文件：' + file.name + ' 文件类型错误，请在模板文件上修改后上传')
         return false
       }
-      this.isLoading = true
-      return false
+
     }
   }
 }
