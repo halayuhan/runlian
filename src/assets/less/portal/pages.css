@@ -64,6 +64,21 @@
   color: #eee;
 }
 
+.header-wrapper-right {
+  padding: 0 30px;
+}
+
+.header-wrapper-right div {
+  margin: 0 0 0 10px;
+  height: 50px;
+  line-height: 50px;
+}
+.header-wrapper-right button {
+  font-size: 14px;
+  border-bottom: 1px solid #86c4c3;
+  color: #eee;
+}
+
 .portal-container {
   height: calc(100% - 80px);
   background-color: #eee;

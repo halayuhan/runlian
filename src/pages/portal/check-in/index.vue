@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 18:32:30
+ * @LastEditTime: 2019-08-09 15:02:07
  * @Description: file content
  -->
 <template>
@@ -225,7 +225,7 @@ export default {
     },
 
     downloadExcel () {
-      const baseurl = 'http://10.0.58.22:8080/signIn/getExcel?'
+      const baseurl = process.env.API_HOST + '/signIn/getExcel?'
 
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),

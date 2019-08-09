@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 09:35:05
+ * @LastEditTime: 2019-08-09 15:08:22
  * @Description: file content
  -->
 <template>
@@ -28,7 +28,6 @@
         :fields="fields"
         :tips="tips"
         @upload="handleUpload"
-        @errorRow="handleError"
         v-if="currentStep === 1"
       />
 
@@ -143,8 +142,7 @@ export default {
       this.columns = []
       this.preStep()
     }
-  },
-  mounted () { }
+  }
 }
 </script>
 

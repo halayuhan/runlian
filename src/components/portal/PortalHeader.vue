@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 13:58:07
+ * @LastEditTime: 2019-08-09 15:05:39
  * @Description: file content
  -->
 <template>
@@ -15,6 +15,9 @@
         <i class="el-icon-user"></i>
         <p>{{userName}}</p>
         <!-- <router-link to="/login" @click.native="loginOut">登出</router-link> -->
+        <div>
+          <button @click="loginOut">注销</button>
+        </div>
       </div>
     </div>
   </header>
@@ -41,22 +44,11 @@ export default {
     loginOut () {
       this.$store.commit('GET_USER', '')
       window.sessionStorage.removeItem('user')
+      this.$router.push('/book/add-book')
     }
   }
 }
 </script>
 
 <style>
-.portal-header .header-wrapper-right {
-  padding: 0 30px;
-}
-
-.portal-header .header-wrapper-right a {
-  display: inline-block;
-  margin: 0 0 0 10px;
-  height: 50px;
-  line-height: 50px;
-  font-size: 16px;
-  color: #666;
-}
 </style>
