@@ -1,0 +1,80 @@
+/* 用户搜索书籍 */
+.findBook_header {
+  height: 50px;
+  padding: 0 8px;
+  background-size: 80vw 60px;
+  background-color: #5caaab;
+  border: 1px solid #eee;
+}
+.findBook_header h1 {
+  height: 50px;
+  line-height: 48px;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.8);
+  -webkit-text-stroke: 0.5px #03716e;
+}
+.find-book {
+  height: 100%;
+  background-color: #ccc;
+}
+.cell-content {
+  text-align: left;
+  -webkit-flex: 3;
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.cell-title {
+  -webkit-flex: 1;
+  flex: 1;
+  padding-right: 10px;
+}
+
+.item-header-group,
+.item_single {
+  display: flex;
+}
+.item-bookName {
+  font-size: 18px;
+  color: #5caaab;
+  letter-spacing: 2px;
+  flex: 1;
+}
+.item-bookNum {
+  display: flex;
+}
+.item-booktotal,
+.item-bookstatus {
+  flex: 1;
+  -webkit-flex: 1;
+  padding-right: 10px;
+}
+.item-type {
+  text-align: right;
+}
+.van-tag {
+  font-size: 12px;
+}
+.van-collapse-item__content {
+  padding: 16px;
+  color: #272727;
+}
+.item-description {
+  padding-top: 8px;
+}
+.van-dropdown-menu__title--down {
+  color: #5caaab !important;
+}
+.van-cell--clickable {
+  color: #5caaab !important;
+}
+.van-icon-success {
+  color: #5caaab !important;
+}
+
+.van-collapse-item__content .title-span {
+  font-weight: bold;
+}

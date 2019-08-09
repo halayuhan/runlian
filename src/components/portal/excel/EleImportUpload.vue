@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:49
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-08 14:21:11
+ * @LastEditTime: 2019-08-09 09:34:57
  * @Description: file content
  -->
 <template>
@@ -74,8 +74,8 @@ export default {
           'Content-Type': 'multipart/form-data'        }
       }).then((response) => {
         console.log(response)
-        let tableData = [];
-        let errorDate = [];
+        let tableData = []
+        let errorDate = []
 
         for (let i = 0; i < response.data.data.length; i++) {
           const bookData = response.data.data[i];

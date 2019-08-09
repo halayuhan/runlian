@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-08 16:17:18
+ * @LastEditTime: 2019-08-09 09:35:05
  * @Description: file content
  -->
 <template>
@@ -81,6 +81,7 @@ export default {
 
     // 提示信息，数组
     tips: Array,
+
     // 验证规则
     // rules: Object,
     // 格式化数据
@@ -118,9 +119,6 @@ export default {
       this.tableData = tableData
     },
 
-    handleError (errorData) {
-      this.errorData = errorData
-    },
     handlClose () {
       this.$emit('close')
       this.$emit('update:visible', false)

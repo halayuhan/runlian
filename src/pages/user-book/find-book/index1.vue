@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-07 16:04:56
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 09:22:55
+ * @LastEditTime: 2019-08-09 10:31:26
  * @Description: file content
  -->
 
@@ -15,7 +15,7 @@
       <van-row>
         <van-col span="5">
           <van-dropdown-menu>
-            <van-dropdown-item v-model="value" :options="droplist" />
+            <van-dropdown-item v-model="value" :options="droplist" @close="onSearch" />
           </van-dropdown-menu>
         </van-col>
         <van-col span="19">
@@ -38,44 +38,65 @@
     <div class="findBook_content">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <van-collapse v-model="activeNames">
-          <van-cell v-for="item in listData" :key="item.id">
-            <!-- <van-collapse-item>
-            <div slot="title">-->
-            <template slot="title">
-              <van-image width="80" height="100" :src="item.img" />
-            </template>
-            <template slot="default">
-              <div class="item-bookName">
-                <!-- <span>红与黑</span> -->
-                <span>{{item.bookName}}</span>
+          <van-collapse-item v-for="item in listData" :key="item.id">
+            <div slot="title" class="item_single">
+              <div class="cell-title">
+                <van-image width="80" height="100" :src="item.img" />
               </div>
-              <div class="item-type">
-                <!-- <van-tag color="#5caaab">文学类</van-tag> -->
-                <van-tag color="#5caaab">{{item.type}}</van-tag>
+              <div class="cell-content">
+                <div class="item-header-group">
+                  <div class="item-bookName">
+                    <!-- <span>红与黑</span> -->
+                    <span>{{item.bookName}}</span>
+                  </div>
+                  <div class="item-type">
+                    <!-- <van-tag color="#5caaab">文学类</van-tag> -->
+                    <van-tag color="#5caaab">{{item.type}}</van-tag>
+                  </div>
+                </div>
+                <div class="item-author">
+                  <!-- <span>作者:罗斯福妥耶夫斯基</span> -->
+                  <span>作者：{{item.author}}</span>
+                </div>
+                <div class="item-publisher">
+                  <!-- <span>出版社:人民文学出版社</span> -->
+                  <span>{{item.publisher}}</span>
+                </div>
+                <div class="item-bookNum">
+                  <div class="item-booktotal">
+                    <van-tag plain color="#5caaab">库藏</van-tag>
+                    <!-- <span>3本</span> -->
+                    <span>{{item.totalNum}}</span>
+                  </div>
+                  <div class="item-bookstatus">
+                    <van-tag plain color="#5caaab">在库</van-tag>
+                    <!-- <span>2本</span> -->
+                    <span>{{item.haveNum}}</span>
+                  </div>
+                </div>
               </div>
-              <div class="item-author">
-                <!-- <span>作者：罗斯福妥耶夫斯基</span> -->
-                <span>{{item.author}}</span>
+            </div>
+            <div slot="default">
+              <div class="item-pubDate">
+                <span class="title-span">出版时间 :</span>
+                <!-- <span>2018/08/08</span> -->
+                <span>{{item.pubDate}}</span>
               </div>
-
-              <div class="item-publisher">
-                <!-- <span>出版社：人民文学出版社</span> -->
-                <span>{{item.publisher}}</span>
+              <div>
+                <span class="title-span">ISBN :</span>
+                <!-- <span>97878989892</span> -->
+                <span>{{item.isbn}}</span>
               </div>
-              <div class="item-booktotal">
-                <van-tag plain color="#5caaab">库藏</van-tag>
-                <!-- <span>3本</span> -->
-                <span>{{item.totalNum}}</span>
+              <div>
+                <span class="title-span">书籍简介 :</span>
+                <!-- <p>
+                  小说主人公于连,是一个木匠的儿子,年轻英俊,意志坚强,精明能干,从小就希望借助个人的努力与奋斗跻身上流社会。
+                  在法国与瑞士接壤的维立叶尔城，坐落在山坡上，美丽的杜伯河绕城而过，河岸上矗立着许多锯木厂。 市长德瑞那是个出身贵族，在扣上挂满勋章的人。
+                </p>-->
+                <p>{{item.description}}</p>
               </div>
-              <div class="item-bookstatus">
-                <van-tag plain color="#5caaab">在库</van-tag>
-                <!-- <span>2本</span> -->
-                <span>{{item.haveNum}}</span>
-              </div>
-            </template>
-            <!-- </div>
-            </van-collapse-item>-->
-          </van-cell>
+            </div>
+          </van-collapse-item>
         </van-collapse>
       </van-list>
     </div>
@@ -119,7 +140,6 @@ export default {
       ],
       // --列表属性值--
       listData: [],
-      list: [],
       loading: false,
       finished: false,
       activeNames: ['1'],
@@ -169,7 +189,7 @@ export default {
 
     queryData (paramsData = {}) {
       const defaultParams = {
-        isExist: 0,
+        isExist: this.value,
         keyword: this.filterInput.trim(),
         page: this.count,
         pageSize: this.pageSize
@@ -186,7 +206,9 @@ export default {
         console.log(this.listData)
         if (response.data.code != '000') {
           this.total = 0
-          this.$message.error(response.data.msg)
+          // this.$message.error(response.data.msg)
+          this.loading = false
+          this.isScrollOver()
           return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
@@ -237,15 +259,15 @@ export default {
 }
 </script>
 <style>
-.findBook_header {
+@import "../../../assets/less/user-book/pages.css";
+/* .findBook_header {
   height: 50px;
   padding: 0 8px;
   background-size: 80vw 60px;
   background-color: #5caaab;
   border: 1px solid #eee;
 }
-h1 {
-  /* width: 390px; */
+.findBook_header h1 {
   height: 50px;
   line-height: 48px;
   font-size: 20px;
@@ -253,33 +275,43 @@ h1 {
   letter-spacing: 1px;
   -webkit-text-fill-color: rgba(255, 255, 255, 0.8);
   -webkit-text-stroke: 0.5px #03716e;
-  /* -webkit-text-stroke: 0.5px #000; */
-  /* color: rgba(255, 255, 255, 0.8); */
 }
 .find-book {
   height: 100%;
   background-color: #ccc;
 }
-.van-cell__value {
+.cell-content {
   text-align: left;
-  width: 200px;
   -webkit-flex: 3;
   flex: 3;
+  display: flex;
+  flex-direction: column;
 }
-.van-cell__title {
+
+.cell-title {
   -webkit-flex: 1;
   flex: 1;
+  padding-right: 10px;
+}
+
+.item-header-group,
+.item_single {
+  display: flex;
 }
 .item-bookName {
   font-size: 18px;
   color: #5caaab;
   letter-spacing: 2px;
-  float: left;
+  flex: 1;
+}
+.item-bookNum {
+  display: flex;
 }
 .item-booktotal,
 .item-bookstatus {
-  float: left;
-  padding-right: 20px;
+  flex: 1;
+  -webkit-flex: 1;
+  padding-right: 10px;
 }
 .item-type {
   text-align: right;
@@ -287,4 +319,24 @@ h1 {
 .van-tag {
   font-size: 12px;
 }
+.van-collapse-item__content {
+  padding: 16px;
+  color: #272727;
+}
+.item-description {
+  padding-top: 8px;
+}
+.van-dropdown-menu__title--down {
+  color: #5caaab !important;
+}
+.van-cell--clickable {
+  color: #5caaab !important;
+}
+.van-icon-success {
+  color: #5caaab !important;
+}
+
+.van-collapse-item__content .title-span {
+  font-weight: bold;
+} */
 </style>
