@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-08 16:16:27
+ * @LastEditTime: 2019-08-08 17:21:22
  * @Description: file content
  -->
 <template>
@@ -390,7 +390,7 @@ export default {
     },
     downloadTemplate () {
       // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
-      const baseurl = process.env.API_HOST + '/book/getTemplate'
+      const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
@@ -439,27 +439,33 @@ export default {
       return isJPG && isLt2M
     },
     handleUploadCover (scope, file) {
-      const fileName = scope[0].row.isbn
+      const fileIsbn = scope[0].row.isbn
       let formdata = new FormData()
-      formdata.append('name', fileName)
+      formdata.append('isbn', fileIsbn)
       formdata.append('file', file.file)
-      // this.$axios({
-      //   method: 'post',
-      //   url: 'http://10.54.24.45:8080/book/addImage',
-      //   data: formdata,
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }
-      // }).then((response) => {
-      //   console.log(response) // 存储返回的路径到row.img
-      // }).catch((error) => {
-      //   this.$message.error('上传失败')
-      //   console.log(error)
-      // })
+      this.$axios({
+        method: 'post',
+        url: process.env.API_HOST + '/file/uploadImg',
+        data: formdata,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        if (response.data.code === '000') {
+          console.log(response.data.data) // 存储返回的路径到row.img
+          scope[0].row.img = process.env.API_HOST + '/file/get?fileName=' + response.data.data
+        } else {
+          this.$message.error(response.data.msg)
+        }
+      }).catch((error) => {
+        this.$message.error('上传失败')
+        console.log(error)
+      })
     },
     handleEditChange (index, row) {
       row.edit = true
       row.temp = {
+        img: row.img,
         type: row.type,
         totalNum: row.totalNum,
         outNum: row.outNum,
@@ -468,7 +474,7 @@ export default {
     },
     handleEditSave (index, row) {
       row.edit = false
-      row.totalNum = +row.haveNum + row.outNum
+      row.totalNum = +row.haveNum + +row.outNum
       const params = {
         author: row.author,
         bookName: row.bookName,

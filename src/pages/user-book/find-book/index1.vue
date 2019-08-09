@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-07 16:04:56
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-08 14:29:43
+ * @LastEditTime: 2019-08-09 09:22:55
  * @Description: file content
  -->
 
@@ -24,6 +24,7 @@
               placeholder="请输入书名\作者搜索"
               v-model="filterInput"
               show-action
+              @keyup.enter.native="onSearch"
               @search="onSearch"
               @cancel="onCancel"
             />
@@ -37,39 +38,39 @@
     <div class="findBook_content">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <van-collapse v-model="activeNames">
-          <van-cell v-for="item in list" :key="item">
+          <van-cell v-for="item in listData" :key="item.id">
             <!-- <van-collapse-item>
             <div slot="title">-->
             <template slot="title">
-              <van-image width="80" height="100" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+              <van-image width="80" height="100" :src="item.img" />
             </template>
             <template slot="default">
               <div class="item-bookName">
-                <span>红与黑</span>
-                <!-- <span>{{item.bookName}}</span> -->
+                <!-- <span>红与黑</span> -->
+                <span>{{item.bookName}}</span>
               </div>
               <div class="item-type">
-                <van-tag color="#5caaab">文学类</van-tag>
-                <!-- <van-tag color="#5caaab">{{item.type}}</van-tag> -->
+                <!-- <van-tag color="#5caaab">文学类</van-tag> -->
+                <van-tag color="#5caaab">{{item.type}}</van-tag>
               </div>
               <div class="item-author">
-                <span>作者：罗斯福妥耶夫斯基</span>
-                <!-- <span>{{item.author}}</span> -->
+                <!-- <span>作者：罗斯福妥耶夫斯基</span> -->
+                <span>{{item.author}}</span>
               </div>
 
               <div class="item-publisher">
-                <span>出版社：人民文学出版社</span>
-                <!-- <span>{{item.publisher}}</span> -->
+                <!-- <span>出版社：人民文学出版社</span> -->
+                <span>{{item.publisher}}</span>
               </div>
               <div class="item-booktotal">
                 <van-tag plain color="#5caaab">库藏</van-tag>
-                <span>3本</span>
-                <!-- <span>{{item.totalNum}}</span> -->
+                <!-- <span>3本</span> -->
+                <span>{{item.totalNum}}</span>
               </div>
               <div class="item-bookstatus">
                 <van-tag plain color="#5caaab">在库</van-tag>
-                <span>2本</span>
-                <!-- <span>{{item.haveNum}}</span> -->
+                <!-- <span>2本</span> -->
+                <span>{{item.haveNum}}</span>
               </div>
             </template>
             <!-- </div>
@@ -116,95 +117,108 @@ export default {
         { text: '全部书籍', value: 0 },
         { text: '可借书籍', value: 1 }
       ],
-      listData: [1, 2, 3, 4, 5],
       // --列表属性值--
+      listData: [],
       list: [],
       loading: false,
       finished: false,
       activeNames: ['1'],
-      tableData: [],
       filterInput: '',
       total: 0,
-      count: 1, // 相当于页码
-      pageSize: 5,
-      busy: false
-    }
-  },
-  watch: {
-    count (val) {
-      if (val * this.pageSize >= this.total) {
-        // this.busy = true
-      }
+      count: 0, // 相当于页码
+      pageSize: 5
     }
   },
   methods: {
     onSearch () {
-
+      console.log(this.value)
+      this.listData = []
+      this.count = 1
+      const paramsData = {
+        isExist: this.value,
+        page: this.count
+      }
+      this.queryData(paramsData)
     },
     onCancel () {
 
     },
-    onLoad () {
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 5; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
+    // onLoad () {
+    //   // 异步更新数据
+    //   setTimeout(() => {
+    //     for (let i = 0; i < 5; i++) {
+    //       this.list.push(this.list.length + 1)
+    //     }
+    //     // 加载状态结束
+    //     this.loading = false
 
-        // 数据全部加载完成
-        if (this.list.length >= 20) {
-          this.finished = true
-        }
-      }, 500)
+    //     // 数据全部加载完成
+    //     if (this.list.length >= 20) {
+    //       this.finished = true
+    //     }
+    //   }, 500)
+    // },
+    onLoad () {
+      this.finished = false
+      this.count++
+      const paramsData = {
+        page: this.count
+      }
+      this.queryData(paramsData)
     },
 
-    queryData (params = {}) {
+    queryData (paramsData = {}) {
       const defaultParams = {
         isExist: 0,
         keyword: this.filterInput.trim(),
         page: this.count,
         pageSize: this.pageSize
       }
-      const paramsData = Object.assign({}, defaultParams, params)
-
+      const params = Object.assign({}, defaultParams, paramsData)
+      console.log(paramsData)
       this.$axios({
         methods: 'get',
         url: process.env.API_HOST + '/book/query',
-        paramsData
+        params
       }).then((response) => {
-        this.tableData = []
+        console.log(response)
+        let tableData = []
+        console.log(this.listData)
         if (response.data.code != '000') {
           this.total = 0
           this.$message.error(response.data.msg)
-          this.busy = false
           return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
+            // console.log(currentData)
             let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
-            let tableItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
-            this.tableData.push(tableItem)
+            let ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            tableData.push(ListItem)
           }
-          this.listData.push(...this.tableData)
+          this.listData.push(...tableData)
+          console.log(this.listData)
           this.currentPage = response.data.page
           this.total = response.data.count
-          this.busy = false
         }
         console.log(response)
+        this.loading = false
+        this.isScrollOver()
       }).catch((error) => {
-        console.log(1)
         console.log(error)
-        // this.busy = false
+        this.loading = false
+        this.isScrollOver()
       })
-
-      console.log(2)
-      this.busy = false
+    },
+    isScrollOver () {
+      if (this.count * this.pageSize > this.total) {
+        this.finished = true
+      } else {
+        this.finished = false
+      }
     },
     loadMore () {
       // debugger
-      this.busy = true
       this.count++
       // this.listData.push(this.count)
       // console.log(this.count)
