@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 09:35:08
+ * @LastEditTime: 2019-08-09 11:10:24
  * @Description: file content
  -->
 <template>
@@ -350,6 +350,9 @@ export default {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
             let {bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum} = currentData
+            if (img === '') {
+              img = '../../../../static/cover/blank_book.png'
+            }
             let tableItem = {bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false}
             this.tableData.push(tableItem)
           }
