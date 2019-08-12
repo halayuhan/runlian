@@ -58,7 +58,6 @@ export default {
     return {
       isDownload: false,
       hasError: true,
-      // errorData: {}
     }
   },
   computed: {
@@ -77,16 +76,13 @@ export default {
         this.hasError = false
         this.isDownload = true
         return ''
-
       }
     },
 
     handlePre() {
       this.$emit('pre')
     },
-    hasError() {
 
-    },
     _getParam() {
       const paramArray = this.tableData
       var paramC = []
