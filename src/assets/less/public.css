@@ -195,6 +195,22 @@ input:-ms-input-placeholder {
   border-color:  #e6a23c;
 }
 
+
+.el-button--danger {
+  color: #fff;
+  background-color: #F56C6C;
+  border-color: #F56C6C;
+}
+.el-button--danger:hover {
+  background-color: #F56C6C;
+  border-color: #F56C6C;
+}
+.el-button--danger:focus {
+  background-color: #F56C6C;
+  border-color:  #F56C6C;
+}
+
+
 .el-button--success {
   color: #5caaab;
   background-color: #fff;

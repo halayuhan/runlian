@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 13:56:52
+ * @LastEditTime: 2019-08-12 11:28:19
  * @Description: file content
  -->
 <template>
@@ -81,7 +81,7 @@
 <script>
 export default {
   name: 'AddBook',
-  data() {
+  data () {
     return {
       formData: {
         img: '',
@@ -117,14 +117,14 @@ export default {
         type: [{
           required: true, message: '请输入书籍类型', trigger: 'blur'
         }]
-      },
+      }
     }
   },
   methods: {
     // handleCoverChange(file) {
     //   this.formData.img = '/static/cover/' + file.name
     // },
-    handleCancel() {
+    handleCancel () {
       this.formData = {
         img: '',
         bookName: '',
@@ -138,7 +138,7 @@ export default {
         addNum: ''
       }
     },
-    handleSave() {
+    handleSave () {
       const { img, bookName, author, ISBN, publisher, pubDate, page, type, description, addNum } = this.formData
       const params = {
         isbn: ISBN,
@@ -160,7 +160,7 @@ export default {
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
         } else {
-          this.$message.success("添加成功")
+          this.$message.success('添加成功')
           this.$router.push('/book')
         }
         console.log(response)
@@ -168,25 +168,23 @@ export default {
         this.$message.error('操作错误，请重试')
         console.log(error)
       })
-
     },
-    beforeUploadCover(file) {
-
+    beforeUploadCover (file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
+      const isISBN = !this.formData.ISBN === ''
       if (!isJPG) {
         this.$message.error('上传封面图片只能是JPG格式!')
       }
       if (!isLt2M) {
         this.$message.error('上传封面图片大小不能超过2MB!')
       }
-      if (!this.formData.ISBN) {
+      if (!isISBN) {
         this.$message.error('请先输入书籍ISBN编号再上传图片')
       }
-      return isJPG && isLt2M
+      return isJPG && isLt2M && isISBN
     },
-    handleUploadCover(file) {
-
+    handleUploadCover (file) {
       const isbn = this.formData.ISBN
       let formdata = new FormData()
       formdata.append('isbn', isbn)
@@ -209,7 +207,7 @@ export default {
         this.$message.error('上传失败')
         console.log(error)
       })
-    },
+    }
   }
 }
 </script>
