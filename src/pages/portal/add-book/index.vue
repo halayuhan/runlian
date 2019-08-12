@@ -12,19 +12,25 @@
         <h1>添加书籍*</h1>
       </div>
       <div class="add-book-form">
-        <el-form ref="form" :model="formData" label-width="100px" label-position="left">
+        <el-form
+          ref="form"
+          :model="formData"
+          :rules="rules"
+          label-width="100px"
+          label-position="left"
+        >
           <div class="form-item-group">
             <div class="form-col-1">
-              <el-form-item label="ISBN*">
+              <el-form-item label="ISBN*" prop="ISBN">
                 <el-input v-model="formData.ISBN"></el-input>
               </el-form-item>
-              <el-form-item label="书籍名称*">
+              <el-form-item label="书籍名称*" prop="bookName">
                 <el-input v-model="formData.bookName"></el-input>
               </el-form-item>
-              <el-form-item label="作者*">
+              <el-form-item label="作者*" prop="author">
                 <el-input v-model="formData.author"></el-input>
               </el-form-item>
-              <el-form-item label="书籍类型*">
+              <el-form-item label="书籍类型*" prop="type">
                 <el-input v-model="formData.type"></el-input>
               </el-form-item>
               <el-form-item label="页数">
@@ -35,13 +41,13 @@
               </el-form-item>
             </div>
             <div class="form-col-2">
-              <el-form-item label="数量*">
+              <el-form-item label="数量*" prop="addNum">
                 <el-input v-model="formData.addNum"></el-input>
               </el-form-item>
-              <el-form-item label="出版社*">
+              <el-form-item label="出版社*" prop="publisher">
                 <el-input v-model="formData.publisher"></el-input>
               </el-form-item>
-              <el-form-item label="出版时间*">
+              <el-form-item label="出版时间*" prop="pubDate">
                 <el-input v-model="formData.pubDate"></el-input>
               </el-form-item>
               <el-form-item label="上传封面">
@@ -50,8 +56,8 @@
                     class="cover-uploader"
                     action="#"
                     :show-file-list="false"
-                    :auto-upload="false"
-                    :on-change="handleCoverChange"
+                    :http-request="handleUploadCover"
+                    :before-upload="beforeUploadCover"
                   >
                     <img v-if="formData.img" :src="formData.img" alt="cover" class="cover" />
                     <i v-else class="el-icon-plus cover-uploader-icon"></i>
@@ -75,24 +81,49 @@
 <script>
 export default {
   name: 'AddBook',
-  data: () => ({
-    formData: {
-      img: '',
-      bookName: '',
-      author: '',
-      ISBN: '',
-      publisher: '',
-      pubDate: '',
-      page: '',
-      type: '',
-      description: '',
-      addNum: ''
+  data() {
+    return {
+      formData: {
+        img: '',
+        bookName: '',
+        author: '',
+        ISBN: '',
+        publisher: '',
+        pubDate: '',
+        page: '',
+        type: '',
+        description: '',
+        addNum: 1
+      },
+      rules: {
+        ISBN: [{
+          required: true, message: '请输入书籍ISBN编号或自建编号', trigger: 'blur'
+        }],
+        bookName: [{
+          required: true, message: '请输入书籍名称', trigger: 'blur'
+        }],
+        addNum: [{
+          required: true, type: 'number', message: '请输入添加数量', trigger: 'blur'
+        }],
+        author: [{
+          required: true, message: '请输入书籍作者', trigger: 'blur'
+        }],
+        publisher: [{
+          required: true, message: '请输入书籍出版社', trigger: 'blur'
+        }],
+        pubDate: [{
+          required: true, message: '请输入书籍出版时间', trigger: 'blur'
+        }],
+        type: [{
+          required: true, message: '请输入书籍类型', trigger: 'blur'
+        }]
+      },
     }
-  }),
+  },
   methods: {
-    handleCoverChange(file) {
-      this.formData.img = '/static/cover/' + file.name
-    },
+    // handleCoverChange(file) {
+    //   this.formData.img = '/static/cover/' + file.name
+    // },
     handleCancel() {
       this.formData = {
         img: '',
@@ -108,8 +139,77 @@ export default {
       }
     },
     handleSave() {
+      const { img, bookName, author, ISBN, publisher, pubDate, page, type, description, addNum } = this.formData
+      const params = {
+        isbn: ISBN,
+        bookName: bookName,
+        author: author,
+        type: type,
+        totalNum: addNum,
+        page: page,
+        pubDate: pubDate,
+        publisher: publisher,
+        img: img,
+        description: description
+      }
+      this.$axios({
+        method: 'get',
+        url: process.env.API_HOST + '/book/add',
+        params
+      }).then(response => {
+        if (response.data.code != '000') {
+          this.$message.error(response.data.msg)
+        } else {
+          this.$message.success("添加成功")
+          this.$router.push('/book')
+        }
+        console.log(response)
+      }).catch((error) => {
+        this.$message.error('操作错误，请重试')
+        console.log(error)
+      })
 
-    }
+    },
+    beforeUploadCover(file) {
+
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('上传封面图片只能是JPG格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传封面图片大小不能超过2MB!')
+      }
+      if (!this.formData.ISBN) {
+        this.$message.error('请先输入书籍ISBN编号再上传图片')
+      }
+      return isJPG && isLt2M
+    },
+    handleUploadCover(file) {
+
+      const isbn = this.formData.ISBN
+      let formdata = new FormData()
+      formdata.append('isbn', isbn)
+      formdata.append('file', file.file)
+      this.$axios({
+        method: 'post',
+        url: process.env.API_HOST + '/file/uploadImg',
+        data: formdata,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        if (response.data.code === '000') {
+          console.log(response.data.data) // 存储返回的路径到row.img
+          this.formData.img = process.env.API_HOST + '/file/get?fileName=' + response.data.data
+        } else {
+          this.$message.error(response.data.msg)
+        }
+      }).catch((error) => {
+        this.$message.error('上传失败')
+        console.log(error)
+      })
+    },
   }
 }
 </script>

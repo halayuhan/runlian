@@ -308,12 +308,7 @@ export default {
         type: '书籍类型*',
         description: '书籍简介'
       },
-      // rules: {
-      //   series: { type: 'number' },
-      //   isbn: { type: 'number', required: true, message: '书籍ISBN必填' },
-      //   bookNum: { type: 'number', required: true, message: '书籍数量必填' },
-      //   category: { type: 'string', required: true, message: '书籍类型必填' }
-      // },
+
       downloadVisible: false,
       importVisible: false,
       visible: false,
@@ -441,7 +436,7 @@ export default {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
-        this.$message.error('上传封面图片只能是JPG格式!')
+        this.$message.error('上传封面图片只能是JPG或PNG格式!')
       }
       if (!isLt2M) {
         this.$message.error('上传封面图片大小不能超过2MB!')

@@ -98,13 +98,13 @@ export default {
     EleImportFinish
 
   },
-  provide () {
+  provide() {
     return {
       goPre: this.preStep,
       goNext: this.nextStep
     }
   },
-  data () {
+  data() {
     return {
       tableData: [],
       columns: [],
@@ -114,30 +114,30 @@ export default {
   },
   methods: {
     // 上传
-    handleUpload (tableData) {
+    handleUpload(tableData) {
       this.tableData = tableData
     },
 
-    handlClose () {
+    handlClose() {
       this.$emit('close')
       this.$emit('update:visible', false)
     },
     // 结束
-    handleFinish () {
+    handleFinish() {
       this.handlClose()
       this.$emit('finish')
       this.currentStep = 1
     },
     // 下一步
-    nextStep () {
+    nextStep() {
       this.currentStep++
     },
     // 上一步
-    preStep () {
+    preStep() {
       this.currentStep--
     },
     // 第3步 -> 第2步
-    handleStep3Pre () {
+    handleStep3Pre() {
       this.tableData = []
       this.columns = []
       this.preStep()
