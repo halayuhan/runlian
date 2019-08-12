@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 15:08:22
+ * @LastEditTime: 2019-08-12 09:37:33
  * @Description: file content
  -->
 <template>
@@ -147,8 +147,4 @@ export default {
 </script>
 
 <style>
-.ele-import-action {
-  margin-top: 20px;
-  text-align: center;
-}
 </style>

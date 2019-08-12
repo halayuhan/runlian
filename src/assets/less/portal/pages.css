@@ -73,7 +73,7 @@
   height: 50px;
   line-height: 50px;
 }
-.header-wrapper-right button {
+.header-wrapper-right a {
   font-size: 14px;
   border-bottom: 1px solid #86c4c3;
   color: #eee;
@@ -582,7 +582,7 @@
   color: teal;
 }
 
-/* 上传书单错误列表样式 */
+/* 批量上传书单列表展示样式 */
 .import-error-table {
   margin-bottom: 20px;
 }
@@ -592,4 +592,45 @@
 }
 .ele-import-error:hover {
   color: #f56c6c !important;
+}
+
+.ele-import-finish {
+  text-align: center;
+}
+
+.ele-import-finish .el-icon-success {
+  font-size: 150px;
+  line-height: 1.2;
+  color: #67c23a;
+}
+
+.ele-import-download {
+  text-align: center;
+}
+
+.ele-import-download .el-icon-document {
+  font-size: 150px;
+  line-height: 1.2;
+  color: #67c23a;
+}
+
+.ele-import-upload-tips {
+  padding: 0 20px;
+  line-height: 20px;
+  list-style-type: decimal;
+}
+
+.ele-import-upload-uploader {
+  margin-top: 20px;
+  text-align: center;
+}
+.el-step__head.is-finish,
+.el-step__title.is-finish {
+  color: #5caaab;
+  border-color: #5caaab;
+}
+
+.ele-import-action {
+  margin-top: 20px;
+  text-align: center;
 }

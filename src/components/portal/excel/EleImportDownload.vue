@@ -1,3 +1,10 @@
+<!--
+ * @Author: liyan
+ * @Date: 2019-08-06 17:07:49
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-12 09:37:02
+ * @Description: file content
+ -->
 <template>
   <div class="ele-import-download">
     <el-link :href="filepath" :underline="false" @click.native="handleDownload" target="_blank">
@@ -34,20 +41,20 @@ export default {
     }
   },
   inject: ['goNext'],
-  data() {
+  data () {
     return {
       hasDownload: false
     }
   },
   methods: {
     // 点击下载
-    handleDownload() {
+    handleDownload () {
       // Cookie.set('ele-import-download-' + this.filepath, true)
       // this.hasDownload = true
     },
 
     // 点击下一步
-    handleNext() {
+    handleNext () {
       if (this.hasDownload) {
         this.goNext()
       } else {
@@ -56,25 +63,16 @@ export default {
     },
 
     // 判断是否已经下载
-    checkHasDownload() {
+    checkHasDownload () {
       // this.hasDownload = Cookie.get('ele-import-download-' + this.filepath)
     }
   },
-  mounted() {
+  mounted () {
     // 判断是否下载过
     this.checkHasDownload()
   }
 }
 </script>
 
-<style scoped>
-.ele-import-download {
-  text-align: center;
-}
-
-.ele-import-download .el-icon-document {
-  font-size: 150px;
-  line-height: 1.2;
-  color: #67c23a;
-}
+<style>
 </style>

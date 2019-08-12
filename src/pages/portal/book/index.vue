@@ -2,12 +2,12 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 14:20:24
+ * @LastEditTime: 2019-08-12 10:22:24
  * @Description: file content
  -->
 <template>
   <div class="book" v-loading.fullscreen.lock="this.$store.state.loading">
-    <div class="book-wrapper">
+    <div class="book-wrapper" ref="scrollElement">
       <div class="book-search-handle">
         <div class="book-search-handle-left">
           <div class="book-filter">
@@ -24,7 +24,17 @@
         <div class="book-search-handle-right">
           <ul>
             <li>
-              <el-button type="primary" @click="handleOpen">上传书目</el-button>
+              <el-button type="primary" @click.prevent="downloadVisible = true">书目模板下载</el-button>
+              <el-dialog title="提示" :visible.sync="downloadVisible" width="30%">
+                <span>是否确认导出书目模板</span>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click.prevent="downloadVisible = false">取消</el-button>
+                  <el-button type="primary" @click.prevent="downloadTemplate">确认</el-button>
+                </span>
+              </el-dialog>
+            </li>
+            <li>
+              <el-button type="primary" @click="handleOpen">批量上传</el-button>
               <ex-import
                 :fields="fields"
                 :requestFn="requestFn"
@@ -36,17 +46,7 @@
               />
             </li>
             <li>
-              <el-button type="primary" @click.prevent="downloadVisible = true">书目模板下载</el-button>
-              <el-dialog title="提示" :visible.sync="downloadVisible" width="30%">
-                <span>是否确认导出书目模板</span>
-                <span slot="footer" class="dialog-footer">
-                  <el-button @click.prevent="downloadVisible = false">取消</el-button>
-                  <el-button type="primary" @click.prevent="downloadTemplate">确认</el-button>
-                </span>
-              </el-dialog>
-            </li>
-            <li>
-              <el-button type="primary" @click.prevent="handleAddBook">添加</el-button>
+              <el-button type="primary" @click.prevent="handleAddBook">单个添加</el-button>
             </li>
             <li>
               <el-button type="success" @click.prevent="importVisible = true">导出书单</el-button>
@@ -422,6 +422,9 @@ export default {
         page: index
       }
       this.queryData(paramsData)
+      this.$nextTick(() => {
+        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+      })
     },
     handleSizeChange (pageSize) {
       this.pageSize = pageSize
@@ -430,6 +433,9 @@ export default {
         page: 1
       }
       this.queryData(paramsData)
+      this.$nextTick(() => {
+        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+      })
     },
     beforeUploadCover (file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'

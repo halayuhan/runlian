@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 15:05:39
+ * @LastEditTime: 2019-08-09 15:21:30
  * @Description: file content
  -->
 <template>
@@ -16,7 +16,7 @@
         <p>{{userName}}</p>
         <!-- <router-link to="/login" @click.native="loginOut">登出</router-link> -->
         <div>
-          <button @click="loginOut">注销</button>
+          <a @click="loginOut">注销</a>
         </div>
       </div>
     </div>

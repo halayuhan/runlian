@@ -283,3 +283,22 @@ input:-ms-input-placeholder {
 .el-table .ascending .sort-caret.ascending {
   border-bottom-color: #5caaab;
 }
+
+.el-upload-dragger:hover {
+  border-color: #5caaab; 
+}
+.el-upload-dragger .el-upload__text em {
+  color: #5caaab;
+}
+
+.el-upload--picture-card:hover, .el-upload:focus {
+  border-color: #5caaab;
+  color: #5caaab;
+}
+
+.el-upload:focus .el-upload-dragger {
+  border-color: #5caaab; 
+}
+.el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close {
+  color: #5caaab;
+}
