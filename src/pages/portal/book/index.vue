@@ -2,12 +2,12 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 09:35:08
+ * @LastEditTime: 2019-08-12 10:22:24
  * @Description: file content
  -->
 <template>
   <div class="book" v-loading.fullscreen.lock="this.$store.state.loading">
-    <div class="book-wrapper">
+    <div class="book-wrapper" ref="scrollElement">
       <div class="book-search-handle">
         <div class="book-search-handle-left">
           <div class="book-filter">
@@ -24,7 +24,17 @@
         <div class="book-search-handle-right">
           <ul>
             <li>
-              <el-button type="primary" @click="handleOpen">上传书目</el-button>
+              <el-button type="primary" @click.prevent="downloadVisible = true">书目模板下载</el-button>
+              <el-dialog title="提示" :visible.sync="downloadVisible" width="30%">
+                <span>是否确认导出书目模板</span>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click.prevent="downloadVisible = false">取消</el-button>
+                  <el-button type="primary" @click.prevent="downloadTemplate">确认</el-button>
+                </span>
+              </el-dialog>
+            </li>
+            <li>
+              <el-button type="primary" @click="handleOpen">批量上传</el-button>
               <ex-import
                 :fields="fields"
                 :requestFn="requestFn"
@@ -36,17 +46,7 @@
               />
             </li>
             <li>
-              <el-button type="primary" @click.prevent="downloadVisible = true">书目模板下载</el-button>
-              <el-dialog title="提示" :visible.sync="downloadVisible" width="30%">
-                <span>是否确认导出书目模板</span>
-                <span slot="footer" class="dialog-footer">
-                  <el-button @click.prevent="downloadVisible = false">取消</el-button>
-                  <el-button type="primary" @click.prevent="downloadTemplate">确认</el-button>
-                </span>
-              </el-dialog>
-            </li>
-            <li>
-              <el-button type="primary" @click.prevent="handleAddBook">添加</el-button>
+              <el-button type="primary" @click.prevent="handleAddBook">单个添加</el-button>
             </li>
             <li>
               <el-button type="success" @click.prevent="importVisible = true">导出书单</el-button>
@@ -287,13 +287,12 @@
 <script>
 import ExImport from './components/ExImport'
 
-
 export default {
   name: 'Book',
   components: {
     ExImport
   },
-  data() {
+  data () {
     return {
 
       title: '批量导入书单',
@@ -320,11 +319,11 @@ export default {
       total: 0
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
   methods: {
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       const defaultParams = {
         isExist: 0,
         keyword: this.filterInput.trim(),
@@ -355,20 +354,19 @@ export default {
           }
           this.currentPage = response.data.page
           this.total = response.data.count
-
         }
         console.log(response)
       }).catch((error) => {
         console.log(error)
       })
     },
-    filterSearch() {
+    filterSearch () {
       const paramsData = {
         page: 1
       }
       this.queryData(paramsData)
     },
-    isbnTest() {
+    isbnTest () {
       const params = {
         appkey: 'b979ae09bbbff4a2',
         isbn: this.filterInput
@@ -383,52 +381,58 @@ export default {
         console.log(error)
       })
     },
-    importBook() {
+    importBook () {
       const baseurl = process.env.API_HOST + '/book/getBookList'
       const url = baseurl
       window.open(url)
       this.importVisible = false
     },
-    downloadTemplate() {
+    downloadTemplate () {
       // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
       const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
     },
-    async requestFn(data) {
+    async requestFn (data) {
       this.tableData = JSON.stringify(data)
       console.log(data)
       return Promise.resolve()
     },
-    handleCloseImport() {
+    handleCloseImport () {
       console.log('弹窗关闭了~')
       this.$forceUpdate()
     },
-    handleFinishImport() {
+    handleFinishImport () {
       console.log('导入完毕了~')
     },
-    handleOpen() {
+    handleOpen () {
       this.visible = true
     },
-    handleAddBook() {
+    handleAddBook () {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         page: index
       }
       this.queryData(paramsData)
+      this.$nextTick(() => {
+        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+      })
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
         page: 1
       }
       this.queryData(paramsData)
+      this.$nextTick(() => {
+        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+      })
     },
-    beforeUploadCover(file) {
+    beforeUploadCover (file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
@@ -439,7 +443,7 @@ export default {
       }
       return isJPG && isLt2M
     },
-    handleUploadCover(scope, file) {
+    handleUploadCover (scope, file) {
       const fileIsbn = scope[0].row.isbn
       let formdata = new FormData()
       formdata.append('isbn', fileIsbn)
@@ -463,7 +467,7 @@ export default {
         console.log(error)
       })
     },
-    handleEditChange(index, row) {
+    handleEditChange (index, row) {
       row.edit = true
       row.temp = {
         img: row.img,
@@ -473,7 +477,7 @@ export default {
         haveNum: row.haveNum
       }
     },
-    handleEditSave(index, row) {
+    handleEditSave (index, row) {
       row.edit = false
       row.totalNum = +row.haveNum + +row.outNum
       const params = {
@@ -525,7 +529,7 @@ export default {
         row.haveNum = row.temp.haveNum
       })
     },
-    handleEditCancel(index, row) {
+    handleEditCancel (index, row) {
       row.edit = false
       row.img = row.temp.img
       row.type = row.temp.type

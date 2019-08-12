@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 09:35:05
+ * @LastEditTime: 2019-08-12 09:37:33
  * @Description: file content
  -->
 <template>
@@ -142,14 +142,9 @@ export default {
       this.columns = []
       this.preStep()
     }
-  },
-  mounted() { }
+  }
 }
 </script>
 
 <style>
-.ele-import-action {
-  margin-top: 20px;
-  text-align: center;
-}
 </style>

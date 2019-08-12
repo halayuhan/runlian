@@ -1,3 +1,10 @@
+<!--
+ * @Author: liyan
+ * @Date: 2019-08-08 16:13:54
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-12 09:37:21
+ * @Description: file content
+ -->
 <template>
   <div class="ele-import-finish">
     <div>
@@ -13,27 +20,17 @@
 <script>
 export default {
   name: 'EleImportFinish',
-  data() {
+  data () {
     return {}
   },
   methods: {
-    handleFinish() {
+    handleFinish () {
       this.$emit('finish')
-
     }
   },
-  mounted() { }
+  mounted () { }
 }
 </script>
 
 <style>
-.ele-import-finish {
-  text-align: center;
-}
-
-.ele-import-finish .el-icon-success {
-  font-size: 150px;
-  line-height: 1.2;
-  color: #67c23a;
-}
 </style>

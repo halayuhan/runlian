@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 18:32:30
+ * @LastEditTime: 2019-08-12 10:23:01
  * @Description: file content
  -->
 <template>
@@ -82,7 +82,7 @@
           :current-page="currentPage"
           :page-size="pageSize"
           :page-sizes="[10,20,50]"
-          layout="total,prev,pager,next,jumper,sizes"
+          layout="total,prev,pager,next,sizes,jumper"
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
           v-show="isShow"
@@ -225,7 +225,7 @@ export default {
     },
 
     downloadExcel () {
-      const baseurl = 'http://10.0.58.22:8080/signIn/getExcel?'
+      const baseurl = process.env.API_HOST + '/signIn/getExcel?'
 
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
@@ -277,6 +277,10 @@ export default {
         //   pageSize: this.pageSize
       }
       this.queryData(paramsData)
+      this.queryData(paramsData)
+      this.$nextTick(() => {
+        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+      })
     },
     handleSizeChange (pageSize) {
       this.pageSize = pageSize
@@ -288,6 +292,10 @@ export default {
         page: 1
       }
       this.queryData(paramsData)
+      this.queryData(paramsData)
+      this.$nextTick(() => {
+        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+      })
     }
   }
 }

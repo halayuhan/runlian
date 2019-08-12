@@ -1,3 +1,10 @@
+<!--
+ * @Author: liyan
+ * @Date: 2019-08-09 14:46:45
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-09 15:07:37
+ * @Description: file content
+ -->
 <template>
   <div>
     <!-- 数据列表 -->
@@ -24,8 +31,6 @@
 </template>
 
 <script>
-import Schema from 'async-validator'
-import cloneDeep from 'lodash.clonedeep'
 
 export default {
   name: 'EleImportData',
@@ -49,8 +54,7 @@ export default {
       default() {
         return []
       }
-    },
-
+    }
 
   },
   inject: ['goNext', 'goPre'],
@@ -60,25 +64,18 @@ export default {
       hasError: true,
     }
   },
-  computed: {
-
-  },
   methods: {
     tableRowStyle({ row, rowIndex }) {
-
-      if (this.tableData[rowIndex]["haveNum"] === 0) {
+      if (this.tableData[rowIndex]['haveNum'] === 0) {
         this.hasError = true
         this.isDownload = false
         return 'ele-import-error'
-
-      }
-      else {
+      } else {
         this.hasError = false
         this.isDownload = true
         return ''
       }
     },
-
     handlePre() {
       this.$emit('pre')
     },
@@ -100,8 +97,7 @@ export default {
           let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
           let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
           paramC.push(elItem)
-        }
-        else {
+        } else {
           let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
           let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
           paramE.push(elItem)
@@ -128,7 +124,6 @@ export default {
           paramE.push(elItem)
           console.log(paramE)
         }
-
       })
       this.$axios({
         method: 'post',
@@ -149,17 +144,13 @@ export default {
         this.$message.error('下载错误列表失败')
         console.error(error) // 请求失败返回的数据
       })
-
     },
 
     // 发送请求
     handleRequest() {
-
-
       if (!this.isDownload) {
-        this.$message.error("请先下载错误信息表")
-      }
-      else {
+        this.$message.error('请先下载错误信息表')
+      } else {
         const paramArray = this.tableData
         var paramC = []
         var paramE = []
@@ -176,8 +167,7 @@ export default {
             let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
             let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
             paramC.push(elItem)
-          }
-          else {
+          } else {
             let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
             let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
             paramE.push(elItem)
@@ -201,7 +191,7 @@ export default {
         })
       }
     }
-  },
+  }
 }
 </script>
 
