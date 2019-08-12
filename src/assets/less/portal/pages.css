@@ -490,6 +490,13 @@
   padding: 30px 50px;
 }
 
+.el-input.is-disabled .el-input__inner {
+ border: none;
+ background-color: #fff;
+ color: #333;
+  cursor: not-allowed;
+}
+
 /* add-book */
 .add-book-wrapper {
   padding: 30px 40px;
