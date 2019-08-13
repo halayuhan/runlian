@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-13 10:57:14
+ * @LastEditTime: 2019-08-13 13:15:52
  * @Description: file content
  -->
 <template>
@@ -148,16 +148,16 @@
           </el-table-column>
           <el-table-column label="ISBN" align="center">
             <template slot-scope="scope">
-              <div>
-                <span>{{scope.row.isbn}}</span>
-              </div>
-              <el-button
+              <span>{{scope.row.isbn}}</span>
+
+              <i class="el-icon-edit-outline" @click="handleEditISBN(scope.$index,scope.row)"></i>
+              <!-- <el-button
                 size="mini"
-                type="success"
+                type="danger"
                 :disabled="scope.row.edit"
                 v-if="!scope.row.edit"
                 @click="handleEditISBN(scope.$index,scope.row)"
-              >修改ISBN</el-button>
+              >修改ISBN</el-button>-->
             </template>
           </el-table-column>
           <el-table-column label="书籍封面" align="center">
@@ -257,24 +257,6 @@
                 <li>
                   <el-button
                     size="mini"
-                    type="primary"
-                    v-if="scope.row.edit"
-                    :disabled="!scope.row.edit"
-                    @click="handleEditCancel(scope.$index,scope.row)"
-                  >取消</el-button>
-                </li>
-                <li>
-                  <el-button
-                    size="mini"
-                    type="success"
-                    :disabled="!scope.row.edit"
-                    v-if="scope.row.edit"
-                    @click="handleEditSave(scope.$index,scope.row)"
-                  >保存</el-button>
-                </li>
-                <li>
-                  <el-button
-                    size="mini"
                     type="self"
                     v-if="!scope.row.edit"
                     :disabled="scope.row.edit"
@@ -289,6 +271,33 @@
                     v-if="!scope.row.edit"
                     @click="handleBookReturn(scope.$index,scope.row)"
                   >还书</el-button>
+                </li>
+                <!-- <li>
+                  <el-button
+                    size="mini"
+                    type="self2"
+                    :disabled="scope.row.edit"
+                    v-if="!scope.row.edit"
+                    @click="handleEditISBN(scope.$index,scope.row)"
+                  >修改ISBN</el-button>
+                </li>-->
+                <li>
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    v-if="scope.row.edit"
+                    :disabled="!scope.row.edit"
+                    @click="handleEditCancel(scope.$index,scope.row)"
+                  >取消</el-button>
+                </li>
+                <li>
+                  <el-button
+                    size="mini"
+                    type="success"
+                    :disabled="!scope.row.edit"
+                    v-if="scope.row.edit"
+                    @click="handleEditSave(scope.$index,scope.row)"
+                  >保存</el-button>
                 </li>
               </ul>
             </template>
@@ -565,7 +574,13 @@ export default {
       row.haveNum = row.temp.haveNum
     },
     handleEditISBN (index, row) {
-
+      console.log('isbn')
+      this.$prompt('请输入新的书籍编号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({value}) => {
+        console.log(row.isbn, value)
+      })
     },
     handleBookBorrow (index, row) {
       if (row.haveNum <= 0) {
@@ -648,13 +663,13 @@ export default {
         console.log(response)
         if (response.data.code === '000') {
           this.$message({
-            message: '借书成功!',
+            message: '还书成功!',
             type: 'success',
             duration: 2000
           })
         } else {
           this.$message({
-            message: '借书失败!',
+            message: '还书失败!',
             type: 'error',
             duration: 2000
           })
