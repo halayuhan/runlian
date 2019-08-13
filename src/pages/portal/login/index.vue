@@ -41,20 +41,22 @@
 </template>
 
 <script>
+import { Encrypt } from '../../../api/encrypt'
 export default {
   name: 'Login',
 
-  data () {
+  data() {
     return {
       username: '',
       password: ''
     }
   },
   methods: {
-    login_Submit () {
+    login_Submit() {
+      let encryptPsw = Encrypt(this.password)
       const params = {
         adminName: this.username,
-        password: this.password
+        password: encryptPsw
       }
       console.log(params)
       if (this.username == '' || this.password == '') {
