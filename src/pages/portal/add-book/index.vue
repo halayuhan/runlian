@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 11:28:19
+ * @LastEditTime: 2019-08-12 15:08:38
  * @Description: file content
  -->
 <template>
@@ -22,19 +22,19 @@
           <div class="form-item-group">
             <div class="form-col-1">
               <el-form-item label="ISBN*" prop="ISBN">
-                <el-input v-model="formData.ISBN"></el-input>
+                <el-input v-model="formData.ISBN" @blur="getBookinfo()"></el-input>
               </el-form-item>
               <el-form-item label="书籍名称*" prop="bookName">
-                <el-input v-model="formData.bookName"></el-input>
+                <el-input v-model="formData.bookName" :disabled="isRead"></el-input>
               </el-form-item>
               <el-form-item label="作者*" prop="author">
-                <el-input v-model="formData.author"></el-input>
+                <el-input v-model="formData.author" :disabled="isRead"></el-input>
               </el-form-item>
               <el-form-item label="书籍类型*" prop="type">
-                <el-input v-model="formData.type"></el-input>
+                <el-input v-model="formData.type" :disabled="isRead"></el-input>
               </el-form-item>
               <el-form-item label="页数">
-                <el-input v-model="formData.page"></el-input>
+                <el-input v-model="formData.page" :disabled="isRead"></el-input>
               </el-form-item>
               <el-form-item label="书籍详情">
                 <el-input type="textarea" v-model="formData.description"></el-input>
@@ -45,10 +45,10 @@
                 <el-input v-model="formData.addNum"></el-input>
               </el-form-item>
               <el-form-item label="出版社*" prop="publisher">
-                <el-input v-model="formData.publisher"></el-input>
+                <el-input v-model="formData.publisher" :disabled="isRead"></el-input>
               </el-form-item>
               <el-form-item label="出版时间*" prop="pubDate">
-                <el-input v-model="formData.pubDate"></el-input>
+                <el-input v-model="formData.pubDate" :disabled="isRead"></el-input>
               </el-form-item>
               <el-form-item label="上传封面">
                 <div class="upload-div">
@@ -83,6 +83,7 @@ export default {
   name: 'AddBook',
   data () {
     return {
+      isRead: false,
       formData: {
         img: '',
         bookName: '',
@@ -121,9 +122,45 @@ export default {
     }
   },
   methods: {
-    // handleCoverChange(file) {
-    //   this.formData.img = '/static/cover/' + file.name
-    // },
+    getBookinfo () {
+      const params = {
+        isbn: this.formData.ISBN
+      }
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/get',
+        params
+      })
+        .then((response) => {
+          if (response.data.code !== '000') {
+            this.formData.bookName = ''
+            this.formData.author = ''
+            this.formData.publisher = ''
+            this.formData.pubDate = ''
+            this.formData.type = ''
+            this.formData.page = ''
+            this.formData.img = ''
+            this.formData.description = ''
+            this.isRead = false
+          } else {
+            const bookinfo = response.data.data
+            // let { img, bookName, author, ISBN, publisher, pubDate, page, type, description, addNum } = this.formData
+            this.formData.bookName = bookinfo.bookName
+            this.formData.author = bookinfo.author
+            this.formData.publisher = bookinfo.publisher
+            this.formData.pubDate = bookinfo.pubDate
+            this.formData.type = bookinfo.type
+            this.formData.page = bookinfo.page
+            this.formData.img = bookinfo.img
+            this.formData.description = bookinfo.description
+            this.isRead = true
+          }
+          console.log(response) // 请求成功返回的数据
+        }).catch((error) => {
+          this.isRead = false
+          console.error(error) // 请求失败返回的数据
+        })
+    },
     handleCancel () {
       this.formData = {
         img: '',

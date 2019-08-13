@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-09 14:46:45
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 15:07:37
+ * @LastEditTime: 2019-08-12 15:06:33
  * @Description: file content
  -->
 <template>
@@ -19,6 +19,7 @@
         align="left"
         header-align="center"
         v-for="(label, field) of fields"
+        :show-overflow-tooltip="true"
       ></el-table-column>
     </el-table>
 
@@ -51,21 +52,21 @@ export default {
     },
     tableData: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     }
 
   },
   inject: ['goNext', 'goPre'],
-  data() {
+  data () {
     return {
       isDownload: false,
-      hasError: true,
+      hasError: true
     }
   },
   methods: {
-    tableRowStyle({ row, rowIndex }) {
+    tableRowStyle ({ row, rowIndex }) {
       if (this.tableData[rowIndex]['haveNum'] === 0) {
         this.hasError = true
         this.isDownload = false
@@ -76,11 +77,11 @@ export default {
         return ''
       }
     },
-    handlePre() {
+    handlePre () {
       this.$emit('pre')
     },
 
-    _getParam() {
+    _getParam () {
       const paramArray = this.tableData
       var paramC = []
       var paramE = []
@@ -105,7 +106,7 @@ export default {
       })
     },
 
-    downloadError() {
+    downloadError () {
       const paramArray = this.tableData
 
       const paramE = []
@@ -147,7 +148,7 @@ export default {
     },
 
     // 发送请求
-    handleRequest() {
+    handleRequest () {
       if (!this.isDownload) {
         this.$message.error('请先下载错误信息表')
       } else {

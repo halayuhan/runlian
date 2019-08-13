@@ -2,14 +2,14 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 15:21:30
+ * @LastEditTime: 2019-08-12 15:01:02
  * @Description: file content
  -->
 <template>
   <header class="portal-header">
     <div class="header-wrapper">
       <div class="header-wrapper-left">
-        <span>header-text</span>
+        <span></span>
       </div>
       <div class="header-wrapper-right" v-if="isLogin">
         <i class="el-icon-user"></i>
