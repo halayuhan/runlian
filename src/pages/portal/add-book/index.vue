@@ -140,6 +140,7 @@ export default {
             this.formData.type = ''
             this.formData.page = ''
             this.formData.img = ''
+            this.formData.description = ''
             this.isRead = false
 
           }
@@ -154,6 +155,7 @@ export default {
             this.formData.type = bookinfo.type
             this.formData.page = bookinfo.page
             this.formData.img = bookinfo.img
+            this.formData.description = bookinfo.description
             this.isRead = true
           }
           console.log(response) // 请求成功返回的数据

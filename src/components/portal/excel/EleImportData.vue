@@ -19,6 +19,7 @@
         align="left"
         header-align="center"
         v-for="(label, field) of fields"
+        :show-overflow-tooltip="true"
       ></el-table-column>
     </el-table>
 

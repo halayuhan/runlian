@@ -641,3 +641,6 @@
   margin-top: 20px;
   text-align: center;
 }
+.el-tooltip__popper {
+   max-width: 200px !important; 
+}
