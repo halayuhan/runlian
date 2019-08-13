@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 10:22:24
+ * @LastEditTime: 2019-08-13 08:55:14
  * @Description: file content
  -->
 <template>
@@ -127,7 +127,7 @@
                   </el-form-item>
                   <el-form-item>
                     <div>
-                      <p>可借数量:</p>
+                      <p>已借数量:</p>
                       <span>{{props.row.outNum}}</span>
                     </div>
                   </el-form-item>
@@ -346,7 +346,7 @@ export default {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
             let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
-            if (img === '') {
+            if (img === '' || img === '0') {
               img = '../../../../static/cover/blank_book.png'
             }
             let tableItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
