@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-13 08:55:14
+ * @LastEditTime: 2019-08-13 10:57:14
  * @Description: file content
  -->
 <template>
@@ -148,7 +148,16 @@
           </el-table-column>
           <el-table-column label="ISBN" align="center">
             <template slot-scope="scope">
-              <span>{{scope.row.isbn}}</span>
+              <div>
+                <span>{{scope.row.isbn}}</span>
+              </div>
+              <el-button
+                size="mini"
+                type="success"
+                :disabled="scope.row.edit"
+                v-if="!scope.row.edit"
+                @click="handleEditISBN(scope.$index,scope.row)"
+              >修改ISBN</el-button>
             </template>
           </el-table-column>
           <el-table-column label="书籍封面" align="center">
@@ -262,6 +271,24 @@
                     v-if="scope.row.edit"
                     @click="handleEditSave(scope.$index,scope.row)"
                   >保存</el-button>
+                </li>
+                <li>
+                  <el-button
+                    size="mini"
+                    type="self"
+                    v-if="!scope.row.edit"
+                    :disabled="scope.row.edit"
+                    @click="handleBookBorrow(scope.$index,scope.row)"
+                  >借书</el-button>
+                </li>
+                <li>
+                  <el-button
+                    size="mini"
+                    type="success"
+                    :disabled="scope.row.edit"
+                    v-if="!scope.row.edit"
+                    @click="handleBookReturn(scope.$index,scope.row)"
+                  >还书</el-button>
                 </li>
               </ul>
             </template>
@@ -536,6 +563,105 @@ export default {
       row.totalNum = row.temp.totalNum
       row.outNum = row.temp.outNum
       row.haveNum = row.temp.haveNum
+    },
+    handleEditISBN (index, row) {
+
+    },
+    handleBookBorrow (index, row) {
+      if (row.haveNum <= 0) {
+        this.$message.error('已无可借书籍!')
+        return
+      }
+      row.haveNum--
+      row.outNum++
+      row.totalNum = +row.haveNum + +row.outNum
+      console.log(row.totalNum)
+      const params = {
+        author: row.author,
+        bookName: row.bookName,
+        description: row.description,
+        img: row.img,
+        isbn: row.isbn,
+        outNum: row.outNum,
+        page: row.page,
+        pubDate: row.pubDate,
+        publisher: row.publisher,
+        totalNum: row.totalNum,
+        type: row.type
+      }
+
+      console.log(params)
+
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/update',
+        params
+      }).then(response => {
+        console.log(response)
+        if (response.data.code === '000') {
+          this.$message({
+            message: '借书成功!',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$message({
+            message: '借书失败!',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    handleBookReturn (index, row) {
+      if (row.outNum <= 0) {
+        this.$message.error('还书操作异常!')
+        return
+      }
+      row.haveNum++
+      row.outNum--
+      row.totalNum = +row.haveNum + +row.outNum
+      console.log(row.totalNum)
+      const params = {
+        author: row.author,
+        bookName: row.bookName,
+        description: row.description,
+        img: row.img,
+        isbn: row.isbn,
+        outNum: row.outNum,
+        page: row.page,
+        pubDate: row.pubDate,
+        publisher: row.publisher,
+        totalNum: row.totalNum,
+        type: row.type
+      }
+
+      console.log(params)
+
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/update',
+        params
+      }).then(response => {
+        console.log(response)
+        if (response.data.code === '000') {
+          this.$message({
+            message: '借书成功!',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$message({
+            message: '借书失败!',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   }
 }
