@@ -82,7 +82,11 @@
 .portal-container {
   height: calc(100% - 80px);
   background-color: #eee;
-  overflow: auto;
+  /* overflow: auto; */
+}
+
+.portal-container .el-scrollbar__wrap {
+  overflow-x: auto;
 }
 
 /* 主体展示部分 */

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 15:01:02
+ * @LastEditTime: 2019-08-14 15:39:14
  * @Description: file content
  -->
 <template>
@@ -10,6 +10,19 @@
     <div class="header-wrapper">
       <div class="header-wrapper-left">
         <span></span>
+        <div class="search-nav">
+          <ul>
+            <li>
+              <i class="el-icon-arrow-right"></i>
+            </li>
+            <li>
+              <router-link to="/check-in" active-class="active-link">签到管理</router-link>
+            </li>
+            <li>
+              <router-link to="/book" active-class="active-link">书单管理</router-link>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="header-wrapper-right" v-if="isLogin">
         <i class="el-icon-user"></i>
