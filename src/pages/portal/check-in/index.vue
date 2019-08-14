@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 15:51:04
+ * @LastEditTime: 2019-08-14 16:43:35
  * @Description: file content
  -->
 <template>
@@ -14,16 +14,16 @@
             <el-date-picker
               v-model="timeStart"
               type="date"
+              :picker-options="pickerOptions"
               :clearable="false"
               placeholder="选择起始时间"
-              :picker-options="pickerOptions"
             ></el-date-picker>
             <el-date-picker
               v-model="timeEnd"
               type="date"
+              :picker-options="pickerOptions"
               :clearable="false"
               placeholder="选择结束时间"
-              :picker-options="pickerOptions"
             ></el-date-picker>
           </div>
           <div class="data-filter">
@@ -125,31 +125,7 @@ export default {
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() > Date.now()
-        },
-        shortcuts: [
-          {
-            text: '今天',
-            onClick (picker) {
-              picker.$emit('pick', new Date())
-            }
-          },
-          {
-            text: '昨天',
-            onClick (picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24)
-              picker.$emit('pick', date)
-            }
-          },
-          {
-            text: '一周前',
-            onClick (picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', date)
-            }
-          }
-        ]
+        }
       }, // 日期组件配置选项
       downloadVisible: false, // 是否显示导出Excel对话框
       filterInput: '', // 用于过滤的输入
@@ -271,8 +247,8 @@ export default {
       //   colorLight: '#fff'
       // })
       let qrcode = new QRCode('qrcode', {
-        width: 132,
-        height: 132,
+        width: 360,
+        height: 360,
         colorDark: '#000',
         colorLight: '#fff'
       })

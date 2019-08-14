@@ -260,6 +260,22 @@ input:-ms-input-placeholder {
   border-color: #F56C6C;
 }
 
+.el-button--blue {
+  color: #2ca9e0;
+  background-color: #fff;
+  border-color: #2ca9e0;;
+}
+.el-button--blue:hover {
+  color: #2ca9e0;
+  background-color: #fff;
+  border-color: #2ca9e0;
+}
+.el-button--blue:focus {
+  color: #2ca9e0;
+  background-color: #fff;
+  border-color: #2ca9e0;
+}
+
 .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #5caaab;
   color: #fff;

@@ -326,15 +326,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 260px;
-  height: 320px;
+  width: 420px;
+  height: 480px;
   text-align: center;
+  border-radius: 10px;
   background-color: #fff;
 }
 
 .mask-content p {
   margin: 10px 0 0 0;
-  font-size: 16px;
+  font-size: 22px;
 }
 
 .mask-content .icon {
@@ -353,16 +354,16 @@
 }
 
 #qrcode {
-  width: 142px;
-  height: 142px;
-  padding: 5px;
+  width: 400px;
+  height: 400px;
+  padding: 20px;
   /* border: 1px solid #000; */
   background-color: #fff;
 }
 
 #qrcode img {
-  width: 132px;
-  height: 132px;
+  width: 360px;
+  height: 360px;
 }
 
 .search-content {
@@ -391,7 +392,10 @@
 }
 
 .book-search-handle-left .el-input__inner {
-  width: 240px;
+  width: 260px;
+}
+.book-search-handle-left .select-type .el-input__inner {
+  width: 90px;
 }
 
 .book-search-handle-right ul {

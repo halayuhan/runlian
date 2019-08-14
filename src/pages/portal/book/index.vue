@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 16:07:45
+ * @LastEditTime: 2019-08-14 17:42:42
  * @Description: file content
  -->
 <template>
@@ -18,6 +18,15 @@
               clearable
               @keyup.enter.native="filterSearch"
             >
+              <div slot="prepend" class="select-type">
+                <el-select v-model="selectType" placeholder="请选择">
+                  <el-option label="关键字" value="0"></el-option>
+                  <el-option label="书名" value="1"></el-option>
+                  <el-option label="类型" value="2"></el-option>
+                  <el-option label="作者名" value="3"></el-option>
+                  <el-option label="出版社" value="4"></el-option>
+                </el-select>
+              </div>
               <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
             </el-input>
           </div>
@@ -190,29 +199,22 @@
           </el-table-column>
           <el-table-column label="书籍名称" align="center">
             <template slot-scope="scope">
-              <!-- <template v-if="scope.row.edit">
-                <el-input v-model="scope.row.bookName"></el-input>
-              </template>
-              <span v-else>{{scope.row.bookName}}</span>-->
               <span>{{scope.row.bookName}}</span>
             </template>
           </el-table-column>
           <el-table-column label="作者" prop="author" align="center">
             <template slot-scope="scope">
-              <!-- <template v-if="scope.row.edit">
-                <el-input v-model="scope.row.author"></el-input>
-              </template>
-              <span v-else>{{scope.row.author}}</span>-->
               <span>{{scope.row.author}}</span>
             </template>
           </el-table-column>
           <el-table-column label="出版社" prop="publisher" align="center">
             <template slot-scope="scope">
-              <!-- <template v-if="scope.row.edit">
-                <el-input v-model="scope.row.publisher"></el-input>
-              </template>
-              <span v-else>{{scope.row.publisher}}</span>-->
               <span>{{scope.row.publisher}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建日期" prop="createDate" align="center">
+            <template slot-scope="scope">
+              <span>{{scope.row.createDate}}</span>
             </template>
           </el-table-column>
           <el-table-column label="书籍类型" prop="type" align="center">
@@ -256,7 +258,7 @@
                 <li>
                   <el-button
                     size="mini"
-                    type="primary"
+                    type="blue"
                     :disabled="scope.row.edit"
                     v-if="!scope.row.edit"
                     @click="showDetial(scope.$index,scope.row)"
@@ -361,7 +363,7 @@ export default {
         type: '书籍类型*',
         description: '书籍简介'
       },
-
+      selectType: '0',
       downloadVisible: false,
       importVisible: false,
       visible: false,
@@ -381,7 +383,9 @@ export default {
         isExist: 0,
         keyword: this.filterInput.trim(),
         page: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        sign: 0,
+        sortFlag: 0
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(params)
@@ -398,11 +402,11 @@ export default {
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
-            let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
+            let { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
             if (img === '' || img === '0') {
               img = '../../../../static/cover/blank_book.png'
             }
-            let tableItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
@@ -415,6 +419,7 @@ export default {
     },
     filterSearch () {
       const paramsData = {
+        sign: +this.selectType,
         page: 1
       }
       this.queryData(paramsData)
@@ -613,6 +618,33 @@ export default {
         cancelButtonText: '取消'
       }).then(({value}) => {
         console.log(row.isbn, value)
+        const params = {
+          newIsbn: value,
+          oldIsbn: row.isbn
+        }
+        this.$axios({
+          methods: 'get',
+          url: process.env.API_HOST + '/book/updateISBN',
+          params
+        }).then(response => {
+          console.log(response)
+          if (response.data.code === '000') {
+            this.$message({
+              message: '修改成功!',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: '修改失败!',
+              type: 'error',
+              duration: 2000
+            })
+          }
+          this.queryData({page: this.currentPage})
+        }).catch((error) => {
+          console.log(error)
+        })
       })
     },
     handleBookBorrow (index, row) {
