@@ -82,11 +82,11 @@
 .portal-container {
   height: calc(100% - 80px);
   background-color: #eee;
-  /* overflow: auto; */
+  overflow: hidden;
 }
 
 .portal-container .el-scrollbar__wrap {
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 /* 主体展示部分 */
@@ -436,57 +436,94 @@
   margin: 0 0 5px 0;
 }
 
-.el-table .table-expand-form {
-  display: flex;
-  padding: 0 0 10px 0;
+.el-table .el-dialog {
+  width: 60%;
+  border-radius: 10px; 
 }
 
-.el-table .table-expand-form .el-form-item {
+.el-table .el-dialog__header {
+  text-align: left;
+  padding: 30px 40px 0;
+}
+.el-table .el-dialog__title {
+  font-size: 22px;
+}
+.el-table .el-dialog__body {
+  padding: 20px 40px 30px 40px;
+}
+
+.el-table .detial-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+.el-table .detial-content-left {
+  width: 30%;
+}
+
+.el-table .detial-content-right {
+  width: 70%;
+  padding: 0 0 0 40px;
+}
+
+.el-table .detial-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0 0 ;
+  /* border-top: 1px solid #000; */
+}
+
+.el-table .el-form-item {
   margin: 0;
   height: 30px;
 }
-
-.el-table .table-expand-form .el-form-item div {
+.el-table .detial-footer .el-form-item {
+  margin: 0 0 0 30px;
+}
+.el-table .el-form-item div {
   display: flex;
-  height: 210px;
 }
 
-.el-table .table-expand-form .el-form-item .flex-column {
-  flex-direction: column;
+.el-table .flex-column {
+  height: 100%;
+  position: relative;
 }
 
-.el-table .el-form .table-expand-form {
-  display: flex;
-  justify-content: space-between;
-}
-.el-table .expand-form-left {
-}
-
-.el-table .expand-form-right {
-  width: 250px;
-}
-
-.el-table .expand-form-center {
-  flex: 1;
-  padding: 0 80px 0 60px;
-}
-
-.el-table .table-expand-form p {
-  width: 90px;
+.el-table li .detial-box p {
+  height: 30px;
+  width: 80px;
   font-size: 16px;
   font-weight: bold;
+  text-align: left;
 }
 
-.el-table .table-expand-form h1 {
-  height: 210px;
-  line-height: 40px;
+.el-table li .detial-box span {
+  display: inline-block;
+  height: 30px;
+  overflow: hidden;
+  word-wrap: break-all;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /*! autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+}
+
+.el-table li .detial-box h1 {
+  height: calc(100% - 30px);
+  line-height: 30px;
   font-size: 14px;
   font-weight: normal;
   word-break: break-all;
+  text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 6;
   /*! autoprefixer: off */
   -webkit-box-orient: vertical;
   /* autoprefixer: on */
@@ -507,7 +544,7 @@
 
 /* add-book */
 .add-book-wrapper {
-  padding: 30px 40px;
+  padding: 10px 40px;
 }
 
 .add-book-header {
@@ -517,7 +554,7 @@
 }
 
 .add-book-header h1 {
-  font-size: 28px;
+  font-size: 20px;
 }
 
 .add-book-form {
@@ -526,25 +563,52 @@
 
 .add-book-form .form-item-group {
   display: flex;
-  margin: 0 0 30px 0;
+  margin: 0;
   justify-content: center;
+ 
 }
-
+.el-form--label-left .el-form-item__label {
+  text-align: right;
+  padding: 0 20px 0 0;
+}
 .add-book-form .form-col-1 {
   /* width: 50%; */
   display: flex;
   flex-direction: column;
-  padding: 0 100px 0 0;
+  padding: 0 50px 0 50px;
+  flex:1;
 }
-
+.add-book-form .from-col-group{
+  display: flex;
+  flex-direction: column;
+  padding: 0 50px 0 0;
+  flex:2;
+}
+.from-col-group .from-col-toptwo,
+.from-col-group .form-col-4{
+     flex: 1;
+     display: flex;
+}
 .add-book-form .form-col-2 {
   
   display: flex;
   flex-direction: column;
+  padding: 0 50px 0 0;
+  flex:1;
   /* align-items: flex-end; */
 }
+.add-book-form .form-col-3 {
+  
+  display: flex;
+  flex:1;
+ 
+  /* align-items: flex-end; */
+}
+.add-book-form .item-upload{
+  margin-left: 0px;
+}
 
-.add-book-form .form-col-2 .cover-uploader .el-upload {
+.add-book-form .form-col-3 .cover-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
@@ -552,39 +616,77 @@
   overflow: hidden;
 }
 
-.add-book-form .form-col-2 .cover-uploader .el-upload:hover {
+.add-book-form .form-col-3 .cover-uploader .el-upload:hover {
   border-color: #5caaab;
 }
 
-.add-book-form .form-col-2 .cover-uploader-icon {
-  font-size: 28px;
+.add-book-form .form-col-3 .cover-uploader-icon {
+  font-size: 16px;
   color: #8c939d;
   width: 150px;
-  height: 150px;
-  line-height: 150px;
+  height: 160px;
+  line-height: 160px;
   text-align: center;
 }
+.add-book-form .form-col-3 .cover-uploader-icon em{
+  font-size: 16px;
 
-.add-book-form .form-col-2 .cover {
+}
+.add-book-form .form-col-3 .cover {
   display: inline-block;
   width: 85px;
   height: 150px;
 }
-
+.item-upload .el-form-item__content {
+  margin-left:0px !important;
+} 
 .add-book-wrapper .form-btn-group .el-form-item {
   display: flex;
   justify-content: center;
 }
 
 .add-book-wrapper .form-btn-group >>> .el-form-item__content {
-  margin: 0 auto !important;
+  margin:0 !important;
+}
+.form-btn-group .el-form-item__content {
+  margin-left:0px !important;
+} 
+.form-btn-group .save_btn,
+.form-btn-group .cancel_btn
+{
+  font-size: 14px;
+  padding: 8px 40px;
+  margin-right: 100px;
+}
+.form-btn-group .back_btn{
+  background-color: #fff;
+  color: #5caaab;
+   font-size: 14px;
+  padding: 8px 12px;
+  margin-right: 100px;
+}
+.form-btn-group .back_btn:hover{
+  background-color: #5caaab;
+  color: #fff;
 }
 
 .add-book-wrapper .el-form-item >>> .el-form-item__label {
   font-size: 16px;
   font-weight: bold;
 }
+.el-textarea__inner {
+  resize: both;
+  min-height: 33px;
+  margin: 0px;
+  width: 435px;
+  height: 90px;
+  
+}
+.el-textarea__inner:focus {
+  outline: 0;
+  border-color: #5caaab;
 
+}
 
 /* 404页面 */
 .error-body {

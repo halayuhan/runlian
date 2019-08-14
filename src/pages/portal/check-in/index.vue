@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 16:43:35
+ * @LastEditTime: 2019-08-14 17:55:48
  * @Description: file content
  -->
 <template>
@@ -17,6 +17,7 @@
               :picker-options="pickerOptions"
               :clearable="false"
               placeholder="选择起始时间"
+              @change="changeStart"
             ></el-date-picker>
             <el-date-picker
               v-model="timeEnd"
@@ -24,6 +25,7 @@
               :picker-options="pickerOptions"
               :clearable="false"
               placeholder="选择结束时间"
+              @change="changeEnd"
             ></el-date-picker>
           </div>
           <div class="data-filter">
@@ -151,6 +153,20 @@ export default {
     }
   },
   methods: {
+    changeStart () {
+      this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
+        disabledDate: (time) => {
+          return time.getTime() > this.timeEnd
+        }
+      })
+    },
+    changeEnd () {
+      this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
+        disabledDate: (time) => {
+          return time.getTime() < this.timeStart
+        }
+      })
+    },
     queryData (paramsData = {}) {
       // TODO
       const defaultParams = {
@@ -177,14 +193,6 @@ export default {
             const currentData = response.data.data[i]
 
             let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
-
-            // if (gender == 'M') { gender = '男' } else {
-            //   gender = '女'
-            // }
-            // if (isInternal == 'Y') { isInternal = '内部' } else {
-            //   isInternal = '外部'
-            // }
-
             let tableItem = { ldap, userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
           }

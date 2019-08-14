@@ -96,7 +96,7 @@
 <script>
 export default {
   name: 'Attendance',
-  data () {
+  data() {
     return {
       isCorrect: false,
       isShow: true,
@@ -147,7 +147,7 @@ export default {
     }
   },
   computed: {
-    channel () {
+    channel() {
       return this.form.ladp.val
     }
   },
@@ -175,7 +175,7 @@ export default {
   //   }
   // },
   methods: {
-    _getUserinfo () {
+    _getUserinfo() {
       const params = {
         ldap: this.form.ldap.val
       }
@@ -189,7 +189,7 @@ export default {
           params
         })
           .then((response) => {
-            if (response.data.code != '000') {
+            if (response.data.code != '000') {           
               this.form.name.val = ''
               this.form.department.val = ''
               this.form.phone.val = ''
@@ -214,7 +214,7 @@ export default {
       }
     },
 
-    _validate () {
+    _validate() {
       let isPass = false
       for (let key in this.form) {
         let reg = this.form[key].rules[0]
@@ -231,7 +231,7 @@ export default {
       return isPass
     },
 
-    attendSubmit () {
+    attendSubmit() {
       if (!this._validate()) {
         return
       }

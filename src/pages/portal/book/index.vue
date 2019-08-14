@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 17:42:42
+ * @LastEditTime: 2019-08-14 21:44:38
  * @Description: file content
  -->
 <template>
@@ -44,7 +44,7 @@
               </el-dialog>
             </li>
             <li>
-              <el-button type="primary" @click="handleOpen">批量上传</el-button>
+              <el-button type="primary" @click="handleOpen">Excel导入书单</el-button>
               <ex-import
                 :fields="fields"
                 :requestFn="requestFn"
@@ -261,8 +261,157 @@
                     type="blue"
                     :disabled="scope.row.edit"
                     v-if="!scope.row.edit"
-                    @click="showDetial(scope.$index,scope.row)"
+                    @click="showDetial"
                   >详情</el-button>
+                  <el-dialog :visible.sync="detialVisible" title="书目详情">
+                    <el-form class="detial-box">
+                      <div class="detial-content">
+                        <div class="detial-content-left">
+                          <el-form-item>
+                            <div>
+                              <p>书籍名称:</p>
+                              <span :show-overflow-tooltip="true">{{scope.row.bookName}}</span>
+                              <!-- <span>{{scope.row.bookName}}</span> -->
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>作者:</p>
+                              <span>{{scope.row.author}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>出版社:</p>
+                              <span>{{scope.row.publisher}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>出版日期:</p>
+                              <span>{{scope.row.pubDate}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>ISBN:</p>
+                              <span>{{scope.row.isbn}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>页数:</p>
+                              <span>{{scope.row.page}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>类型:</p>
+                              <span>{{scope.row.type}}</span>
+                            </div>
+                          </el-form-item>
+                        </div>
+                        <div class="detial-content-right">
+                          <div class="flex-column">
+                            <p>描述:</p>
+                            <h1>{{scope.row.description}}</h1>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="detial-footer">
+                        <el-form-item>
+                          <div>
+                            <p>库藏数量:</p>
+                            <span>{{scope.row.totalNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>待还数量:</p>
+                            <span>{{scope.row.outNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>可借数量:</p>
+                            <span>{{scope.row.haveNum}}</span>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <!-- <div class="expand-form-left">
+                        <el-form-item>
+                          <div>
+                            <p>书籍名称:</p>
+                            <span>{{scope.row.bookName}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>作者:</p>
+                            <span>{{scope.row.author}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>出版社:</p>
+                            <span>{{scope.row.publisher}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>出版日期:</p>
+                            <span>{{scope.row.pubDate}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>ISBN:</p>
+                            <span>{{scope.row.isbn}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>页数:</p>
+                            <span>{{scope.row.page}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>类型:</p>
+                            <span>{{scope.row.type}}</span>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <div class="expand-form-center">
+                        <el-form-item>
+                          <div class="flex-column">
+                            <p>描述:</p>
+                            <h1>{{scope.row.description}}</h1>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <div class="expand-form-right">
+                        <el-form-item>
+                          <div>
+                            <p>库藏数量:</p>
+                            <span>{{scope.row.totalNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>待还数量:</p>
+                            <span>{{scope.row.outNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>可借数量:</p>
+                            <span>{{scope.row.haveNum}}</span>
+                          </div>
+                        </el-form-item>
+                      </div>-->
+                    </el-form>
+                  </el-dialog>
                 </li>
                 <li>
                   <el-button
@@ -291,15 +440,6 @@
                     @click="handleBookReturn(scope.$index,scope.row)"
                   >还书</el-button>
                 </li>
-                <!-- <li>
-                  <el-button
-                    size="mini"
-                    type="self2"
-                    :disabled="scope.row.edit"
-                    v-if="!scope.row.edit"
-                    @click="handleEditISBN(scope.$index,scope.row)"
-                  >修改ISBN</el-button>
-                </li>-->
                 <li>
                   <el-button
                     size="mini"
@@ -351,7 +491,7 @@ export default {
     return {
 
       title: '批量导入书单',
-      tips: ['ISBN必填', '数量必填', '书籍类型必填'],
+      tips: ['除书籍简介外，其他信息为必填', '若添加书籍数量为空，默认为1'],
       fields: {
         // id: '序号',
         isbn: 'ISBN/书籍编号*',
@@ -366,7 +506,8 @@ export default {
       selectType: '0',
       downloadVisible: false,
       importVisible: false,
-      visible: false,
+      visible: false, // 批量上传提示框可见情况
+      detialVisible: false,
       filterInput: '',
       tableData: [],
       currentPage: 1, // 当前页码
@@ -616,7 +757,7 @@ export default {
       this.$prompt('请输入新的书籍编号', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
-      }).then(({value}) => {
+      }).then(({ value }) => {
         console.log(row.isbn, value)
         const params = {
           newIsbn: value,
@@ -743,8 +884,8 @@ export default {
         console.log(error)
       })
     },
-    showDetial (index, row) {
-
+    showDetial () {
+      this.detialVisible = true
     }
   }
 }

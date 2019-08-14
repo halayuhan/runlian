@@ -21,24 +21,21 @@
         <van-col span="19">
           <form action="/">
             <van-search
-              placeholder="请输入书名\作者搜索"
+              placeholder="请输入书名/作者/书籍类型搜索"
               v-model="filterInput"
-              show-action
               @keyup.enter.native="onSearch"
               @search="onSearch"
-              @cancel="onCancel"
-            />
+              @clear="onCancel"
+            ></van-search>
           </form>
         </van-col>
       </van-row>
     </div>
-    <!-- <el-input placeholder="请输入姓名搜索" v-model="filterInput" @keyup.enter.native="handleSearch">
-    <!-- <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>-->
-    <!-- </el-input>  -->
+
     <div class="findBook_content">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <van-collapse v-model="activeNames">
-          <van-collapse-item v-for="item in listData" :key="item.id">
+          <van-collapse-item v-for="(item,index) in listData" :key="item.id">
             <div slot="title" class="item_single">
               <div class="cell-title">
                 <van-image width="80" height="100" :src="item.img" />
@@ -47,6 +44,7 @@
                 <div class="item-header-group">
                   <div class="item-bookName">
                     <!-- <span>红与黑</span> -->
+                    <span class="item-index">{{index+1+'.'}}</span>
                     <span>{{item.bookName}}</span>
                   </div>
                   <div class="item-type">
@@ -97,6 +95,7 @@
               </div>
             </div>
           </van-collapse-item>
+          <vueToTop type="9" top="280" size="28"></vueToTop>
         </van-collapse>
       </van-list>
     </div>
@@ -112,8 +111,8 @@
 </template>
 
 <script>
-import { Row, Col, Image, Search, Collapse, CollapseItem, List, Tag, Skeleton, Card, Button, Cell, CellGroup, DropdownMenu, DropdownItem } from 'vant'
-
+import { Row, Col, Icon, Image, Search, Collapse, CollapseItem, List, Tag, Skeleton, Card, Button, Cell, CellGroup, DropdownMenu, DropdownItem } from 'vant'
+import vueToTop from 'vue-totop'
 export default {
   name: 'FindBook',
   components: {
@@ -128,9 +127,11 @@ export default {
     [List.name]: List,
     [Tag.name]: Tag,
     [Collapse.name]: Collapse,
-    [CollapseItem.name]: CollapseItem
+    [CollapseItem.name]: CollapseItem,
+    [Icon.name]: Icon,
+    vueToTop
   },
-  data () {
+  data() {
     return {
       // --下拉菜单的属性值--
       value: 0,
@@ -146,11 +147,12 @@ export default {
       filterInput: '',
       total: 0,
       count: 0, // 相当于页码
-      pageSize: 5
+      pageSize: 5,
+
     }
   },
   methods: {
-    onSearch () {
+    onSearch() {
       console.log(this.value)
       this.listData = []
       this.count = 1
@@ -160,8 +162,8 @@ export default {
       }
       this.queryData(paramsData)
     },
-    onCancel () {
-
+    onCancel() {
+      this.filterInput = ''
     },
     // onLoad () {
     //   // 异步更新数据
@@ -178,7 +180,7 @@ export default {
     //     }
     //   }, 500)
     // },
-    onLoad () {
+    onLoad() {
       this.finished = false
       this.count++
       const paramsData = {
@@ -187,7 +189,7 @@ export default {
       this.queryData(paramsData)
     },
 
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       const defaultParams = {
         isExist: this.value,
         keyword: this.filterInput.trim(),
@@ -232,14 +234,14 @@ export default {
         this.isScrollOver()
       })
     },
-    isScrollOver () {
+    isScrollOver() {
       if (this.count * this.pageSize > this.total) {
         this.finished = true
       } else {
         this.finished = false
       }
     },
-    loadMore () {
+    loadMore() {
       // debugger
       this.count++
       // this.listData.push(this.count)
@@ -249,7 +251,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    handleSearch () {
+    handleSearch() {
       this.count = 1
       this.queryData = {
         page: this.count

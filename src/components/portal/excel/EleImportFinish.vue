@@ -12,7 +12,7 @@
     </div>
     <div>导入成功</div>
     <div class="ele-import-action">
-      <el-button @click="handleFinish" type="primary">查看详情</el-button>
+      <el-button @click="handleFinish" type="primary">确定</el-button>
     </div>
   </div>
 </template>
@@ -20,15 +20,15 @@
 <script>
 export default {
   name: 'EleImportFinish',
-  data () {
+  data() {
     return {}
   },
   methods: {
-    handleFinish () {
+    handleFinish() {
       this.$emit('finish')
     }
   },
-  mounted () { }
+  mounted() { }
 }
 </script>
 
