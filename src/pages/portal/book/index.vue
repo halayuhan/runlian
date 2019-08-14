@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-13 08:55:14
+ * @LastEditTime: 2019-08-14 16:07:45
  * @Description: file content
  -->
 <template>
@@ -15,6 +15,7 @@
               placeholder="请输入书籍名称/作者/出版社"
               v-model="filterInput"
               width="250"
+              clearable
               @keyup.enter.native="filterSearch"
             >
               <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
@@ -127,7 +128,7 @@
                   </el-form-item>
                   <el-form-item>
                     <div>
-                      <p>已借数量:</p>
+                      <p>待还数量:</p>
                       <span>{{props.row.outNum}}</span>
                     </div>
                   </el-form-item>
@@ -149,6 +150,15 @@
           <el-table-column label="ISBN" align="center">
             <template slot-scope="scope">
               <span>{{scope.row.isbn}}</span>
+
+              <i class="el-icon-edit-outline" @click="handleEditISBN(scope.$index,scope.row)"></i>
+              <!-- <el-button
+                size="mini"
+                type="danger"
+                :disabled="scope.row.edit"
+                v-if="!scope.row.edit"
+                @click="handleEditISBN(scope.$index,scope.row)"
+              >修改ISBN</el-button>-->
             </template>
           </el-table-column>
           <el-table-column label="书籍封面" align="center">
@@ -216,15 +226,22 @@
           <el-table-column label="数量" align="center">
             <template slot-scope="scope">
               <ul>
+                <li v-if="!scope.row.edit">
+                  <p>总数</p>
+                  <!-- <template v-if="scope.row.edit">
+                    <el-input v-model="scope.row.totalNum" size="mini"></el-input>
+                  </template>-->
+                  <span>{{scope.row.totalNum}}</span>
+                </li>
                 <li>
-                  <p>在库</p>
+                  <p>可借</p>
                   <template v-if="scope.row.edit">
                     <el-input v-model="scope.row.haveNum" size="mini"></el-input>
                   </template>
                   <span v-else>{{scope.row.haveNum}}</span>
                 </li>
                 <li>
-                  <p>出库</p>
+                  <p>待还</p>
                   <template v-if="scope.row.edit">
                     <el-input v-model="scope.row.outNum" size="mini"></el-input>
                   </template>
@@ -242,26 +259,62 @@
                     type="primary"
                     :disabled="scope.row.edit"
                     v-if="!scope.row.edit"
+                    @click="showDetial(scope.$index,scope.row)"
+                  >详情</el-button>
+                </li>
+                <li>
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    :disabled="scope.row.edit"
+                    v-if="!scope.row.edit"
                     @click="handleEditChange(scope.$index,scope.row)"
                   >编辑</el-button>
                 </li>
                 <li>
                   <el-button
                     size="mini"
-                    type="primary"
-                    v-if="scope.row.edit"
-                    :disabled="!scope.row.edit"
-                    @click="handleEditCancel(scope.$index,scope.row)"
-                  >取消</el-button>
+                    type="self"
+                    v-if="!scope.row.edit"
+                    :disabled="scope.row.edit"
+                    @click="handleBookBorrow(scope.$index,scope.row)"
+                  >借书</el-button>
                 </li>
                 <li>
                   <el-button
                     size="mini"
                     type="success"
+                    :disabled="scope.row.edit"
+                    v-if="!scope.row.edit"
+                    @click="handleBookReturn(scope.$index,scope.row)"
+                  >还书</el-button>
+                </li>
+                <!-- <li>
+                  <el-button
+                    size="mini"
+                    type="self2"
+                    :disabled="scope.row.edit"
+                    v-if="!scope.row.edit"
+                    @click="handleEditISBN(scope.$index,scope.row)"
+                  >修改ISBN</el-button>
+                </li>-->
+                <li>
+                  <el-button
+                    size="mini"
+                    type="primary"
                     :disabled="!scope.row.edit"
                     v-if="scope.row.edit"
                     @click="handleEditSave(scope.$index,scope.row)"
                   >保存</el-button>
+                </li>
+                <li>
+                  <el-button
+                    size="mini"
+                    type="success"
+                    v-if="scope.row.edit"
+                    :disabled="!scope.row.edit"
+                    @click="handleEditCancel(scope.$index,scope.row)"
+                  >取消</el-button>
                 </li>
               </ul>
             </template>
@@ -478,6 +531,22 @@ export default {
       }
     },
     handleEditSave(index, row) {
+      if (row.haveNum < 0) {
+        this.$message.error('可借数量不能为负!')
+        return
+      }
+      if (row.outNum < 0) {
+        this.$message.error('待还数量不能为负!')
+        return
+      }
+      if (row.haveNum === '') {
+        this.$message.error('可借数量不能为空!')
+        return
+      }
+      if (row.outNum === '') {
+        this.$message.error('待还数量不能为空!')
+        return
+      }
       row.edit = false
       row.totalNum = +row.haveNum + +row.outNum
       const params = {
@@ -536,6 +605,114 @@ export default {
       row.totalNum = row.temp.totalNum
       row.outNum = row.temp.outNum
       row.haveNum = row.temp.haveNum
+    },
+    handleEditISBN(index, row) {
+      console.log('isbn')
+      this.$prompt('请输入新的书籍编号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        console.log(row.isbn, value)
+      })
+    },
+    handleBookBorrow(index, row) {
+      if (row.haveNum <= 0) {
+        this.$message.error('已无可借书籍!')
+        return
+      }
+      row.haveNum--
+      row.outNum++
+      row.totalNum = +row.haveNum + +row.outNum
+      console.log(row.totalNum)
+      const params = {
+        author: row.author,
+        bookName: row.bookName,
+        description: row.description,
+        img: row.img,
+        isbn: row.isbn,
+        outNum: row.outNum,
+        page: row.page,
+        pubDate: row.pubDate,
+        publisher: row.publisher,
+        totalNum: row.totalNum,
+        type: row.type
+      }
+
+      console.log(params)
+
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/update',
+        params
+      }).then(response => {
+        console.log(response)
+        if (response.data.code === '000') {
+          this.$message({
+            message: '借书成功!',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$message({
+            message: '借书失败!',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    handleBookReturn(index, row) {
+      if (row.outNum <= 0) {
+        this.$message.error('还书操作异常!')
+        return
+      }
+      row.haveNum++
+      row.outNum--
+      row.totalNum = +row.haveNum + +row.outNum
+      console.log(row.totalNum)
+      const params = {
+        author: row.author,
+        bookName: row.bookName,
+        description: row.description,
+        img: row.img,
+        isbn: row.isbn,
+        outNum: row.outNum,
+        page: row.page,
+        pubDate: row.pubDate,
+        publisher: row.publisher,
+        totalNum: row.totalNum,
+        type: row.type
+      }
+
+      console.log(params)
+
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/update',
+        params
+      }).then(response => {
+        console.log(response)
+        if (response.data.code === '000') {
+          this.$message({
+            message: '还书成功!',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$message({
+            message: '还书失败!',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    showDetial(index, row) {
+
     }
   }
 }

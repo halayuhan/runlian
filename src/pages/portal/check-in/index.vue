@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 10:23:01
+ * @LastEditTime: 2019-08-14 15:51:04
  * @Description: file content
  -->
 <template>
@@ -32,6 +32,7 @@
             <el-input
               placeholder="请输入姓名搜索"
               v-model="filterInput"
+              clearable
               @keyup.enter.native="filterSearch"
             >
               <!-- <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button> -->
@@ -198,7 +199,7 @@ export default {
   },
   filters: {
     genderFormat(value) {
-      return value === 'M' ? '男' : '女';
+      return value === 'M' ? '男' : '女'
     },
     internalFormat(value) {
       return value === 'Y' ? '内部' : '外部'

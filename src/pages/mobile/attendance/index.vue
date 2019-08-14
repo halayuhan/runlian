@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 14:01:48
+ * @LastEditTime: 2019-08-14 14:25:21
  * @Description: file content
  -->
 <template>
@@ -10,22 +10,22 @@
     <div class="attend-container">
       <form class="form">
         <div class="form-item">
-          <span>LDAP账号</span>
+          <span>*LDAP账号:</span>
           <div class="form-item-input">
             <input type="text" v-model="form.ldap.val" @blur="_getUserinfo()" />
             <!-- <p v-if="errors.phone">手机号码{{errors.phone}}</p> -->
           </div>
         </div>
         <div class="form-item">
-          <span>手机号码</span>
+          <span>*手机号码:</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" v-if="isShow" />
-            <h2 v-if="!isShow">{{form.phone.val}}</h2>
-            <p v-if="isCorrect">请谨慎填写，提交后不可修改</p>
+            <input type="text" v-model="form.phone.val" />
+            <!-- <h2 v-if="!isShow">{{form.phone.val}}</h2> -->
+            <!-- <p v-if="isCorrect">请谨慎填写，提交后不可修改</p> -->
           </div>
         </div>
         <div class="form-item">
-          <span>姓名</span>
+          <span>*姓名:</span>
           <div class="form-item-input">
             <input type="text" v-model="form.name.val" v-if="isShow" />
             <h2 v-if="!isShow">{{form.name.val}}</h2>
@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="form-item justify-item">
-          <span>性别</span>
+          <span>*性别:</span>
           <div class="form-item-input">
             <ul>
               <li>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="form-item justify-item">
-          <span>内外部</span>
+          <span>*内外部:</span>
           <div class="form-item-input">
             <ul>
               <li>
@@ -65,15 +65,18 @@
           </div>
         </div>
         <div class="form-item">
-          <span>部门</span>
+          <span>*部门:</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.department.val" />
+            <!-- <input type="text" v-model="form.department.val" /> -->
+            <el-select v-model="form.department.val" clearable placeholder="请选择">
+              <el-option v-for="item in options" :label="item" :value="item" :key="item.index"></el-option>
+            </el-select>
             <!-- <p v-if="errors.department">部门{{errors.department}}</p> -->
           </div>
         </div>
 
         <div class="form-item">
-          <span>在读书籍</span>
+          <span>*在读书籍:</span>
           <div class="form-item-input">
             <input type="text" v-model="form.books.val" />
             <!-- <p v-if="errors.books">在读书籍{{errors.books}}</p> -->
@@ -99,6 +102,7 @@ export default {
       isShow: true,
       gender: 'M',
       isInternal: 'Y',
+      options: ['华润云', '智慧技术部', '科技创新部', '数据分析', '管理与发展部', 'IT产品服务部', 'IT运营服务部'],
       form: {
         ldap: {
           val: '',
@@ -185,8 +189,7 @@ export default {
           params
         })
           .then((response) => {
-            if (response.data.code != '000') {
-            
+            if (response.data.code != '000') {           
               this.form.name.val = ''
               this.form.department.val = ''
               this.form.phone.val = ''

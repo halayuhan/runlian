@@ -37,6 +37,7 @@ body,
 html,
 #app {
   height: 100%;
+  /* position: relative; */
 }
 
 body {
@@ -227,6 +228,38 @@ input:-ms-input-placeholder {
   border-color: #5caaab;
 }
 
+.el-button--self {
+  color: #e6a23c;
+  background-color: #fff;
+  border-color: #e6a23c;
+}
+.el-button--self:hover {
+  color: #e6a23c;
+  background-color: #fff;
+  border-color: #e6a23c;
+}
+.el-button--self:focus {
+  color: #e6a23c;
+  background-color: #fff;
+  border-color: #e6a23c;
+}
+
+.el-button--self2 {
+  color: #F56C6C;
+  background-color: #fff;
+  border-color: #F56C6C;
+}
+.el-button--self2:hover {
+  color: #F56C6C;
+  background-color: #fff;
+  border-color: #F56C6C;
+}
+.el-button--self2:focus {
+  color: #F56C6C;
+  background-color: #fff;
+  border-color: #F56C6C;
+}
+
 .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #5caaab;
   color: #fff;
@@ -316,5 +349,13 @@ input:-ms-input-placeholder {
   border-color: #5caaab; 
 }
 .el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close {
+  color: #5caaab;
+}
+
+.el-icon-edit-outline:before {
+  font-size: 18px;
+}
+
+.el-message-box__headerbtn:focus .el-message-box__close, .el-message-box__headerbtn:hover .el-message-box__close {
   color: #5caaab;
 }

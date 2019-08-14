@@ -1,6 +1,9 @@
 .mobile-item {
   background: url("../../bc_attend3.png") no-repeat;
-  background-size: 100vw 100vh;
+  /* background-size: 100vw 100vh; */
+  background-size: 100% 100%;
+  position: relative;
+  height: 100%;
 }
 
 .mobile-header {
@@ -26,7 +29,7 @@
 
 .mobile-container {
   /* background-color: #61acab; */
-  height: calc(100vh - 60px);
+  height: calc(100% - 60px);
 }
 
 /* 登录表单页面 */
@@ -44,6 +47,7 @@
   padding: 20px;
   /* border-radius: 10px; */
   background-color: rgba(255, 255, 255, 0.7);
+  overflow: scroll;
 }
 
 /* 表单item */
@@ -54,18 +58,60 @@
 }
 
 .attend-container .form-item span {
-  /* width: 70px; */
+  width: 90px;
   height: 30px;
   line-height: 30px;
   font-size: 16px;
+  /* font-weight: bold; */
   color: #000;
+}
+
+.attend-container .form-item .el-input__suffix {
+  width: initial;
+  height: 23px;
+  line-height: 23px;
+}
+
+.attend-container .form-item .el-input__suffix-inner {
+  height: 23px;
+  line-height: 23px;
+}
+
+.attend-container .form-item .el-input__inner {
+  background-color: #d0e7e6;
+  border: 1px solid #ccc;
+}
+.attend-container .form-item  .el-input__icon {
+  line-height: 25px;
+}
+.el-select-dropdown {
+  background-color: #d0e7e6;
+}
+.el-select-dropdown__wrap {
+  max-height: 250px;
+}
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.el-popper[x-placement^=bottom] {
+  margin-top: 4px;
+}
+.el-popper[x-placement^=bottom] .popper__arrow {
+  border-bottom-color: transparent;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+  border-bottom-color: transparent;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::before {
+  border-bottom-color: transparent;
 }
 
 .attend-container .form-item .form-item-input {
   position: relative;
   flex: 1;
   height: 55px;
-  margin: 0 20px 0 20px;
+  margin: 0 10px 0 10px;
 }
 
 /* 文本输入*/
@@ -73,7 +119,7 @@
   display: inline-block;
   width: 100%;
   height: 25px;
-  margin: 0 0 5px 0;
+  /* margin: 0 0 5px 0; */
   border-bottom: 1px solid #ccc;
 }
 
@@ -88,10 +134,11 @@
   font-size: 10px;
 }
 
-.attend-container .justify-item span {
+/* .attend-container .justify-item span {
   display: inline-block;
   width: 80px;
-}
+} */
+
 /* 单选输入区域 */
 .attend-container .form-item ul {
   display: flex;

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 10:22:14
+ * @LastEditTime: 2019-08-13 13:36:53
  * @Description: file content
  */
 import Vue from 'vue'
@@ -32,7 +32,7 @@ const router = new Router({
             let timestamp = Date.parse(new Date()).toString() // 获取当前时间戳
             let gap = timestamp - hash // 时间戳比较，一小时内可跳转
             // to.hash === '' 为方便测试
-            if ((gap < 3600000 && gap > 0) || to.hash === '') {
+            if ((gap < 21600000 && gap > 0) || to.hash === '') {
               next()
             }
           }
@@ -77,7 +77,7 @@ const router = new Router({
               // component: () => import('@/pages/portal/404'),
               component: () => import('@/pages/portal/book/index'),
               meta: {
-                // requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
+                requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
               }
             },
             {
