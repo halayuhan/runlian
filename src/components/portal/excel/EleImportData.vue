@@ -7,6 +7,13 @@
  -->
 <template>
   <div>
+    <div v-if="hasError">
+      <el-alert show-icon type="warning">
+        <ol class="ele-import-upload-tips">
+          <li>红色*号表示该信息为空，不能正确导入</li>
+        </ol>
+      </el-alert>
+    </div>
     <!-- 数据列表 -->
     <h1>数据列表</h1>
     <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowStyle">
@@ -25,8 +32,8 @@
 
     <div class="ele-import-action">
       <el-button @click="handlePre">重新上传</el-button>
-      <el-button @click="handleRequest" type="primary">一键导入</el-button>
       <el-button @click="downloadError" type="primary" v-if="hasError">下载错误信息表</el-button>
+      <el-button @click="handleRequest" type="primary">导入正确书籍</el-button>
     </div>
   </div>
 </template>
@@ -52,21 +59,21 @@ export default {
     },
     tableData: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     }
 
   },
   inject: ['goNext', 'goPre'],
-  data () {
+  data() {
     return {
       isDownload: false,
       hasError: true
     }
   },
   methods: {
-    tableRowStyle ({ row, rowIndex }) {
+    tableRowStyle({ row, rowIndex }) {
       if (this.tableData[rowIndex]['haveNum'] === 0) {
         this.hasError = true
         this.isDownload = false
@@ -77,11 +84,11 @@ export default {
         return ''
       }
     },
-    handlePre () {
+    handlePre() {
       this.$emit('pre')
     },
 
-    _getParam () {
+    _getParam() {
       const paramArray = this.tableData
       var paramC = []
       var paramE = []
@@ -106,7 +113,7 @@ export default {
       })
     },
 
-    downloadError () {
+    downloadError() {
       const paramArray = this.tableData
 
       const paramE = []
@@ -148,7 +155,7 @@ export default {
     },
 
     // 发送请求
-    handleRequest () {
+    handleRequest() {
       if (!this.isDownload) {
         this.$message.error('请先下载错误信息表')
       } else {

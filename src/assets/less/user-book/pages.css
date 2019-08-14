@@ -38,14 +38,24 @@
   display: flex;
 }
 .item-bookName {
-  font-size: 18px;
-  color: #5caaab;
-  letter-spacing: 2px;
+  font-size: 16px;
+  color: #666666;
+  font-weight: 700;
+  letter-spacing: 1px;
   flex: 1;
+}
+.item-bookName .item-index{
+  font-style: italic;
+  font-weight: bold;
+}
+.item-author,
+.item-publisher{
+  font-size: 12px;
 }
 .item-bookNum {
   display: flex;
 }
+
 .item-booktotal,
 .item-bookstatus {
   flex: 1;
@@ -54,6 +64,7 @@
 }
 .item-type {
   text-align: right;
+  /* flex:1; */
 }
 .van-tag {
   font-size: 12px;
@@ -69,7 +80,8 @@
   color: #5caaab !important;
 }
 .van-cell--clickable {
-  color: #5caaab !important;
+  font-weight: 400;
+  color: #666666 !important;
 }
 .van-icon-success {
   color: #5caaab !important;

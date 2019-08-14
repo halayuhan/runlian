@@ -16,14 +16,16 @@
               type="date"
               :clearable="false"
               placeholder="选择起始时间"
-              :picker-options="pickerOptions"
+              :picker-options="pickerOptionsStart"
+              @change="changeStart"
             ></el-date-picker>
             <el-date-picker
               v-model="timeEnd"
               type="date"
               :clearable="false"
               placeholder="选择结束时间"
-              :picker-options="pickerOptions"
+              :picker-options="pickerOptionsEnd"
+              @change="changeEnd"
             ></el-date-picker>
           </div>
           <div class="data-filter">
@@ -121,7 +123,36 @@ export default {
       qrcodeObject: {}, // 二维码封装对象
       timeStart, // 起始时间
       timeEnd, // 结束时间
-      pickerOptions: {
+      pickerOptionsStart: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            }
+          },
+          {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          },
+          {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
+          }
+        ]
+      },
+      pickerOptionsEnd: {
         disabledDate(time) {
           return time.getTime() > Date.now()
         },
@@ -174,6 +205,20 @@ export default {
     }
   },
   methods: {
+    changeStart() {
+      this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
+        disabledDate: (time) => {
+          return time.getTime() > this.timeEnd
+        }
+      })
+    },
+    changeEnd() {
+      this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
+        disabledDate: (time) => {
+          return time.getTime() < this.timeStart
+        }
+      })
+    },
     queryData(paramsData = {}) {
       // TODO
       const defaultParams = {
@@ -200,14 +245,6 @@ export default {
             const currentData = response.data.data[i]
 
             let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
-
-            // if (gender == 'M') { gender = '男' } else {
-            //   gender = '女'
-            // }
-            // if (isInternal == 'Y') { isInternal = '内部' } else {
-            //   isInternal = '外部'
-            // }
-
             let tableItem = { ldap, userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
           }
