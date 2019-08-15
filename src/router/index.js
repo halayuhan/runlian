@@ -17,7 +17,7 @@ const router = new Router({
     {
       path: '/',
       name: 'MobileItem',
-      redirect: '/attendance',
+      redirect: '/login',
       component: () => import('@/pages/mobile/index'),
       children: [
         {
