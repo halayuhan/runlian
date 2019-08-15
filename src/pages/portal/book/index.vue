@@ -72,7 +72,13 @@
         </div>
       </div>
       <div class="book-search-content">
-        <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
+        <el-table
+          :data="tableData"
+          @sort-change="sortChange"
+          :header-cell-style="{background: '#eee'}"
+          border
+          stripe
+        >
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form class="table-expand-form">
@@ -212,7 +218,7 @@
               <span>{{scope.row.publisher}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="创建日期" prop="createDate" align="center">
+          <el-table-column label="创建日期" prop="createDate" align="center" sortable="custom">
             <template slot-scope="scope">
               <span>{{scope.row.createDate}}</span>
             </template>
@@ -487,7 +493,7 @@ export default {
   components: {
     ExImport
   },
-  data () {
+  data() {
     return {
 
       title: '批量导入书单',
@@ -504,6 +510,7 @@ export default {
         description: '书籍简介'
       },
       selectType: '0',
+      sortFlag: '0',
       downloadVisible: false,
       importVisible: false,
       visible: false, // 批量上传提示框可见情况
@@ -515,18 +522,18 @@ export default {
       total: 0
     }
   },
-  created () {
+  created() {
     this.queryData()
   },
   methods: {
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       const defaultParams = {
         isExist: 0,
         keyword: this.filterInput.trim(),
         page: this.currentPage,
         pageSize: this.pageSize,
-        sign: 0,
-        sortFlag: 0
+        sign: this.selectType,
+        sortFlag: this.sortFlag
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(params)
@@ -558,14 +565,28 @@ export default {
         console.log(error)
       })
     },
-    filterSearch () {
+    sortChange: function (column, prop, order) {
+      if (column.order === 'ascending') {
+        this.sortFlag = 1
+      }
+      else if (column.order === 'descending')
+        this.sortFlag = 2
+      else
+        this.sortFlag = 0
+      const paramsData = {
+        sortFlag: this.sortFlag
+      }
+      this.queryData(paramsData)
+
+    },
+    filterSearch() {
       const paramsData = {
         sign: +this.selectType,
         page: 1
       }
       this.queryData(paramsData)
     },
-    isbnTest () {
+    isbnTest() {
       const params = {
         appkey: 'b979ae09bbbff4a2',
         isbn: this.filterInput
@@ -580,38 +601,38 @@ export default {
         console.log(error)
       })
     },
-    importBook () {
+    importBook() {
       const baseurl = process.env.API_HOST + '/book/getBookList'
       const url = baseurl
       window.open(url)
       this.importVisible = false
     },
-    downloadTemplate () {
+    downloadTemplate() {
       // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
       const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
     },
-    async requestFn (data) {
+    async requestFn(data) {
       this.tableData = JSON.stringify(data)
       console.log(data)
       return Promise.resolve()
     },
-    handleCloseImport () {
+    handleCloseImport() {
       console.log('弹窗关闭了~')
       this.$forceUpdate()
     },
-    handleFinishImport () {
+    handleFinishImport() {
       console.log('导入完毕了~')
     },
-    handleOpen () {
+    handleOpen() {
       this.visible = true
     },
-    handleAddBook () {
+    handleAddBook() {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       const paramsData = {
         page: index
       }
@@ -620,7 +641,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
@@ -631,7 +652,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    beforeUploadCover (file) {
+    beforeUploadCover(file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
@@ -642,7 +663,7 @@ export default {
       }
       return isJPG && isLt2M
     },
-    handleUploadCover (scope, file) {
+    handleUploadCover(scope, file) {
       const fileIsbn = scope[0].row.isbn
       let formdata = new FormData()
       formdata.append('isbn', fileIsbn)
@@ -666,7 +687,7 @@ export default {
         console.log(error)
       })
     },
-    handleEditChange (index, row) {
+    handleEditChange(index, row) {
       row.edit = true
       row.temp = {
         img: row.img,
@@ -676,7 +697,7 @@ export default {
         haveNum: row.haveNum
       }
     },
-    handleEditSave (index, row) {
+    handleEditSave(index, row) {
       if (row.haveNum < 0) {
         this.$message.error('可借数量不能为负!')
         return
@@ -744,7 +765,7 @@ export default {
         row.haveNum = row.temp.haveNum
       })
     },
-    handleEditCancel (index, row) {
+    handleEditCancel(index, row) {
       row.edit = false
       row.img = row.temp.img
       row.type = row.temp.type
@@ -752,7 +773,7 @@ export default {
       row.outNum = row.temp.outNum
       row.haveNum = row.temp.haveNum
     },
-    handleEditISBN (index, row) {
+    handleEditISBN(index, row) {
       console.log('isbn')
       this.$prompt('请输入新的书籍编号', '提示', {
         confirmButtonText: '确定',
@@ -782,13 +803,13 @@ export default {
               duration: 2000
             })
           }
-          this.queryData({page: this.currentPage})
+          this.queryData({ page: this.currentPage })
         }).catch((error) => {
           console.log(error)
         })
       })
     },
-    handleBookBorrow (index, row) {
+    handleBookBorrow(index, row) {
       if (row.haveNum <= 0) {
         this.$message.error('已无可借书籍!')
         return
@@ -836,7 +857,7 @@ export default {
         console.log(error)
       })
     },
-    handleBookReturn (index, row) {
+    handleBookReturn(index, row) {
       if (row.outNum <= 0) {
         this.$message.error('还书操作异常!')
         return
@@ -884,7 +905,7 @@ export default {
         console.log(error)
       })
     },
-    showDetial () {
+    showDetial() {
       this.detialVisible = true
     }
   }

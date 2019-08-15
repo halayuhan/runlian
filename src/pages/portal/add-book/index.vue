@@ -138,8 +138,8 @@ export default {
         return this.formData.pubDate.substr(0, 10)
       },
       set: function (value) {
-        // this.formData.pubDate = value
-        this.formData.pubDate = value.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1\/').replace(/(?<=\/)(\d{2})/g, '$1\/')
+
+        this.formData.pubDate = value.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1\/').replace(/(\d{4}\/\d{2})(?=\d)/g, '$1\/')
         if (value.length === 7) {
           this.formData.pubDate = value.replace(/[/]$/, '')
         }
