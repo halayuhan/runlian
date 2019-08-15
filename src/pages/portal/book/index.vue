@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 16:07:45
+ * @LastEditTime: 2019-08-14 21:44:38
  * @Description: file content
  -->
 <template>
@@ -18,6 +18,15 @@
               clearable
               @keyup.enter.native="filterSearch"
             >
+              <div slot="prepend" class="select-type">
+                <el-select v-model="selectType" placeholder="请选择">
+                  <el-option label="关键字" value="0"></el-option>
+                  <el-option label="书名" value="1"></el-option>
+                  <el-option label="类型" value="2"></el-option>
+                  <el-option label="作者名" value="3"></el-option>
+                  <el-option label="出版社" value="4"></el-option>
+                </el-select>
+              </div>
               <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
             </el-input>
           </div>
@@ -190,29 +199,22 @@
           </el-table-column>
           <el-table-column label="书籍名称" align="center">
             <template slot-scope="scope">
-              <!-- <template v-if="scope.row.edit">
-                <el-input v-model="scope.row.bookName"></el-input>
-              </template>
-              <span v-else>{{scope.row.bookName}}</span>-->
               <span>{{scope.row.bookName}}</span>
             </template>
           </el-table-column>
           <el-table-column label="作者" prop="author" align="center">
             <template slot-scope="scope">
-              <!-- <template v-if="scope.row.edit">
-                <el-input v-model="scope.row.author"></el-input>
-              </template>
-              <span v-else>{{scope.row.author}}</span>-->
               <span>{{scope.row.author}}</span>
             </template>
           </el-table-column>
           <el-table-column label="出版社" prop="publisher" align="center">
             <template slot-scope="scope">
-              <!-- <template v-if="scope.row.edit">
-                <el-input v-model="scope.row.publisher"></el-input>
-              </template>
-              <span v-else>{{scope.row.publisher}}</span>-->
               <span>{{scope.row.publisher}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建日期" prop="createDate" align="center">
+            <template slot-scope="scope">
+              <span>{{scope.row.createDate}}</span>
             </template>
           </el-table-column>
           <el-table-column label="书籍类型" prop="type" align="center">
@@ -256,11 +258,160 @@
                 <li>
                   <el-button
                     size="mini"
-                    type="primary"
+                    type="blue"
                     :disabled="scope.row.edit"
                     v-if="!scope.row.edit"
-                    @click="showDetial(scope.$index,scope.row)"
+                    @click="showDetial"
                   >详情</el-button>
+                  <el-dialog :visible.sync="detialVisible" title="书目详情">
+                    <el-form class="detial-box">
+                      <div class="detial-content">
+                        <div class="detial-content-left">
+                          <el-form-item>
+                            <div>
+                              <p>书籍名称:</p>
+                              <span :show-overflow-tooltip="true">{{scope.row.bookName}}</span>
+                              <!-- <span>{{scope.row.bookName}}</span> -->
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>作者:</p>
+                              <span>{{scope.row.author}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>出版社:</p>
+                              <span>{{scope.row.publisher}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>出版日期:</p>
+                              <span>{{scope.row.pubDate}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>ISBN:</p>
+                              <span>{{scope.row.isbn}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>页数:</p>
+                              <span>{{scope.row.page}}</span>
+                            </div>
+                          </el-form-item>
+                          <el-form-item>
+                            <div>
+                              <p>类型:</p>
+                              <span>{{scope.row.type}}</span>
+                            </div>
+                          </el-form-item>
+                        </div>
+                        <div class="detial-content-right">
+                          <div class="flex-column">
+                            <p>描述:</p>
+                            <h1>{{scope.row.description}}</h1>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="detial-footer">
+                        <el-form-item>
+                          <div>
+                            <p>库藏数量:</p>
+                            <span>{{scope.row.totalNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>待还数量:</p>
+                            <span>{{scope.row.outNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>可借数量:</p>
+                            <span>{{scope.row.haveNum}}</span>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <!-- <div class="expand-form-left">
+                        <el-form-item>
+                          <div>
+                            <p>书籍名称:</p>
+                            <span>{{scope.row.bookName}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>作者:</p>
+                            <span>{{scope.row.author}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>出版社:</p>
+                            <span>{{scope.row.publisher}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>出版日期:</p>
+                            <span>{{scope.row.pubDate}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>ISBN:</p>
+                            <span>{{scope.row.isbn}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>页数:</p>
+                            <span>{{scope.row.page}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>类型:</p>
+                            <span>{{scope.row.type}}</span>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <div class="expand-form-center">
+                        <el-form-item>
+                          <div class="flex-column">
+                            <p>描述:</p>
+                            <h1>{{scope.row.description}}</h1>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <div class="expand-form-right">
+                        <el-form-item>
+                          <div>
+                            <p>库藏数量:</p>
+                            <span>{{scope.row.totalNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>待还数量:</p>
+                            <span>{{scope.row.outNum}}</span>
+                          </div>
+                        </el-form-item>
+                        <el-form-item>
+                          <div>
+                            <p>可借数量:</p>
+                            <span>{{scope.row.haveNum}}</span>
+                          </div>
+                        </el-form-item>
+                      </div>-->
+                    </el-form>
+                  </el-dialog>
                 </li>
                 <li>
                   <el-button
@@ -289,15 +440,6 @@
                     @click="handleBookReturn(scope.$index,scope.row)"
                   >还书</el-button>
                 </li>
-                <!-- <li>
-                  <el-button
-                    size="mini"
-                    type="self2"
-                    :disabled="scope.row.edit"
-                    v-if="!scope.row.edit"
-                    @click="handleEditISBN(scope.$index,scope.row)"
-                  >修改ISBN</el-button>
-                </li>-->
                 <li>
                   <el-button
                     size="mini"
@@ -345,7 +487,7 @@ export default {
   components: {
     ExImport
   },
-  data() {
+  data () {
     return {
 
       title: '批量导入书单',
@@ -361,10 +503,11 @@ export default {
         type: '书籍类型*',
         description: '书籍简介'
       },
-
+      selectType: '0',
       downloadVisible: false,
       importVisible: false,
-      visible: false,
+      visible: false, // 批量上传提示框可见情况
+      detialVisible: false,
       filterInput: '',
       tableData: [],
       currentPage: 1, // 当前页码
@@ -372,16 +515,18 @@ export default {
       total: 0
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
   methods: {
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       const defaultParams = {
         isExist: 0,
         keyword: this.filterInput.trim(),
         page: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        sign: 0,
+        sortFlag: 0
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(params)
@@ -398,11 +543,11 @@ export default {
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
-            let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
+            let { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
             if (img === '' || img === '0') {
               img = '../../../../static/cover/blank_book.png'
             }
-            let tableItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
@@ -413,13 +558,14 @@ export default {
         console.log(error)
       })
     },
-    filterSearch() {
+    filterSearch () {
       const paramsData = {
+        sign: +this.selectType,
         page: 1
       }
       this.queryData(paramsData)
     },
-    isbnTest() {
+    isbnTest () {
       const params = {
         appkey: 'b979ae09bbbff4a2',
         isbn: this.filterInput
@@ -434,38 +580,38 @@ export default {
         console.log(error)
       })
     },
-    importBook() {
+    importBook () {
       const baseurl = process.env.API_HOST + '/book/getBookList'
       const url = baseurl
       window.open(url)
       this.importVisible = false
     },
-    downloadTemplate() {
+    downloadTemplate () {
       // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
       const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
     },
-    async requestFn(data) {
+    async requestFn (data) {
       this.tableData = JSON.stringify(data)
       console.log(data)
       return Promise.resolve()
     },
-    handleCloseImport() {
+    handleCloseImport () {
       console.log('弹窗关闭了~')
       this.$forceUpdate()
     },
-    handleFinishImport() {
+    handleFinishImport () {
       console.log('导入完毕了~')
     },
-    handleOpen() {
+    handleOpen () {
       this.visible = true
     },
-    handleAddBook() {
+    handleAddBook () {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         page: index
       }
@@ -474,7 +620,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
@@ -485,7 +631,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    beforeUploadCover(file) {
+    beforeUploadCover (file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
@@ -496,7 +642,7 @@ export default {
       }
       return isJPG && isLt2M
     },
-    handleUploadCover(scope, file) {
+    handleUploadCover (scope, file) {
       const fileIsbn = scope[0].row.isbn
       let formdata = new FormData()
       formdata.append('isbn', fileIsbn)
@@ -520,7 +666,7 @@ export default {
         console.log(error)
       })
     },
-    handleEditChange(index, row) {
+    handleEditChange (index, row) {
       row.edit = true
       row.temp = {
         img: row.img,
@@ -530,7 +676,7 @@ export default {
         haveNum: row.haveNum
       }
     },
-    handleEditSave(index, row) {
+    handleEditSave (index, row) {
       if (row.haveNum < 0) {
         this.$message.error('可借数量不能为负!')
         return
@@ -598,7 +744,7 @@ export default {
         row.haveNum = row.temp.haveNum
       })
     },
-    handleEditCancel(index, row) {
+    handleEditCancel (index, row) {
       row.edit = false
       row.img = row.temp.img
       row.type = row.temp.type
@@ -606,16 +752,43 @@ export default {
       row.outNum = row.temp.outNum
       row.haveNum = row.temp.haveNum
     },
-    handleEditISBN(index, row) {
+    handleEditISBN (index, row) {
       console.log('isbn')
       this.$prompt('请输入新的书籍编号', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
         console.log(row.isbn, value)
+        const params = {
+          newIsbn: value,
+          oldIsbn: row.isbn
+        }
+        this.$axios({
+          methods: 'get',
+          url: process.env.API_HOST + '/book/updateISBN',
+          params
+        }).then(response => {
+          console.log(response)
+          if (response.data.code === '000') {
+            this.$message({
+              message: '修改成功!',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: '修改失败!',
+              type: 'error',
+              duration: 2000
+            })
+          }
+          this.queryData({page: this.currentPage})
+        }).catch((error) => {
+          console.log(error)
+        })
       })
     },
-    handleBookBorrow(index, row) {
+    handleBookBorrow (index, row) {
       if (row.haveNum <= 0) {
         this.$message.error('已无可借书籍!')
         return
@@ -663,7 +836,7 @@ export default {
         console.log(error)
       })
     },
-    handleBookReturn(index, row) {
+    handleBookReturn (index, row) {
       if (row.outNum <= 0) {
         this.$message.error('还书操作异常!')
         return
@@ -711,8 +884,8 @@ export default {
         console.log(error)
       })
     },
-    showDetial(index, row) {
-
+    showDetial () {
+      this.detialVisible = true
     }
   }
 }
