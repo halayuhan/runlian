@@ -503,7 +503,7 @@
 }
 
 .el-table li .detial-box span {
-  display: inline-block;
+  /* display: inline-block; */
   height: 30px;
   overflow: hidden;
   word-wrap: break-all;

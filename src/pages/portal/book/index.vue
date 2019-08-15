@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:05:12
+ * @LastEditTime: 2019-08-15 20:26:35
  * @Description: file content
  -->
 <template>
@@ -542,51 +542,6 @@ export default {
       row.edit = false
       row.totalNum = +row.haveNum + +row.outNum
       this.updateData(index, row, '编辑')
-      // const params = {
-      //   author: row.author,
-      //   bookName: row.bookName,
-      //   description: row.description,
-      //   img: row.img,
-      //   isbn: row.isbn,
-      //   outNum: row.outNum,
-      //   page: row.page,
-      //   pubDate: row.pubDate,
-      //   publisher: row.publisher,
-      //   totalNum: row.totalNum,
-      //   type: row.type
-      // }
-
-      // this.$axios({
-      //   methods: 'get',
-      //   url: process.env.API_HOST + '/book/update',
-      //   params
-      // }).then(response => {
-      //   if (response.data.code === '000') {
-      //     this.$message({
-      //       message: response.data.msg,
-      //       type: 'success',
-      //       duration: 2000
-      //     })
-      //   } else {
-      //     this.$message({
-      //       message: response.data.msg,
-      //       type: 'error',
-      //       duration: 2000
-      //     })
-      //     row.img = row.temp.img
-      //     row.type = row.temp.type
-      //     row.totalNum = row.temp.totalNum
-      //     row.outNum = row.temp.outNum
-      //     row.haveNum = row.temp.haveNum
-      //   }
-      // }).catch((error) => {
-      //   console.log(error)
-      //   row.img = row.temp.img
-      //   row.type = row.temp.type
-      //   row.totalNum = row.temp.totalNum
-      //   row.outNum = row.temp.outNum
-      //   row.haveNum = row.temp.haveNum
-      // })
     },
     handleEditCancel (index, row) {
       row.edit = false
@@ -662,7 +617,7 @@ export default {
             type: 'error',
             duration: 2000
           })
-           row.img = row.temp.img
+          row.img = row.temp.img
           row.type = row.temp.type
           row.totalNum = row.temp.totalNum
           row.outNum = row.temp.outNum
@@ -671,11 +626,11 @@ export default {
       }).catch((error) => {
         console.log('error:', error)
         this.$message.error('网络错误，请重试')
-         row.img = row.temp.img
-          row.type = row.temp.type
-          row.totalNum = row.temp.totalNum
-          row.outNum = row.temp.outNum
-          row.haveNum = row.temp.haveNum
+        row.img = row.temp.img
+        row.type = row.temp.type
+        row.totalNum = row.temp.totalNum
+        row.outNum = row.temp.outNum
+        row.haveNum = row.temp.haveNum
       })
     },
     handleBookBorrow (index, row) {
@@ -687,41 +642,6 @@ export default {
       row.outNum++
       row.totalNum = +row.haveNum + +row.outNum
       this.updateData(index, row, '借书')
-      // const params = {
-      //   author: row.author,
-      //   bookName: row.bookName,
-      //   description: row.description,
-      //   img: row.img,
-      //   isbn: row.isbn,
-      //   outNum: row.outNum,
-      //   page: row.page,
-      //   pubDate: row.pubDate,
-      //   publisher: row.publisher,
-      //   totalNum: row.totalNum,
-      //   type: row.type
-      // }
-
-      // this.$axios({
-      //   methods: 'get',
-      //   url: process.env.API_HOST + '/book/update',
-      //   params
-      // }).then(response => {
-      //   if (response.data.code === '000') {
-      //     this.$message({
-      //       message: '借书成功!',
-      //       type: 'success',
-      //       duration: 2000
-      //     })
-      //   } else {
-      //     this.$message({
-      //       message: '借书失败!',
-      //       type: 'error',
-      //       duration: 2000
-      //     })
-      //   }
-      // }).catch((error) => {
-      //   this.$message.error('网络错误，请重试')
-      // })
     },
     handleBookReturn (index, row) {
       if (row.outNum <= 0) {
@@ -732,41 +652,6 @@ export default {
       row.outNum--
       row.totalNum = +row.haveNum + +row.outNum
       this.updateData(index, row, '还书')
-      // const params = {
-      //   author: row.author,
-      //   bookName: row.bookName,
-      //   description: row.description,
-      //   img: row.img,
-      //   isbn: row.isbn,
-      //   outNum: row.outNum,
-      //   page: row.page,
-      //   pubDate: row.pubDate,
-      //   publisher: row.publisher,
-      //   totalNum: row.totalNum,
-      //   type: row.type
-      // }
-
-      // this.$axios({
-      //   methods: 'get',
-      //   url: process.env.API_HOST + '/book/update',
-      //   params
-      // }).then(response => {
-      //   if (response.data.code === '000') {
-      //     this.$message({
-      //       message: '还书成功!',
-      //       type: 'success',
-      //       duration: 2000
-      //     })
-      //   } else {
-      //     this.$message({
-      //       message: '还书失败!',
-      //       type: 'error',
-      //       duration: 2000
-      //     })
-      //   }
-      // }).catch((error) => {
-      //   this.$message.error('网络错误，请重试')
-      // })
     },
     showDetial (index, row) {
       row.detial = true

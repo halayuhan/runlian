@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:25:11
+ * @LastEditTime: 2019-08-15 20:35:09
  * @Description: file content
  -->
 <template>
@@ -168,7 +168,6 @@ export default {
             this.isRead = false
           } else {
             const bookinfo = response.data.data
-            // let { img, bookName, author, ISBN, publisher, pubDate, page, type, description, addNum } = this.formData
             this.formData.bookName = bookinfo.bookName
             this.formData.author = bookinfo.author
             this.formData.publisher = bookinfo.publisher
@@ -179,7 +178,6 @@ export default {
             this.formData.description = bookinfo.description
             this.isRead = true
           }
-          console.log(response) // 请求成功返回的数据
         }).catch((error) => {
           this.isRead = false
           console.error(error) // 请求失败返回的数据
@@ -229,7 +227,6 @@ export default {
               this.$message.success('添加成功')
               this.$router.push('/book')
             }
-            console.log(response)
           }).catch((error) => {
             this.$message.error('操作错误，请重试')
             console.log(error)
@@ -267,7 +264,6 @@ export default {
           }
         }).then((response) => {
           if (response.data.code === '000') {
-            console.log(response.data.data) // 存储返回的路径到row.img
             this.formData.img = process.env.API_HOST + '/file/get?fileName=' + response.data.data
           } else {
             this.$message.error(response.data.msg)

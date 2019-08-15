@@ -1,8 +1,8 @@
 /*
- * @Author: todo
+ * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 09:34:53
+ * @LastEditTime: 2019-08-15 20:21:38
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -20,12 +20,6 @@ import router from './router'
 import { getDate } from './api/dateFormat'
 import infiniteScroll from 'vue-infinite-scroll'
 
-// import ExImport from './pages/portal/book/components/ExImport'
-
-// import { addCookie, getCookie, removeCookie } from './api/cookie'
-// axios.defaults.baseURL = 'http://10.54.24.45:8080'
-// axios.defaults.baseURL = 'http://10.0.58.22:8080'
-// 服务器
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 Vue.config.productionTip = false
@@ -33,13 +27,12 @@ Vue.use(ElementUI)
 Vue.use(infiniteScroll)
 Vue.prototype.$axios = axios
 Vue.prototype.getDate = getDate
-// Vue.component(ExImport.name, ExImport)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
-  store,
+  template: '<App/>',
   components: { App },
-  template: '<App/>'
+  router,
+  store
 })

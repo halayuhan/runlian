@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-09 14:46:45
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 19:47:22
+ * @LastEditTime: 2019-08-15 20:31:25
  * @Description: file content
  -->
 <template>
@@ -120,7 +120,6 @@ export default {
           window.open(url)
         }
         this.isDownload = true
-        console.log(response) // 请求成功返回的数据
       }).catch((error) => {
         this.$message.error('下载错误列表失败')
         console.log('error:', error)

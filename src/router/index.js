@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:35:09
+ * @LastEditTime: 2019-08-15 20:39:14
  * @Description: file content
  */
 import Vue from 'vue'
@@ -103,7 +103,6 @@ router.beforeEach((to, from, next) => {
     if (user) {
       next()
     } else {
-      console.log('该页面需要登陆')
       next({
         path: '/login'
         // query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:31:26
+ * @LastEditTime: 2019-08-15 20:38:30
  * @Description: file content
  -->
 <template>
@@ -58,7 +58,6 @@ export default {
         adminName: this.username,
         password: encryptPsw
       }
-      console.log(params)
       if (this.username == '' || this.password == '') {
         this.$message.error('用户名与密码不能为空！')
       } else {
@@ -73,7 +72,6 @@ export default {
             this.$store.commit('GET_USER', response.data.data.adminName)
             this.$router.push('/search')
           }
-          console.log(response) // 请求成功返回的数据
         }).catch((error) => {
           this.$message.error('登录失败')
           console.error(error) // 请求失败返回的数据

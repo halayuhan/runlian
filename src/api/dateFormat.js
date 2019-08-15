@@ -1,9 +1,14 @@
-export function getDate (val, format) {
+/*
+ * @Author: liyan
+ * @Date: 2019-07-31 16:44:58
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-15 20:15:12
+ * @Description: file content
+ */
+export function getDate(val, format) {
   if (!val) {
     return ''
-  }
-  // 如果时间戳后不是毫秒值就加000,变成毫秒值
-  // if (val && val.length == 10) { val = parseInt(val+'000'); }
+  } // 如果时间戳后不是毫秒值就加000,变成毫秒值
   if (val && val.length != 13) {
     if (val && val.length == 10) {
       val = parseInt(val + '000')

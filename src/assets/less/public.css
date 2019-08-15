@@ -263,7 +263,7 @@ input:-ms-input-placeholder {
 .el-button--blue {
   color: #2ca9e0;
   background-color: #fff;
-  border-color: #2ca9e0;;
+  border-color: #2ca9e0;
 }
 .el-button--blue:hover {
   color: #2ca9e0;
@@ -310,10 +310,6 @@ input:-ms-input-placeholder {
 
 .el-pagination__sizes .el-input .el-input__inner:hover {
   border-color: #5caaab;
-}
-
-.el-select-dropdown__item.selected {
-  color: #5caaab;
 }
 
 .el-select .el-input.is-focus .el-input__inner {
