@@ -552,9 +552,20 @@
   line-height: 40px;
   margin: 0 0 40px 0;
 }
-
-.add-book-header h1 {
+.add-book-header .el-icon-back {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  color: #000000;
+}
+.add-book-header .el-icon-back:hover{
+  cursor: pointer;
+}
+.add-book-header span {
   font-size: 20px;
+  margin-left: 10px;
+  
 }
 
 .add-book-form {

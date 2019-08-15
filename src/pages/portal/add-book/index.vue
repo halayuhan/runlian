@@ -9,7 +9,8 @@
   <div class="add-book">
     <div class="add-book-wrapper">
       <div class="add-book-header">
-        <h1>添加书籍*</h1>
+        <i class="el-icon-back" @click="goback"></i>
+        <span>添加书籍*</span>
       </div>
       <div class="add-book-form">
         <el-form
@@ -80,7 +81,6 @@
             <el-form-item>
               <el-button type="primary" class="save_btn" @click="handleSave('formData')">保存</el-button>
               <el-button type="warning" class="cancel_btn" @click="handleCancel">清空</el-button>
-              <el-button type="primary" class="back_btn" @click="goback">返回</el-button>
             </el-form-item>
           </div>
         </el-form>

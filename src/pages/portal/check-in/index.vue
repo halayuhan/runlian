@@ -247,8 +247,10 @@ export default {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
-      // this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance' + '#' + timestamp.toString())
-      this.qrcodeObject.makeCode('http://10.0.58.22:8090/' + encodeURI('#') + '/attendance' + encodeURI('#') + timestamp.toString())
+      //this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance' + '#' + timestamp.toString())
+      this.qrcodeObject.makeCode('http://10.0.58.22:8090/' + encodeURI('#') + '/attendance')
+      //+ encodeURI('#') + timestamp.toString())
+      //this.qrcodeObject.makeCode(encodeURI('http://10.0.58.22:8090/#/attendance#' + timestamp.toString()))
       this.qrcodeVisible = true
     },
     closeMask() {
