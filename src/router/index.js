@@ -32,7 +32,7 @@ const router = new Router({
             let timestamp = Date.parse(new Date()).toString() // 获取当前时间戳
             let gap = timestamp - date // 时间戳比较，六小时内可跳转
             console.log(gap)
-            if ((gap < 21600000 && gap > 0) || date === '') {
+            if ((gap < 21600000 && gap > 0) || date === undefined) {
               console.log(gap < 21600000 && gap > 0)
               next()
             }

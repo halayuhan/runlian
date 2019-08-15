@@ -62,7 +62,7 @@ export default {
   methods: {
     // 上传
     Requeset(file) {
-      let formdata = new FormData()
+      const formdata = new FormData()
       formdata.append('file', file.file)
       console.log(formdata.get('file'))
       this.$axios({
@@ -73,8 +73,8 @@ export default {
           'Content-Type': 'multipart/form-data'        }
       }).then((response) => {
         console.log(response)
-        let tableData = []
-        let errorDate = []
+        const tableData = []
+        const errorDate = []
 
         for (let i = 0; i < response.data.data.length; i++) {
           const bookData = response.data.data[i]
@@ -83,7 +83,7 @@ export default {
             errorDate.push({ bookData })
             this.$emit('errorRow', errorDate)
           }
-          let tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num }
+          const tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num }
           tableData.push(tableItem)
         }
 
@@ -133,7 +133,7 @@ export default {
     changeDatakeyAndFilter(arr) {
       const fields = this.fields
       return arr.map((item) => {
-        let res = {}
+        const res = {}
         for (const key in fields) {
           res[key] = item[fields[key]]
         }

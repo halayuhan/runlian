@@ -16,7 +16,7 @@ export function Encrypt (word, keyStr, ivStr) {
     iv = CryptoJS.enc.Utf8.parse(ivStr)
   }
 
-  let srcs = CryptoJS.enc.Utf8.parse(word)
+  const srcs = CryptoJS.enc.Utf8.parse(word)
   var encrypted = CryptoJS.AES.encrypt(srcs, key, {
     iv: iv,
     mode: CryptoJS.mode.CBC,
@@ -38,8 +38,8 @@ export function Decrypt (word, keyStr, ivStr) {
     iv = CryptoJS.enc.Utf8.parse(ivStr)
   }
 
-  let base64 = CryptoJS.enc.Base64.parse(word)
-  let src = CryptoJS.enc.Base64.stringify(base64)
+  const base64 = CryptoJS.enc.Base64.parse(word)
+  const src = CryptoJS.enc.Base64.stringify(base64)
 
   var decrypt = CryptoJS.AES.decrypt(src, key, {
     iv: iv,

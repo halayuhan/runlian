@@ -28,7 +28,7 @@ export default {
       this.$emit('finish')
     }
   },
-  mounted() { }
+
 }
 </script>
 

@@ -225,7 +225,7 @@ export default {
             const currentData = response.data.data[i]
             // console.log(currentData)
             let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
-            let ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            const ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             tableData.push(ListItem)
           }
           this.listData.push(...tableData)
