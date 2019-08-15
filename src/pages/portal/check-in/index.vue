@@ -121,7 +121,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data () {
+  data() {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -131,7 +131,7 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() > Date.now()
         }
       }, // 日期组件配置选项
@@ -144,30 +144,30 @@ export default {
       sign: 2// 默认降序排列
     }
   },
-  created () {
+  created() {
     this.queryData()
   },
-  mounted () {
+  mounted() {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   filters: {
-    genderFormat (value) {
+    genderFormat(value) {
       return value === 'M' ? '男' : '女'
     },
-    internalFormat (value) {
+    internalFormat(value) {
       return value === 'Y' ? '内部' : '外部'
     }
   },
   methods: {
-    changeStart () {
+    changeStart() {
       this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
         disabledDate: (time) => {
           return time.getTime() > this.timeEnd
         }
       })
     },
-    changeEnd () {
+    changeEnd() {
       this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
         disabledDate: (time) => {
           return time.getTime() < this.timeStart
@@ -181,7 +181,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       if (this.timeStart > this.timeEnd) {
         this.$message.error('起始时间不能大于结束时间!')
         return
@@ -226,7 +226,7 @@ export default {
         console.error(error) // 请求失败返回的数据
       })
     },
-    filterSearch () {
+    filterSearch() {
       this.sign = 2
       const paramsData = {
         page: 1
@@ -234,7 +234,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    downloadExcel () {
+    downloadExcel() {
       const baseurl = process.env.API_HOST + '/signIn/getExcel?'
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
@@ -246,22 +246,22 @@ export default {
       window.open(url)
       this.downloadVisible = false
     },
-    showMask () {
+    showMask() {
       let timestamp = Date.parse(new Date())
-      console.log(timestamp.toString())
+      // console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
       //this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance' + '#' + timestamp.toString())
-      this.qrcodeObject.makeCode('http://10.0.58.22:8090/' + encodeURI('#') + '/attendance')
+      this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance')
       //+ encodeURI('#') + timestamp.toString())
       //this.qrcodeObject.makeCode(encodeURI('http://10.0.58.22:8090/#/attendance#' + timestamp.toString()))
       this.qrcodeVisible = true
     },
-    closeMask () {
+    closeMask() {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode () {
+    qrcode() {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -279,7 +279,7 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       const paramsData = {
         page: index
       }
@@ -288,7 +288,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,

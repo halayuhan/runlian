@@ -26,6 +26,8 @@ const router = new Router({
           component: () => import('@/pages/mobile/attendance/index'),
           // 路由守卫
           beforeEnter: (to, from, next) => {
+            // console.log(to)
+            console.log(to.hash)
             let hashArr = to.hash.split('')
             hashArr.shift()
             let hash = hashArr.join('') // 获取链接哈希值，即二维码创建时间戳
@@ -33,6 +35,7 @@ const router = new Router({
             let gap = timestamp - hash // 时间戳比较，一小时内可跳转
             // to.hash === '' 为方便测试
             if ((gap < 21600000 && gap > 0) || to.hash === '') {
+              console.log(to.hash)
               next()
             }
           }

@@ -95,7 +95,13 @@
               </div>
             </div>
           </van-collapse-item>
-          <vueToTop type="9" top="280" size="28"></vueToTop>
+          <vueToTop
+            type="9"
+            top="280"
+            size="30"
+            color="#fff"
+            style="font-size: 30px;background-color: #1518198a;"
+          ></vueToTop>
         </van-collapse>
       </van-list>
     </div>
@@ -194,7 +200,9 @@ export default {
         isExist: this.value,
         keyword: this.filterInput.trim(),
         page: this.count,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        sign: 0,
+        sortFlag: 0
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(paramsData)
