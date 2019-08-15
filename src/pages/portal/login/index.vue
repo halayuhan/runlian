@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:16:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-06 13:55:17
+ * @LastEditTime: 2019-08-15 18:31:26
  * @Description: file content
  -->
 <template>
@@ -45,15 +45,15 @@ import { Encrypt } from '../../../api/encrypt'
 export default {
   name: 'Login',
 
-  data() {
+  data () {
     return {
       username: '',
       password: ''
     }
   },
   methods: {
-    login_Submit() {
-      let encryptPsw = Encrypt(this.password)
+    login_Submit () {
+      const encryptPsw = Encrypt(this.password)
       const params = {
         adminName: this.username,
         password: encryptPsw

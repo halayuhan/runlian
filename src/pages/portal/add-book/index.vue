@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 15:08:38
+ * @LastEditTime: 2019-08-15 18:25:11
  * @Description: file content
  -->
 <template>
@@ -92,7 +92,7 @@
 <script>
 export default {
   name: 'AddBook',
-  data() {
+  data () {
     return {
       isRead: false,
       formData: {
@@ -138,7 +138,6 @@ export default {
         return this.formData.pubDate.substr(0, 10)
       },
       set: function (value) {
-
         this.formData.pubDate = value.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1\/').replace(/(\d{4}\/\d{2})(?=\d)/g, '$1\/')
         if (value.length === 7) {
           this.formData.pubDate = value.replace(/[/]$/, '')
@@ -147,7 +146,7 @@ export default {
     }
   },
   methods: {
-    getBookinfo() {
+    getBookinfo () {
       const params = {
         isbn: this.formData.ISBN
       }
@@ -186,7 +185,7 @@ export default {
           console.error(error) // 请求失败返回的数据
         })
     },
-    handleCancel() {
+    handleCancel () {
       this.formData = {
         img: '',
         bookName: '',
@@ -200,11 +199,11 @@ export default {
         addNum: ''
       }
     },
-    handleSave(formData) {
+    handleSave (formData) {
       this.$refs[formData].validate((valid) => {
         if (!valid) {
           this.$message.error('请填入正确信息')
-          return false;
+          return false
         } else {
           const { img, bookName, author, ISBN, publisher, pubDate, page, type, description, addNum } = this.formData
           const params = {
@@ -237,9 +236,8 @@ export default {
           })
         }
       })
-
     },
-    beforeUploadCover(file) {
+    beforeUploadCover (file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -252,13 +250,12 @@ export default {
 
       return isJPG && isLt2M
     },
-    handleUploadCover(file) {
+    handleUploadCover (file) {
       const isbn = this.formData.ISBN
       if (!isbn) {
         this.$message.error('请先输入书籍ISBN编号再上传图片')
-      }
-      else {
-        let formdata = new FormData()
+      } else {
+        const formdata = new FormData()
         formdata.append('isbn', isbn)
         formdata.append('file', file.file)
         this.$axios({
@@ -281,7 +278,7 @@ export default {
         })
       }
     },
-    goback() {
+    goback () {
       this.$router.push('/book')
     }
   }

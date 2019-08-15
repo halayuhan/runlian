@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 16:10:48
+ * @LastEditTime: 2019-08-15 18:30:21
  * @Description: file content
  -->
 <template>
@@ -385,7 +385,6 @@ export default {
         sortFlag: this.sortFlag
       }
       const params = Object.assign({}, defaultParams, paramsData)
-      console.log(params)
       this.$axios({
         methods: 'get',
         url: process.env.API_HOST + '/book/query',
@@ -395,7 +394,6 @@ export default {
         if (response.data.code != '000') {
           this.total = 0
           this.$message.error(response.data.msg)
-          return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
@@ -403,19 +401,18 @@ export default {
             if (img === '' || img === '0') {
               img = '../../../../static/cover/blank_book.png'
             }
-            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
+            const tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
           this.total = response.data.count
         }
-        console.log(response)
       }).catch((error) => {
         this.$message.error('网络错误，请重试')
         console.log(error)
       })
     },
-    sortChange: function (column, prop, order) {
+    sortChange: function (column) {
       if (column.order === 'ascending') {
         this.sortFlag = 1
       } else if (column.order === 'descending') { this.sortFlag = 2 } else { this.sortFlag = 0 }
@@ -438,7 +435,6 @@ export default {
       this.importVisible = false
     },
     downloadTemplate () {
-      // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
       const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
@@ -446,15 +442,12 @@ export default {
     },
     async requestFn (data) {
       this.tableData = JSON.stringify(data)
-      console.log(data)
       return Promise.resolve()
     },
     handleCloseImport () {
-      console.log('弹窗关闭了~')
       this.$forceUpdate()
     },
     handleFinishImport () {
-      console.log('导入完毕了~')
     },
     handleOpen () {
       this.visible = true
@@ -496,7 +489,7 @@ export default {
     },
     handleUploadCover (scope, file) {
       const fileIsbn = scope[0].row.isbn
-      let formdata = new FormData()
+      const formdata = new FormData()
       formdata.append('isbn', fileIsbn)
       formdata.append('file', file.file)
       this.$axios({
@@ -508,7 +501,6 @@ export default {
         }
       }).then((response) => {
         if (response.data.code === '000') {
-          console.log(response.data.data) // 存储返回的路径到row.img
           scope[0].row.img = process.env.API_HOST + '/file/get?fileName=' + response.data.data
         } else {
           this.$message.error(response.data.msg)
@@ -561,14 +553,11 @@ export default {
         type: row.type
       }
 
-      console.log(params)
-
       this.$axios({
         methods: 'get',
         url: process.env.API_HOST + '/book/update',
         params
       }).then(response => {
-        console.log(response)
         if (response.data.code === '000') {
           this.$message({
             message: response.data.msg,
@@ -605,12 +594,10 @@ export default {
       row.haveNum = row.temp.haveNum
     },
     handleEditISBN (index, row) {
-      console.log('isbn')
       this.$prompt('请输入新的书籍编号', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
-        console.log(row.isbn, value)
         const params = {
           newIsbn: value,
           oldIsbn: row.isbn
@@ -620,7 +607,6 @@ export default {
           url: process.env.API_HOST + '/book/updateISBN',
           params
         }).then(response => {
-          console.log(response)
           if (response.data.code === '000') {
             this.$message({
               message: '修改成功!',
@@ -648,7 +634,6 @@ export default {
       row.haveNum--
       row.outNum++
       row.totalNum = +row.haveNum + +row.outNum
-      console.log(row.totalNum)
       const params = {
         author: row.author,
         bookName: row.bookName,
@@ -663,14 +648,11 @@ export default {
         type: row.type
       }
 
-      console.log(params)
-
       this.$axios({
         methods: 'get',
         url: process.env.API_HOST + '/book/update',
         params
       }).then(response => {
-        console.log(response)
         if (response.data.code === '000') {
           this.$message({
             message: '借书成功!',
@@ -696,7 +678,6 @@ export default {
       row.haveNum++
       row.outNum--
       row.totalNum = +row.haveNum + +row.outNum
-      console.log(row.totalNum)
       const params = {
         author: row.author,
         bookName: row.bookName,
@@ -711,14 +692,11 @@ export default {
         type: row.type
       }
 
-      console.log(params)
-
       this.$axios({
         methods: 'get',
         url: process.env.API_HOST + '/book/update',
         params
       }).then(response => {
-        console.log(response)
         if (response.data.code === '000') {
           this.$message({
             message: '还书成功!',

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 14:25:21
+ * @LastEditTime: 2019-08-15 18:24:37
  * @Description: file content
  -->
 <template>
@@ -96,7 +96,7 @@
 <script>
 export default {
   name: 'Attendance',
-  data() {
+  data () {
     return {
       isCorrect: false,
       isShow: true,
@@ -147,39 +147,16 @@ export default {
     }
   },
   computed: {
-    channel() {
+    channel () {
       return this.form.ladp.val
     }
   },
-
-  // watch: {
-  //   channel: function (newValue, oldValue) {
-  //     if (newValue.length != 11) {
-  //       //alert('输入正确手机号');
-  //     }
-  //     else {
-  //       this.$axios({
-  //         methods: 'get',
-  //         url: '/admin/signIn/getUser',
-  //         data: {phoneNumber:this.form.phone.val}        })
-  //         .then((response) => {
-  //           this.gender = response.gender;
-  //           this.from = response.from;
-  //           this.form.name.val = response.name;
-  //           this.form.department.val = response.department;
-  //           console.log(response)       //请求成功返回的数据
-  //         }).catch((error) => {
-  //           console.error(error)       //请求失败返回的数据
-  //         })
-  //     }
-  //   }
-  // },
   methods: {
-    _getUserinfo() {
+    _getUserinfo () {
       const params = {
         ldap: this.form.ldap.val
       }
-      let reg = /^[_a-zA-Z0-9]+$/
+      const reg = /^[_a-zA-Z0-9]+$/
       if (!reg.test(this.form.ldap.val)) {
         this.$message.error(this.form.ldap.err_msg)
       } else {
@@ -189,7 +166,7 @@ export default {
           params
         })
           .then((response) => {
-            if (response.data.code != '000') {           
+            if (response.data.code != '000') {
               this.form.name.val = ''
               this.form.department.val = ''
               this.form.phone.val = ''
@@ -214,10 +191,10 @@ export default {
       }
     },
 
-    _validate() {
+    _validate () {
       let isPass = false
-      for (let key in this.form) {
-        let reg = this.form[key].rules[0]
+      for (const key in this.form) {
+        const reg = this.form[key].rules[0]
         // console.log(reg.test(this.form[key].val));
         if (reg.test(this.form[key].val) && this.form[key].val != '') {
           isPass = true
@@ -231,7 +208,7 @@ export default {
       return isPass
     },
 
-    attendSubmit() {
+    attendSubmit () {
       if (!this._validate()) {
         return
       }

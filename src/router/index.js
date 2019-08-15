@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 16:05:19
+ * @LastEditTime: 2019-08-15 18:32:52
  * @Description: file content
  */
 import Vue from 'vue'
@@ -26,14 +26,10 @@ const router = new Router({
           component: () => import('@/pages/mobile/attendance/index'),
           // 路由守卫
           beforeEnter: (to, from, next) => {
-            console.log(to)
-            console.log(to.query.d)
-            let date = to.query.d
-            let timestamp = Date.parse(new Date()).toString() // 获取当前时间戳
-            let gap = timestamp - date // 时间戳比较，六小时内可跳转
-            console.log(gap)
-            if ((gap < 21600000 && gap > 0) || date === '') {
-              console.log(gap < 21600000 && gap > 0)
+            const date = to.query.d
+            const timestamp = Date.parse(new Date()).toString() // 获取当前时间戳
+            const gap = timestamp - date // 时间戳比较，六小时内可跳转
+            if ((gap < 21600000 && gap > 0) || date === undefined) {
               next()
             }
           }

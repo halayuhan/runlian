@@ -1,3 +1,10 @@
+/*
+ * @Author: liyan
+ * @Date: 2019-07-29 16:34:42
+ * @LastEditors: liyan
+ * @LastEditTime: 2019-08-15 18:17:50
+ * @Description: file content
+ */
 export function addCookie (name, value, expiredays) {
   var exdate = new Date()
   exdate.setDate(exdate.getDate() + expiredays)
@@ -9,8 +16,8 @@ export function addCookie (name, value, expiredays) {
 }
 // 获取cookie
 export function getCookie (name) {
-  var arr,
-    reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+  var arr
+  reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
   if ((arr = document.cookie.match(reg))) return arr[2]
   else return null
 }

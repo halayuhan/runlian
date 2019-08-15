@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 16:06:41
+ * @LastEditTime: 2019-08-15 18:31:03
  * @Description: file content
  -->
 <template>
@@ -212,7 +212,7 @@ export default {
             const currentData = response.data.data[i]
 
             let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
-            let tableItem = { ldap, userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
+            const tableItem = { ldap, userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-07 16:04:56
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-09 10:31:37
+ * @LastEditTime: 2019-08-15 18:13:17
  * @Description: file content
  -->
 
@@ -137,7 +137,7 @@ export default {
     [Icon.name]: Icon,
     vueToTop
   },
-  data() {
+  data () {
     return {
       // --下拉菜单的属性值--
       value: 0,
@@ -153,13 +153,12 @@ export default {
       filterInput: '',
       total: 0,
       count: 0, // 相当于页码
-      pageSize: 5,
+      pageSize: 5
 
     }
   },
   methods: {
-    onSearch() {
-      console.log(this.value)
+    onSearch () {
       this.listData = []
       this.count = 1
       const paramsData = {
@@ -168,7 +167,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    onCancel() {
+    onCancel () {
       this.filterInput = ''
     },
     // onLoad () {
@@ -186,7 +185,7 @@ export default {
     //     }
     //   }, 500)
     // },
-    onLoad() {
+    onLoad () {
       this.finished = false
       this.count++
       const paramsData = {
@@ -195,7 +194,7 @@ export default {
       this.queryData(paramsData)
     },
 
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       const defaultParams = {
         isExist: this.value,
         keyword: this.filterInput.trim(),
@@ -205,15 +204,12 @@ export default {
         sortFlag: 0
       }
       const params = Object.assign({}, defaultParams, paramsData)
-      console.log(paramsData)
       this.$axios({
         methods: 'get',
         url: process.env.API_HOST + '/book/query',
         params
       }).then((response) => {
-        console.log(response)
-        let tableData = []
-        console.log(this.listData)
+        const tableData = []
         if (response.data.code != '000') {
           this.total = 0
           // this.$message.error(response.data.msg)
@@ -225,15 +221,13 @@ export default {
             const currentData = response.data.data[i]
             // console.log(currentData)
             let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
-            let ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            const ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             tableData.push(ListItem)
           }
           this.listData.push(...tableData)
-          console.log(this.listData)
           this.currentPage = response.data.page
           this.total = response.data.count
         }
-        console.log(response)
         this.loading = false
         this.isScrollOver()
       }).catch((error) => {
@@ -242,24 +236,21 @@ export default {
         this.isScrollOver()
       })
     },
-    isScrollOver() {
+    isScrollOver () {
       if (this.count * this.pageSize > this.total) {
         this.finished = true
       } else {
         this.finished = false
       }
     },
-    loadMore() {
-      // debugger
+    loadMore () {
       this.count++
-      // this.listData.push(this.count)
-      // console.log(this.count)
       const paramsData = {
         page: this.count
       }
       this.queryData(paramsData)
     },
-    handleSearch() {
+    handleSearch () {
       this.count = 1
       this.queryData = {
         page: this.count
