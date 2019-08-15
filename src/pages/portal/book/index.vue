@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 09:23:05
+ * @LastEditTime: 2019-08-15 09:56:07
  * @Description: file content
  -->
 <template>
@@ -73,84 +73,6 @@
       </div>
       <div class="book-search-content">
         <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form class="table-expand-form">
-                <div class="expand-form-left">
-                  <el-form-item>
-                    <div>
-                      <p>书籍名称:</p>
-                      <span>{{props.row.bookName}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>作者:</p>
-                      <span>{{props.row.author}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>出版社:</p>
-                      <span>{{props.row.publisher}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>出版日期:</p>
-                      <span>{{props.row.pubDate}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>ISBN:</p>
-                      <span>{{props.row.isbn}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>页数:</p>
-                      <span>{{props.row.page}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>类型:</p>
-                      <span>{{props.row.type}}</span>
-                    </div>
-                  </el-form-item>
-                </div>
-                <div class="expand-form-center">
-                  <el-form-item>
-                    <div class="flex-column">
-                      <p>描述:</p>
-                      <h1>{{props.row.description}}</h1>
-                    </div>
-                  </el-form-item>
-                </div>
-                <div class="expand-form-right">
-                  <el-form-item>
-                    <div>
-                      <p>库藏数量:</p>
-                      <span>{{props.row.totalNum}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>待还数量:</p>
-                      <span>{{props.row.outNum}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>可借数量:</p>
-                      <span>{{props.row.haveNum}}</span>
-                    </div>
-                  </el-form-item>
-                </div>
-              </el-form>
-            </template>
-          </el-table-column>
           <el-table-column label="序号" width="60" align="center">
             <template slot-scope="scope">
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
@@ -338,78 +260,6 @@
                           </div>
                         </el-form-item>
                       </div>
-                      <!-- <div class="expand-form-left">
-                        <el-form-item>
-                          <div>
-                            <p>书籍名称:</p>
-                            <span>{{scope.row.bookName}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>作者:</p>
-                            <span>{{scope.row.author}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>出版社:</p>
-                            <span>{{scope.row.publisher}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>出版日期:</p>
-                            <span>{{scope.row.pubDate}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>ISBN:</p>
-                            <span>{{scope.row.isbn}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>页数:</p>
-                            <span>{{scope.row.page}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>类型:</p>
-                            <span>{{scope.row.type}}</span>
-                          </div>
-                        </el-form-item>
-                      </div>
-                      <div class="expand-form-center">
-                        <el-form-item>
-                          <div class="flex-column">
-                            <p>描述:</p>
-                            <h1>{{scope.row.description}}</h1>
-                          </div>
-                        </el-form-item>
-                      </div>
-                      <div class="expand-form-right">
-                        <el-form-item>
-                          <div>
-                            <p>库藏数量:</p>
-                            <span>{{scope.row.totalNum}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>待还数量:</p>
-                            <span>{{scope.row.outNum}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>可借数量:</p>
-                            <span>{{scope.row.haveNum}}</span>
-                          </div>
-                        </el-form-item>
-                      </div>-->
                     </el-form>
                   </el-dialog>
                 </li>
@@ -554,6 +404,7 @@ export default {
         }
         console.log(response)
       }).catch((error) => {
+        this.$message.error('网络错误，请重试')
         console.log(error)
       })
     },
