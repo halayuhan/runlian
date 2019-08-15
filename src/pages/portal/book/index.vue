@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 10:18:04
+ * @LastEditTime: 2019-08-15 10:43:06
  * @Description: file content
  -->
 <template>
@@ -72,7 +72,13 @@
         </div>
       </div>
       <div class="book-search-content">
-        <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
+        <el-table
+          :data="tableData"
+          @sort-change="sortChange"
+          :header-cell-style="{background: '#eee'}"
+          border
+          stripe
+        >
           <el-table-column label="序号" width="60" align="center">
             <template slot-scope="scope">
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
@@ -134,7 +140,7 @@
               <span>{{scope.row.publisher}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="创建日期" prop="createDate" align="center">
+          <el-table-column label="创建日期" prop="createDate" align="center" sortable="custom">
             <template slot-scope="scope">
               <span>{{scope.row.createDate}}</span>
             </template>
@@ -354,6 +360,7 @@ export default {
         description: '书籍简介'
       },
       selectType: '0',
+      sortFlag: '0',
       downloadVisible: false,
       importVisible: false,
       visible: false, // 批量上传提示框可见情况
@@ -374,8 +381,8 @@ export default {
         keyword: this.filterInput.trim(),
         page: this.currentPage,
         pageSize: this.pageSize,
-        sign: 0,
-        sortFlag: 0
+        sign: this.selectType,
+        sortFlag: this.sortFlag
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(params)
@@ -407,6 +414,18 @@ export default {
         this.$message.error('网络错误，请重试')
         console.log(error)
       })
+    },
+    sortChange: function (column, prop, order) {
+      if (column.order === 'ascending') {
+        this.sortFlag = 1
+      } else if (column.order === 'descending')
+        {this.sortFlag = 2}
+      else
+        {this.sortFlag = 0}
+      const paramsData = {
+        sortFlag: this.sortFlag
+      }
+      this.queryData(paramsData)
     },
     filterSearch () {
       const paramsData = {
@@ -618,7 +637,7 @@ export default {
               duration: 2000
             })
           }
-          this.queryData({page: this.currentPage})
+          this.queryData({ page: this.currentPage })
         }).catch((error) => {
           console.log(error)
         })
