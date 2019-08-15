@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-24 10:13:58
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 15:39:14
+ * @LastEditTime: 2019-08-15 11:04:25
  * @Description: file content
  -->
 <template>
@@ -10,7 +10,7 @@
     <div class="header-wrapper">
       <div class="header-wrapper-left">
         <span></span>
-        <div class="search-nav">
+        <div class="search-nav" v-if="isLogin">
           <ul>
             <li>
               <i class="el-icon-arrow-right"></i>
