@@ -1,8 +1,8 @@
-<!-- 
+<!--
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 17:55:48
+ * @LastEditTime: 2019-08-15 10:38:47
  * @Description: file content
  -->
 <template>
@@ -30,7 +30,7 @@
           </div>
           <div class="data-filter">
             <el-input
-              placeholder="请输入姓名搜索"
+              placeholder="请输入姓名/ldap搜索"
               v-model="filterInput"
               clearable
               @keyup.enter.native="filterSearch"
@@ -121,7 +121,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data() {
+  data () {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -131,7 +131,7 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
         }
       }, // 日期组件配置选项
@@ -140,34 +140,34 @@ export default {
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
-      total: 0,// 总数据量
-      sign: 2//默认降序排列
+      total: 0, // 总数据量
+      sign: 2// 默认降序排列
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
-  mounted() {
+  mounted () {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   filters: {
-    genderFormat(value) {
+    genderFormat (value) {
       return value === 'M' ? '男' : '女'
     },
-    internalFormat(value) {
+    internalFormat (value) {
       return value === 'Y' ? '内部' : '外部'
     }
   },
   methods: {
-    changeStart() {
+    changeStart () {
       this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
         disabledDate: (time) => {
           return time.getTime() > this.timeEnd
         }
       })
     },
-    changeEnd() {
+    changeEnd () {
       this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
         disabledDate: (time) => {
           return time.getTime() < this.timeStart
@@ -180,9 +180,12 @@ export default {
         sign: this.sign
       }
       this.queryData(paramsData)
-
     },
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
+      if (this.timeStart > this.timeEnd) {
+        this.$message.error('起始时间不能大于结束时间!')
+        return
+      }
       // TODO
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
@@ -223,7 +226,7 @@ export default {
         console.error(error) // 请求失败返回的数据
       })
     },
-    filterSearch() {
+    filterSearch () {
       this.sign = 2
       const paramsData = {
         page: 1
@@ -231,7 +234,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    downloadExcel() {
+    downloadExcel () {
       const baseurl = process.env.API_HOST + '/signIn/getExcel?'
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
@@ -243,7 +246,7 @@ export default {
       window.open(url)
       this.downloadVisible = false
     },
-    showMask() {
+    showMask () {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
@@ -253,12 +256,12 @@ export default {
       //this.qrcodeObject.makeCode(encodeURI('http://10.0.58.22:8090/#/attendance#' + timestamp.toString()))
       this.qrcodeVisible = true
     },
-    closeMask() {
+    closeMask () {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode() {
+    qrcode () {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -276,7 +279,7 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         page: index
       }
@@ -285,7 +288,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
@@ -293,7 +296,7 @@ export default {
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+        this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     }
   }

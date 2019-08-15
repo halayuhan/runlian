@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 21:44:38
+ * @LastEditTime: 2019-08-15 10:43:06
  * @Description: file content
  -->
 <template>
@@ -79,84 +79,6 @@
           border
           stripe
         >
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form class="table-expand-form">
-                <div class="expand-form-left">
-                  <el-form-item>
-                    <div>
-                      <p>书籍名称:</p>
-                      <span>{{props.row.bookName}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>作者:</p>
-                      <span>{{props.row.author}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>出版社:</p>
-                      <span>{{props.row.publisher}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>出版日期:</p>
-                      <span>{{props.row.pubDate}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>ISBN:</p>
-                      <span>{{props.row.isbn}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>页数:</p>
-                      <span>{{props.row.page}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>类型:</p>
-                      <span>{{props.row.type}}</span>
-                    </div>
-                  </el-form-item>
-                </div>
-                <div class="expand-form-center">
-                  <el-form-item>
-                    <div class="flex-column">
-                      <p>描述:</p>
-                      <h1>{{props.row.description}}</h1>
-                    </div>
-                  </el-form-item>
-                </div>
-                <div class="expand-form-right">
-                  <el-form-item>
-                    <div>
-                      <p>库藏数量:</p>
-                      <span>{{props.row.totalNum}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>待还数量:</p>
-                      <span>{{props.row.outNum}}</span>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <div>
-                      <p>可借数量:</p>
-                      <span>{{props.row.haveNum}}</span>
-                    </div>
-                  </el-form-item>
-                </div>
-              </el-form>
-            </template>
-          </el-table-column>
           <el-table-column label="序号" width="60" align="center">
             <template slot-scope="scope">
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
@@ -267,16 +189,16 @@
                     type="blue"
                     :disabled="scope.row.edit"
                     v-if="!scope.row.edit"
-                    @click="showDetial"
+                    @click="showDetial(scope.$index,scope.row)"
                   >详情</el-button>
-                  <el-dialog :visible.sync="detialVisible" title="书目详情">
+                  <el-dialog :visible.sync="scope.row.detial" title="书目详情">
                     <el-form class="detial-box">
                       <div class="detial-content">
                         <div class="detial-content-left">
                           <el-form-item>
                             <div>
                               <p>书籍名称:</p>
-                              <span :show-overflow-tooltip="true">{{scope.row.bookName}}</span>
+                              <span>{{scope.row.bookName}}</span>
                               <!-- <span>{{scope.row.bookName}}</span> -->
                             </div>
                           </el-form-item>
@@ -344,78 +266,6 @@
                           </div>
                         </el-form-item>
                       </div>
-                      <!-- <div class="expand-form-left">
-                        <el-form-item>
-                          <div>
-                            <p>书籍名称:</p>
-                            <span>{{scope.row.bookName}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>作者:</p>
-                            <span>{{scope.row.author}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>出版社:</p>
-                            <span>{{scope.row.publisher}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>出版日期:</p>
-                            <span>{{scope.row.pubDate}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>ISBN:</p>
-                            <span>{{scope.row.isbn}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>页数:</p>
-                            <span>{{scope.row.page}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>类型:</p>
-                            <span>{{scope.row.type}}</span>
-                          </div>
-                        </el-form-item>
-                      </div>
-                      <div class="expand-form-center">
-                        <el-form-item>
-                          <div class="flex-column">
-                            <p>描述:</p>
-                            <h1>{{scope.row.description}}</h1>
-                          </div>
-                        </el-form-item>
-                      </div>
-                      <div class="expand-form-right">
-                        <el-form-item>
-                          <div>
-                            <p>库藏数量:</p>
-                            <span>{{scope.row.totalNum}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>待还数量:</p>
-                            <span>{{scope.row.outNum}}</span>
-                          </div>
-                        </el-form-item>
-                        <el-form-item>
-                          <div>
-                            <p>可借数量:</p>
-                            <span>{{scope.row.haveNum}}</span>
-                          </div>
-                        </el-form-item>
-                      </div>-->
                     </el-form>
                   </el-dialog>
                 </li>
@@ -493,7 +343,7 @@ export default {
   components: {
     ExImport
   },
-  data() {
+  data () {
     return {
 
       title: '批量导入书单',
@@ -514,7 +364,6 @@ export default {
       downloadVisible: false,
       importVisible: false,
       visible: false, // 批量上传提示框可见情况
-      detialVisible: false,
       filterInput: '',
       tableData: [],
       currentPage: 1, // 当前页码
@@ -522,11 +371,11 @@ export default {
       total: 0
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
   methods: {
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       const defaultParams = {
         isExist: 0,
         keyword: this.filterInput.trim(),
@@ -554,7 +403,7 @@ export default {
             if (img === '' || img === '0') {
               img = '../../../../static/cover/blank_book.png'
             }
-            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
@@ -562,86 +411,71 @@ export default {
         }
         console.log(response)
       }).catch((error) => {
+        this.$message.error('网络错误，请重试')
         console.log(error)
       })
     },
     sortChange: function (column, prop, order) {
       if (column.order === 'ascending') {
         this.sortFlag = 1
-      }
-      else if (column.order === 'descending')
-        this.sortFlag = 2
+      } else if (column.order === 'descending')
+        {this.sortFlag = 2}
       else
-        this.sortFlag = 0
+        {this.sortFlag = 0}
       const paramsData = {
         sortFlag: this.sortFlag
       }
       this.queryData(paramsData)
-
     },
-    filterSearch() {
+    filterSearch () {
       const paramsData = {
         sign: +this.selectType,
         page: 1
       }
       this.queryData(paramsData)
     },
-    isbnTest() {
-      const params = {
-        appkey: 'b979ae09bbbff4a2',
-        isbn: this.filterInput
-      }
-      this.$axios({
-        methods: 'get',
-        url: '/isbn/query',
-        params
-      }).then(response => {
-        console.log(response.data.result)
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
-    importBook() {
+    importBook () {
       const baseurl = process.env.API_HOST + '/book/getBookList'
       const url = baseurl
       window.open(url)
       this.importVisible = false
     },
-    downloadTemplate() {
+    downloadTemplate () {
       // const baseurl = 'http://10.0.58.22:8080/book/getTemplate'
       const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
     },
-    async requestFn(data) {
+    async requestFn (data) {
       this.tableData = JSON.stringify(data)
       console.log(data)
       return Promise.resolve()
     },
-    handleCloseImport() {
+    handleCloseImport () {
       console.log('弹窗关闭了~')
       this.$forceUpdate()
     },
-    handleFinishImport() {
+    handleFinishImport () {
       console.log('导入完毕了~')
     },
-    handleOpen() {
+    handleOpen () {
       this.visible = true
     },
-    handleAddBook() {
+    handleAddBook () {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         page: index
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+        // console.log(this.$el.parentNode.parentNode.parentNode.parentNode)
+        this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
@@ -652,7 +486,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    beforeUploadCover(file) {
+    beforeUploadCover (file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
@@ -663,7 +497,7 @@ export default {
       }
       return isJPG && isLt2M
     },
-    handleUploadCover(scope, file) {
+    handleUploadCover (scope, file) {
       const fileIsbn = scope[0].row.isbn
       let formdata = new FormData()
       formdata.append('isbn', fileIsbn)
@@ -687,7 +521,7 @@ export default {
         console.log(error)
       })
     },
-    handleEditChange(index, row) {
+    handleEditChange (index, row) {
       row.edit = true
       row.temp = {
         img: row.img,
@@ -697,7 +531,7 @@ export default {
         haveNum: row.haveNum
       }
     },
-    handleEditSave(index, row) {
+    handleEditSave (index, row) {
       if (row.haveNum < 0) {
         this.$message.error('可借数量不能为负!')
         return
@@ -765,7 +599,7 @@ export default {
         row.haveNum = row.temp.haveNum
       })
     },
-    handleEditCancel(index, row) {
+    handleEditCancel (index, row) {
       row.edit = false
       row.img = row.temp.img
       row.type = row.temp.type
@@ -773,7 +607,7 @@ export default {
       row.outNum = row.temp.outNum
       row.haveNum = row.temp.haveNum
     },
-    handleEditISBN(index, row) {
+    handleEditISBN (index, row) {
       console.log('isbn')
       this.$prompt('请输入新的书籍编号', '提示', {
         confirmButtonText: '确定',
@@ -809,7 +643,7 @@ export default {
         })
       })
     },
-    handleBookBorrow(index, row) {
+    handleBookBorrow (index, row) {
       if (row.haveNum <= 0) {
         this.$message.error('已无可借书籍!')
         return
@@ -857,7 +691,7 @@ export default {
         console.log(error)
       })
     },
-    handleBookReturn(index, row) {
+    handleBookReturn (index, row) {
       if (row.outNum <= 0) {
         this.$message.error('还书操作异常!')
         return
@@ -905,8 +739,8 @@ export default {
         console.log(error)
       })
     },
-    showDetial() {
-      this.detialVisible = true
+    showDetial (index, row) {
+      row.detial = true
     }
   }
 }
