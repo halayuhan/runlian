@@ -1,4 +1,4 @@
-<!--
+<!-- 
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
@@ -63,7 +63,13 @@
         </div>
       </div>
       <div class="search-content">
-        <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
+        <el-table
+          :data="tableData"
+          @sort-change="sortChange"
+          :header-cell-style="{background: '#eee'}"
+          border
+          stripe
+        >
           <el-table-column label="序号" width="60" align="center">
             <template slot-scope="scope">
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
@@ -79,7 +85,7 @@
           </el-table-column>
           <el-table-column label="在读书籍" prop="bookName"></el-table-column>
           <el-table-column width="160" label="手机号码" prop="phoneNumber"></el-table-column>
-          <el-table-column width="160" label="签到时间" prop="time" sortable></el-table-column>
+          <el-table-column width="160" label="签到时间" prop="time" sortable="custom"></el-table-column>
         </el-table>
       </div>
       <div class="search-footer">
@@ -115,7 +121,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data () {
+  data() {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -125,7 +131,7 @@ export default {
       timeStart, // 起始时间
       timeEnd, // 结束时间
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() > Date.now()
         }
       }, // 日期组件配置选项
@@ -134,52 +140,62 @@ export default {
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
-      total: 0 // 总数据量
+      total: 0,// 总数据量
+      sign: 2//默认降序排列
     }
   },
-  created () {
+  created() {
     this.queryData()
   },
-  mounted () {
+  mounted() {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   filters: {
-    genderFormat (value) {
+    genderFormat(value) {
       return value === 'M' ? '男' : '女'
     },
-    internalFormat (value) {
+    internalFormat(value) {
       return value === 'Y' ? '内部' : '外部'
     }
   },
   methods: {
-    changeStart () {
+    changeStart() {
       this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
         disabledDate: (time) => {
           return time.getTime() > this.timeEnd
         }
       })
     },
-    changeEnd () {
+    changeEnd() {
       this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
         disabledDate: (time) => {
           return time.getTime() < this.timeStart
         }
       })
     },
-    queryData (paramsData = {}) {
+    sortChange: function (column, prop, order) {
+      this.sign = (column.order === 'ascending') ? 1 : 2
+      const paramsData = {
+        sign: this.sign
+      }
+      this.queryData(paramsData)
+
+    },
+    queryData(paramsData = {}) {
       // TODO
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
         userName: this.filterInput.trim(),
         page: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        sign: this.sign
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(params)
       this.$axios({
-        methods: 'get',
+        methods: 'post',
         url: process.env.API_HOST + '/signIn/getRecord',
         params
       }).then((response) => {
@@ -207,20 +223,16 @@ export default {
         console.error(error) // 请求失败返回的数据
       })
     },
-    filterSearch () {
+    filterSearch() {
+      this.sign = 2
       const paramsData = {
-        // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        // userName: this.filterInput,
         page: 1
-        // pageSize: this.pageSize
+
       }
       this.queryData(paramsData)
     },
-
-    downloadExcel () {
+    downloadExcel() {
       const baseurl = process.env.API_HOST + '/signIn/getExcel?'
-
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
@@ -231,7 +243,7 @@ export default {
       window.open(url)
       this.downloadVisible = false
     },
-    showMask () {
+    showMask() {
       let timestamp = Date.parse(new Date())
       console.log(timestamp.toString())
       // 创建二维码，填写相应 ip地址+时间戳
@@ -239,12 +251,12 @@ export default {
       this.qrcodeObject.makeCode('http://10.0.58.22:8090/' + encodeURI('#') + '/attendance' + encodeURI('#') + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask () {
+    closeMask() {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode () {
+    qrcode() {
       // let timestamp = Date.parse(new Date())
       // console.log(timestamp.toString())
       // let qrcode = new QRCode('qrcode', {
@@ -262,30 +274,21 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       const paramsData = {
-        //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        //   userName: this.filterInput,
         page: index
-        //   pageSize: this.pageSize
       }
-      this.queryData(paramsData)
       this.queryData(paramsData)
       this.$nextTick(() => {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
-        //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        //   userName: this.filterInput,
         pageSize,
         page: 1
       }
-      this.queryData(paramsData)
       this.queryData(paramsData)
       this.$nextTick(() => {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
