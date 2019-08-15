@@ -93,7 +93,7 @@ export default {
       var paramC = []
       var paramE = []
       paramArray.forEach((element, index, elArray) => {
-        for (let key in element) {
+        for (const key in element) {
           if (element[key] === null) {
             element[key] = ''
           }
@@ -103,11 +103,11 @@ export default {
         }
         if (element.haveNum === 1) {
           let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-          let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
+          const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
           paramC.push(elItem)
         } else {
           let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-          let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
+          const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
           paramE.push(elItem)
         }
       })
@@ -118,7 +118,7 @@ export default {
 
       const paramE = []
       paramArray.forEach((element, index, elArray) => {
-        for (let key in element) {
+        for (const key in element) {
           if (element[key] === null) {
             element[key] = ''
           }
@@ -128,7 +128,7 @@ export default {
         }
         if (element.haveNum === 0) {
           let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-          let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
+          const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
           paramE.push(elItem)
           console.log(paramE)
         }
@@ -163,7 +163,7 @@ export default {
         var paramC = []
         var paramE = []
         paramArray.forEach((element, index, elArray) => {
-          for (let key in element) {
+          for (const key in element) {
             if (element[key] === null) {
               element[key] = ''
             }
@@ -173,11 +173,11 @@ export default {
           }
           if (element.haveNum === 1) {
             let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-            let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
+            const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
             paramC.push(elItem)
           } else {
             let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-            let elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
+            const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
             paramE.push(elItem)
           }
         })

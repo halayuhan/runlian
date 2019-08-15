@@ -36,6 +36,7 @@
 .header-wrapper-right {
   display: flex;
   text-align: center;
+  padding: 0 30px;
 }
 
 .header-wrapper-right i {
@@ -64,9 +65,7 @@
   color: #eee;
 }
 
-.header-wrapper-right {
-  padding: 0 30px;
-}
+
 
 .header-wrapper-right div {
   margin: 0 0 0 10px;
