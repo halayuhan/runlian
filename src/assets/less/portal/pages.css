@@ -89,6 +89,10 @@
   overflow-x: hidden;
 }
 
+.portal-container .el-scrollbar__view {
+  height: 100%;
+}
+
 /* 主体展示部分 */
 .search {
   /* position: relative; */

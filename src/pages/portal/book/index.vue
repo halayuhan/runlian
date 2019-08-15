@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-14 21:44:38
+ * @LastEditTime: 2019-08-15 09:23:05
  * @Description: file content
  -->
 <template>
@@ -261,16 +261,16 @@
                     type="blue"
                     :disabled="scope.row.edit"
                     v-if="!scope.row.edit"
-                    @click="showDetial"
+                    @click="showDetial(scope.$index,scope.row)"
                   >详情</el-button>
-                  <el-dialog :visible.sync="detialVisible" title="书目详情">
+                  <el-dialog :visible.sync="scope.row.detial" title="书目详情">
                     <el-form class="detial-box">
                       <div class="detial-content">
                         <div class="detial-content-left">
                           <el-form-item>
                             <div>
                               <p>书籍名称:</p>
-                              <span :show-overflow-tooltip="true">{{scope.row.bookName}}</span>
+                              <span>{{scope.row.bookName}}</span>
                               <!-- <span>{{scope.row.bookName}}</span> -->
                             </div>
                           </el-form-item>
@@ -507,7 +507,6 @@ export default {
       downloadVisible: false,
       importVisible: false,
       visible: false, // 批量上传提示框可见情况
-      detialVisible: false,
       filterInput: '',
       tableData: [],
       currentPage: 1, // 当前页码
@@ -547,7 +546,7 @@ export default {
             if (img === '' || img === '0') {
               img = '../../../../static/cover/blank_book.png'
             }
-            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+            let tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
             this.tableData.push(tableItem)
           }
           this.currentPage = response.data.page
@@ -884,8 +883,8 @@ export default {
         console.log(error)
       })
     },
-    showDetial () {
-      this.detialVisible = true
+    showDetial (index, row) {
+      row.detial = true
     }
   }
 }
