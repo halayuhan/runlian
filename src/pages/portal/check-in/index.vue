@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:31:03
+ * @LastEditTime: 2019-08-15 19:45:57
  * @Description: file content
  -->
 <template>
@@ -223,7 +223,7 @@ export default {
       }).catch((error) => {
         this.$message.error('网络错误，请重试')
         this.isShow = false
-        console.error(error) // 请求失败返回的数据
+        console.log('error:', error) // 请求失败返回的数据
       })
     },
     filterSearch() {

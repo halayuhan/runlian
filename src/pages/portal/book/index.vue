@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 19:07:57
+ * @LastEditTime: 2019-08-15 19:45:20
  * @Description: file content
  -->
 <template>
@@ -409,6 +409,7 @@ export default {
         }
       }).catch((error) => {
         this.$message.error('网络错误，请重试')
+        console.log('error:', error)
       })
     },
     sortChange: function (column) {
@@ -508,6 +509,7 @@ export default {
         }
       }).catch((error) => {
         this.$message.error('上传失败')
+        console.log('error:', error)
       })
     },
     handleEditChange (index, row) {
@@ -623,7 +625,46 @@ export default {
           this.queryData({ page: this.currentPage })
         }).catch((error) => {
           this.$message.error('网络错误，请重试')
+          console.log('error:', error)
         })
+      })
+    },
+    updateData (index, row, msg) {
+      const params = {
+        author: row.author,
+        bookName: row.bookName,
+        description: row.description,
+        img: row.img,
+        isbn: row.isbn,
+        outNum: row.outNum,
+        page: row.page,
+        pubDate: row.pubDate,
+        publisher: row.publisher,
+        totalNum: row.totalNum,
+        type: row.type
+      }
+
+      this.$axios({
+        methods: 'get',
+        url: process.env.API_HOST + '/book/update',
+        params
+      }).then(response => {
+        if (response.data.code === '000') {
+          this.$message({
+            message: msg + '成功!',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$message({
+            message: msg + '失败!',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      }).catch((error) => {
+        console.log('error:', error)
+        this.$message.error('网络错误，请重试')
       })
     },
     handleBookBorrow (index, row) {
@@ -634,41 +675,42 @@ export default {
       row.haveNum--
       row.outNum++
       row.totalNum = +row.haveNum + +row.outNum
-      const params = {
-        author: row.author,
-        bookName: row.bookName,
-        description: row.description,
-        img: row.img,
-        isbn: row.isbn,
-        outNum: row.outNum,
-        page: row.page,
-        pubDate: row.pubDate,
-        publisher: row.publisher,
-        totalNum: row.totalNum,
-        type: row.type
-      }
+      this.updateData(index, row, '借书')
+      // const params = {
+      //   author: row.author,
+      //   bookName: row.bookName,
+      //   description: row.description,
+      //   img: row.img,
+      //   isbn: row.isbn,
+      //   outNum: row.outNum,
+      //   page: row.page,
+      //   pubDate: row.pubDate,
+      //   publisher: row.publisher,
+      //   totalNum: row.totalNum,
+      //   type: row.type
+      // }
 
-      this.$axios({
-        methods: 'get',
-        url: process.env.API_HOST + '/book/update',
-        params
-      }).then(response => {
-        if (response.data.code === '000') {
-          this.$message({
-            message: '借书成功!',
-            type: 'success',
-            duration: 2000
-          })
-        } else {
-          this.$message({
-            message: '借书失败!',
-            type: 'error',
-            duration: 2000
-          })
-        }
-      }).catch((error) => {
-        this.$message.error('网络错误，请重试')
-      })
+      // this.$axios({
+      //   methods: 'get',
+      //   url: process.env.API_HOST + '/book/update',
+      //   params
+      // }).then(response => {
+      //   if (response.data.code === '000') {
+      //     this.$message({
+      //       message: '借书成功!',
+      //       type: 'success',
+      //       duration: 2000
+      //     })
+      //   } else {
+      //     this.$message({
+      //       message: '借书失败!',
+      //       type: 'error',
+      //       duration: 2000
+      //     })
+      //   }
+      // }).catch((error) => {
+      //   this.$message.error('网络错误，请重试')
+      // })
     },
     handleBookReturn (index, row) {
       if (row.outNum <= 0) {
@@ -678,41 +720,42 @@ export default {
       row.haveNum++
       row.outNum--
       row.totalNum = +row.haveNum + +row.outNum
-      const params = {
-        author: row.author,
-        bookName: row.bookName,
-        description: row.description,
-        img: row.img,
-        isbn: row.isbn,
-        outNum: row.outNum,
-        page: row.page,
-        pubDate: row.pubDate,
-        publisher: row.publisher,
-        totalNum: row.totalNum,
-        type: row.type
-      }
+      this.updateData(index, row, '还书')
+      // const params = {
+      //   author: row.author,
+      //   bookName: row.bookName,
+      //   description: row.description,
+      //   img: row.img,
+      //   isbn: row.isbn,
+      //   outNum: row.outNum,
+      //   page: row.page,
+      //   pubDate: row.pubDate,
+      //   publisher: row.publisher,
+      //   totalNum: row.totalNum,
+      //   type: row.type
+      // }
 
-      this.$axios({
-        methods: 'get',
-        url: process.env.API_HOST + '/book/update',
-        params
-      }).then(response => {
-        if (response.data.code === '000') {
-          this.$message({
-            message: '还书成功!',
-            type: 'success',
-            duration: 2000
-          })
-        } else {
-          this.$message({
-            message: '还书失败!',
-            type: 'error',
-            duration: 2000
-          })
-        }
-      }).catch((error) => {
-        this.$message.error('网络错误，请重试')
-      })
+      // this.$axios({
+      //   methods: 'get',
+      //   url: process.env.API_HOST + '/book/update',
+      //   params
+      // }).then(response => {
+      //   if (response.data.code === '000') {
+      //     this.$message({
+      //       message: '还书成功!',
+      //       type: 'success',
+      //       duration: 2000
+      //     })
+      //   } else {
+      //     this.$message({
+      //       message: '还书失败!',
+      //       type: 'error',
+      //       duration: 2000
+      //     })
+      //   }
+      // }).catch((error) => {
+      //   this.$message.error('网络错误，请重试')
+      // })
     },
     showDetial (index, row) {
       row.detial = true

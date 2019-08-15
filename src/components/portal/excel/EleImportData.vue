@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-09 14:46:45
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 19:16:51
+ * @LastEditTime: 2019-08-15 19:47:22
  * @Description: file content
  -->
 <template>
@@ -87,32 +87,6 @@ export default {
     handlePre () {
       this.$emit('pre')
     },
-
-    _getParam () {
-      const paramArray = this.tableData
-      var paramC = []
-      var paramE = []
-      paramArray.forEach((element) => {
-        for (const key in element) {
-          if (element[key] === null) {
-            element[key] = ''
-          }
-          if (element[key] === undefined) {
-            element[key] = 0
-          }
-        }
-        if (element.haveNum === 1) {
-          let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-          const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
-          paramC.push(elItem)
-        } else {
-          let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-          const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
-          paramE.push(elItem)
-        }
-      })
-    },
-
     downloadError () {
       const paramArray = this.tableData
 
@@ -149,6 +123,7 @@ export default {
         console.log(response) // 请求成功返回的数据
       }).catch((error) => {
         this.$message.error('下载错误列表失败')
+        console.log('error:', error)
       })
     },
 
@@ -192,6 +167,7 @@ export default {
           }
         }).catch((error) => {
           this.$message.error('导入失败, 请重试')
+          console.log('error:', error)
         })
       }
     }
