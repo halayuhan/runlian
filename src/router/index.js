@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-22 15:30:40
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-13 13:36:53
+ * @LastEditTime: 2019-08-15 15:59:08
  * @Description: file content
  */
 import Vue from 'vue'
@@ -26,13 +26,14 @@ const router = new Router({
           component: () => import('@/pages/mobile/attendance/index'),
           // 路由守卫
           beforeEnter: (to, from, next) => {
-            let hashArr = to.hash.split('')
-            hashArr.shift()
-            let hash = hashArr.join('') // 获取链接哈希值，即二维码创建时间戳
+            console.log(to)
+            console.log(to.query.d)
+            let date = to.query.d
             let timestamp = Date.parse(new Date()).toString() // 获取当前时间戳
-            let gap = timestamp - hash // 时间戳比较，一小时内可跳转
-            // to.hash === '' 为方便测试
-            if ((gap < 21600000 && gap > 0) || to.hash === '') {
+            let gap = timestamp - date // 时间戳比较，六小时内可跳转
+            console.log(gap)
+            if ((gap < 21600000 && gap > 0) || date === '') {
+              console.log(gap < 21600000 && gap > 0)
               next()
             }
           }

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 10:43:06
+ * @LastEditTime: 2019-08-15 14:49:51
  * @Description: file content
  -->
 <template>
@@ -180,7 +180,7 @@
               </ul>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作" align="center" width="90">
             <template slot-scope="scope">
               <ul>
                 <li>
@@ -418,10 +418,7 @@ export default {
     sortChange: function (column, prop, order) {
       if (column.order === 'ascending') {
         this.sortFlag = 1
-      } else if (column.order === 'descending')
-        {this.sortFlag = 2}
-      else
-        {this.sortFlag = 0}
+      } else if (column.order === 'descending') { this.sortFlag = 2 } else { this.sortFlag = 0 }
       const paramsData = {
         sortFlag: this.sortFlag
       }
