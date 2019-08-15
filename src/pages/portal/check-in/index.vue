@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 09:41:40
+ * @LastEditTime: 2019-08-15 10:38:47
  * @Description: file content
  -->
 <template>
@@ -30,7 +30,7 @@
           </div>
           <div class="data-filter">
             <el-input
-              placeholder="请输入姓名搜索"
+              placeholder="请输入姓名/ldap搜索"
               v-model="filterInput"
               clearable
               @keyup.enter.native="filterSearch"
@@ -294,7 +294,7 @@ export default {
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+        this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     }
   }

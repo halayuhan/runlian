@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 09:56:07
+ * @LastEditTime: 2019-08-15 10:18:04
  * @Description: file content
  -->
 <template>
@@ -415,21 +415,6 @@ export default {
       }
       this.queryData(paramsData)
     },
-    isbnTest () {
-      const params = {
-        appkey: 'b979ae09bbbff4a2',
-        isbn: this.filterInput
-      }
-      this.$axios({
-        methods: 'get',
-        url: '/isbn/query',
-        params
-      }).then(response => {
-        console.log(response.data.result)
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
     importBook () {
       const baseurl = process.env.API_HOST + '/book/getBookList'
       const url = baseurl
@@ -467,7 +452,8 @@ export default {
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+        // console.log(this.$el.parentNode.parentNode.parentNode.parentNode)
+        this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
     handleSizeChange (pageSize) {
