@@ -1,4 +1,4 @@
-<!--
+<!-- 
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
@@ -63,7 +63,13 @@
         </div>
       </div>
       <div class="search-content">
-        <el-table :data="tableData" :header-cell-style="{background: '#eee'}" border stripe>
+        <el-table
+          :data="tableData"
+          @sort-change="sortChange"
+          :header-cell-style="{background: '#eee'}"
+          border
+          stripe
+        >
           <el-table-column label="序号" width="60" align="center">
             <template slot-scope="scope">
               <span>{{scope.$index + (currentPage - 1) * pageSize + 1}}</span>
@@ -79,7 +85,7 @@
           </el-table-column>
           <el-table-column label="在读书籍" prop="bookName"></el-table-column>
           <el-table-column width="160" label="手机号码" prop="phoneNumber"></el-table-column>
-          <el-table-column width="160" label="签到时间" prop="time" sortable></el-table-column>
+          <el-table-column width="160" label="签到时间" prop="time" sortable="custom"></el-table-column>
         </el-table>
       </div>
       <div class="search-footer">
@@ -187,7 +193,8 @@ export default {
       tableData: [], // 所有表格数据
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
-      total: 0 // 总数据量
+      total: 0,// 总数据量
+      sign: 2//默认降序排列
     }
   },
   created() {
@@ -220,6 +227,14 @@ export default {
         }
       })
     },
+    sortChange: function (column, prop, order) {
+      this.sign = (column.order === 'ascending') ? 1 : 2
+      const paramsData = {
+        sign: this.sign
+      }
+      this.queryData(paramsData)
+
+    },
     queryData(paramsData = {}) {
       // TODO
       const defaultParams = {
@@ -227,12 +242,13 @@ export default {
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
         userName: this.filterInput.trim(),
         page: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        sign: this.sign
       }
       const params = Object.assign({}, defaultParams, paramsData)
       console.log(params)
       this.$axios({
-        methods: 'get',
+        methods: 'post',
         url: process.env.API_HOST + '/signIn/getRecord',
         params
       }).then((response) => {
@@ -261,19 +277,15 @@ export default {
       })
     },
     filterSearch() {
+      this.sign = 2
       const paramsData = {
-        // start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        // end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        // userName: this.filterInput,
         page: 1
-        // pageSize: this.pageSize
+
       }
       this.queryData(paramsData)
     },
-
     downloadExcel() {
       const baseurl = process.env.API_HOST + '/signIn/getExcel?'
-
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd hh:mm:ss'),
@@ -317,13 +329,8 @@ export default {
     },
     handleCurrentChange(index) {
       const paramsData = {
-        //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        //   userName: this.filterInput,
         page: index
-        //   pageSize: this.pageSize
       }
-      this.queryData(paramsData)
       this.queryData(paramsData)
       this.$nextTick(() => {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
@@ -332,13 +339,9 @@ export default {
     handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
-        //   start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
-        //   end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
-        //   userName: this.filterInput,
         pageSize,
         page: 1
       }
-      this.queryData(paramsData)
       this.queryData(paramsData)
       this.$nextTick(() => {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
