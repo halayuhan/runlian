@@ -430,7 +430,7 @@
 
 .el-table .cell li p {
   margin: 0 3px 0 0;
-  width: 40px;
+  width: 50px;
 }
 
 .el-table .cell img {
@@ -556,9 +556,26 @@
   line-height: 40px;
   margin: 0 0 40px 0;
 }
+.add-book-header .el-icon-back {
+  display: inline-block;
+  width: 40px;
+  height: 26px;
+  border-radius: 4px;
+  line-height: auto;
+  text-align: center;
+  font-size: 24px;
+  color: #fff;
+  background-color: rgb(187, 186, 181);
+}
 
-.add-book-header h1 {
+.add-book-header .el-icon-back:hover{
+  cursor: pointer;
+}
+.add-book-header span {
   font-size: 20px;
+  margin-left: 10px;
+ 
+  
 }
 
 .add-book-form {
