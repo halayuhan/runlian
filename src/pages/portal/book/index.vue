@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:30:21
+ * @LastEditTime: 2019-08-15 19:07:57
  * @Description: file content
  -->
 <template>
@@ -409,13 +409,16 @@ export default {
         }
       }).catch((error) => {
         this.$message.error('网络错误，请重试')
-        console.log(error)
       })
     },
     sortChange: function (column) {
       if (column.order === 'ascending') {
         this.sortFlag = 1
-      } else if (column.order === 'descending') { this.sortFlag = 2 } else { this.sortFlag = 0 }
+      } else if (column.order === 'descending') {
+        this.sortFlag = 2
+      } else {
+        this.sortFlag = 0
+      }
       const paramsData = {
         sortFlag: this.sortFlag
       }
@@ -446,8 +449,6 @@ export default {
     },
     handleCloseImport () {
       this.$forceUpdate()
-    },
-    handleFinishImport () {
     },
     handleOpen () {
       this.visible = true
@@ -507,7 +508,6 @@ export default {
         }
       }).catch((error) => {
         this.$message.error('上传失败')
-        console.log(error)
       })
     },
     handleEditChange (index, row) {
@@ -622,7 +622,7 @@ export default {
           }
           this.queryData({ page: this.currentPage })
         }).catch((error) => {
-          console.log(error)
+          this.$message.error('网络错误，请重试')
         })
       })
     },
@@ -667,7 +667,7 @@ export default {
           })
         }
       }).catch((error) => {
-        console.log(error)
+        this.$message.error('网络错误，请重试')
       })
     },
     handleBookReturn (index, row) {
@@ -711,7 +711,7 @@ export default {
           })
         }
       }).catch((error) => {
-        console.log(error)
+        this.$message.error('网络错误，请重试')
       })
     },
     showDetial (index, row) {
