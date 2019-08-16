@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:25:09
+ * @LastEditTime: 2019-08-16 09:46:21
  * @Description: file content
  -->
 <template>
@@ -93,13 +93,13 @@ export default {
     EleImportFinish
 
   },
-  provide() {
+  provide () {
     return {
       goPre: this.preStep,
       goNext: this.nextStep
     }
   },
-  data() {
+  data () {
     return {
       tableData: [],
       columns: [],
@@ -109,30 +109,29 @@ export default {
   },
   methods: {
     // 上传
-    handleUpload(tableData) {
+    handleUpload (tableData) {
       this.tableData = tableData
     },
 
-    handlClose() {
+    handlClose () {
       this.$emit('close')
       this.$emit('update:visible', false)
     },
     // 结束
-    handleFinish() {
+    handleFinish () {
       this.handlClose()
-      this.$emit('finish')
       this.currentStep = 1
     },
     // 下一步
-    nextStep() {
+    nextStep () {
       this.currentStep++
     },
     // 上一步
-    preStep() {
+    preStep () {
       this.currentStep--
     },
     // 第3步 -> 第2步
-    handleStep3Pre() {
+    handleStep3Pre () {
       this.tableData = []
       this.columns = []
       this.preStep()

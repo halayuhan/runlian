@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:26:35
+ * @LastEditTime: 2019-08-16 09:45:55
  * @Description: file content
  -->
 <template>
@@ -52,7 +52,6 @@
                 :title="title"
                 :visible.sync="visible"
                 @close="handleCloseImport"
-                @finish="handleFinishImport"
               />
             </li>
             <li>

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:33:21
+ * @LastEditTime: 2019-08-16 09:38:11
  * @Description: file content
  -->
 <template>
@@ -102,7 +102,7 @@ export default {
       isShow: true,
       gender: 'M',
       isInternal: 'Y',
-      options: ['华润云', '智慧技术部', '科技创新部', '数据分析', '管理与发展部', 'IT产品服务部', 'IT运营服务部'],
+      options: ['华润云', '智慧技术部', '科技创新部', '数据中心', '管理与发展部', 'IT产品服务部', 'IT运营服务部'],
       form: {
         ldap: {
           val: '',
