@@ -52,7 +52,7 @@
                 :title="title"
                 :visible.sync="visible"
                 @close="handleCloseImport"
-                @finish="handleFinishImport"
+               
               />
             </li>
             <li>

@@ -38,7 +38,9 @@
           <van-collapse-item v-for="(item,index) in listData" :key="item.id">
             <div slot="title" class="item_single">
               <div class="cell-title">
-                <van-image width="80" height="100" :src="item.img" />
+                <van-image width="80" height="100" :src="item.img">
+                  <template v-slot:error>加载失败</template>
+                </van-image>
               </div>
               <div class="cell-content">
                 <div class="item-header-group">
@@ -137,7 +139,7 @@ export default {
     [Icon.name]: Icon,
     vueToTop
   },
-  data () {
+  data() {
     return {
       // --下拉菜单的属性值--
       value: 0,
@@ -158,7 +160,7 @@ export default {
     }
   },
   methods: {
-    onSearch () {
+    onSearch() {
       this.listData = []
       this.count = 1
       const paramsData = {
@@ -167,7 +169,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    onCancel () {
+    onCancel() {
       this.filterInput = ''
     },
     // onLoad () {
@@ -185,7 +187,7 @@ export default {
     //     }
     //   }, 500)
     // },
-    onLoad () {
+    onLoad() {
       this.finished = false
       this.count++
       const paramsData = {
@@ -194,7 +196,7 @@ export default {
       this.queryData(paramsData)
     },
 
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       const defaultParams = {
         isExist: this.value,
         keyword: this.filterInput.trim(),
@@ -236,21 +238,21 @@ export default {
         this.isScrollOver()
       })
     },
-    isScrollOver () {
+    isScrollOver() {
       if (this.count * this.pageSize > this.total) {
         this.finished = true
       } else {
         this.finished = false
       }
     },
-    loadMore () {
+    loadMore() {
       this.count++
       const paramsData = {
         page: this.count
       }
       this.queryData(paramsData)
     },
-    handleSearch () {
+    handleSearch() {
       this.count = 1
       this.queryData = {
         page: this.count
