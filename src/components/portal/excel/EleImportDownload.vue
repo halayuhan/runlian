@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:49
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 09:37:02
+ * @LastEditTime: 2019-08-15 20:18:12
  * @Description: file content
  -->
 <template>
@@ -29,9 +29,6 @@
 </template>
 
 <script>
-// 下载文件页面
-// import Cookie from 'js-cookie'
-
 export default {
   name: 'EleImportDownload',
   props: {
@@ -47,12 +44,6 @@ export default {
     }
   },
   methods: {
-    // 点击下载
-    handleDownload () {
-      // Cookie.set('ele-import-download-' + this.filepath, true)
-      // this.hasDownload = true
-    },
-
     // 点击下一步
     handleNext () {
       if (this.hasDownload) {

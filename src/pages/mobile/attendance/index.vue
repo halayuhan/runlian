@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:24:37
+ * @LastEditTime: 2019-08-15 20:33:21
  * @Description: file content
  -->
 <template>
@@ -184,7 +184,6 @@ export default {
               this.isShow = false
               this.isCorrect = false
             }
-            console.log(response) // 请求成功返回的数据
           }).catch((error) => {
             console.error(error) // 请求失败返回的数据
           })
@@ -195,7 +194,6 @@ export default {
       let isPass = false
       for (const key in this.form) {
         const reg = this.form[key].rules[0]
-        // console.log(reg.test(this.form[key].val));
         if (reg.test(this.form[key].val) && this.form[key].val != '') {
           isPass = true
         } else {
@@ -237,11 +235,10 @@ export default {
         params
       }).then((response) => {
         if (response.data.code != '000') {
-          alert('签到失败')
+          this.$message.error('签到失败')
         } else {
           this.$router.push('/success')
         }
-        console.log(response) // 请求成功返回的数据
       }).catch((error) => {
         console.error(error) // 请求失败返回的数据
       })

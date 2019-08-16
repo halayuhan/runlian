@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 09:37:33
+ * @LastEditTime: 2019-08-15 20:25:09
  * @Description: file content
  -->
 <template>
@@ -80,11 +80,6 @@ export default {
 
     // 提示信息，数组
     tips: Array,
-
-    // 验证规则
-    // rules: Object,
-    // 格式化数据
-
     // 弹窗宽度
     dialogWidth: {
       type: String,

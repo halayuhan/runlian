@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 19:45:57
+ * @LastEditTime: 2019-08-15 20:37:42
  * @Description: file content
  -->
 <template>
@@ -128,8 +128,6 @@ export default {
       isShow: true,
       qrcodeVisible: false, // 是否显示二维码
       qrcodeObject: {}, // 二维码封装对象
-      timeStart, // 起始时间
-      timeEnd, // 结束时间
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now()
@@ -141,7 +139,9 @@ export default {
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
       total: 0, // 总数据量
-      sign: 2// 默认降序排列
+      sign: 2, // 默认降序排列
+      timeStart, // 起始时间
+      timeEnd // 结束时间
     }
   },
   created() {
@@ -174,7 +174,7 @@ export default {
         }
       })
     },
-    sortChange: function (column, prop, order) {
+    sortChange: function (column) {
       this.sign = (column.order === 'ascending') ? 1 : 2
       const paramsData = {
         sign: this.sign
@@ -186,7 +186,6 @@ export default {
         this.$message.error('起始时间不能大于结束时间!')
         return
       }
-      // TODO
       const defaultParams = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd 00:00:00'),
         end: this.getDate(this.timeEnd, 'yyyy-MM-dd 23:59:59'),
@@ -196,7 +195,6 @@ export default {
         sign: this.sign
       }
       const params = Object.assign({}, defaultParams, paramsData)
-      console.log(params)
       this.$axios({
         methods: 'post',
         url: process.env.API_HOST + '/signIn/getRecord',
@@ -219,7 +217,6 @@ export default {
           this.total = response.data.count
           this.isShow = true
         }
-        console.log(response) // 请求成功返回的数据
       }).catch((error) => {
         this.$message.error('网络错误，请重试')
         this.isShow = false
@@ -242,13 +239,11 @@ export default {
         userName: this.filterInput
       }
       const url = baseurl + 'start=' + params.start + '&end=' + params.end + '&userName=' + params.userName
-      // const params = "http://10.54.24.62:8080/signIn/getExcel?start=2019-07-01 00:00:00&end=2019-08-01 00:00:00";// 地址?aaa=aaa [get请求]
       window.open(url)
       this.downloadVisible = false
     },
     showMask() {
-      let timestamp = Date.parse(new Date())
-      console.log(timestamp.toString())
+      const timestamp = Date.parse(new Date())
       // 创建二维码，填写相应 ip地址+时间戳
       this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance/?d=' + timestamp.toString())
       this.qrcodeVisible = true
@@ -259,15 +254,6 @@ export default {
       this.qrcodeVisible = false
     },
     qrcode() {
-      // let timestamp = Date.parse(new Date())
-      // console.log(timestamp.toString())
-      // let qrcode = new QRCode('qrcode', {
-      //   width: 132,
-      //   height: 132,
-      //   text: 'http://10.54.30.64:8080/#/attendance' + '#' + timestamp.toString(), // 二维码地址
-      //   colorDark: '#000',
-      //   colorLight: '#fff'
-      // })
       const qrcode = new QRCode('qrcode', {
         width: 360,
         height: 360,

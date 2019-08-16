@@ -312,10 +312,6 @@ input:-ms-input-placeholder {
   border-color: #5caaab;
 }
 
-.el-select-dropdown__item.selected {
-  color: #5caaab;
-}
-
 .el-select .el-input.is-focus .el-input__inner {
   border-color: #5caaab;
 }

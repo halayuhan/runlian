@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:49
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-12 09:37:10
+ * @LastEditTime: 2019-08-15 20:31:58
  * @Description: file content
  -->
 <template>
@@ -64,7 +64,6 @@ export default {
     Requeset(file) {
       const formdata = new FormData()
       formdata.append('file', file.file)
-      console.log(formdata.get('file'))
       this.$axios({
         method: 'post',
         url: process.env.API_HOST + '/book/uploadExcel',
@@ -72,7 +71,6 @@ export default {
         headers: {
           'Content-Type': 'multipart/form-data'        }
       }).then((response) => {
-        console.log(response)
         const tableData = []
         const errorDate = []
 
