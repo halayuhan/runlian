@@ -31,17 +31,12 @@
         <em>点击上传</em>
       </div>
     </el-upload>
-
-    <!-- 操作 -->
-    <!-- <div class="ele-import-action">
-      <el-button :loading="isLoading" @click="handleGoNext" type="primary">下一步</el-button>
-    </div>-->
   </div>
 </template>
 
 <script>
 // 上传文件页面
-import excel from '@/pages/portal/excel'
+import { UploadExcel } from '../../../api/bookApi'
 
 export default {
   name: 'EleImportUpload',
@@ -56,7 +51,6 @@ export default {
   data() {
     return {
       fileList: []
-
     }
   },
   methods: {
@@ -64,34 +58,19 @@ export default {
     Requeset(file) {
       const formdata = new FormData()
       formdata.append('file', file.file)
-      this.$axios({
-        method: 'post',
-        url: process.env.API_HOST + '/book/uploadExcel',
-        data: formdata,
-        headers: {
-          'Content-Type': 'multipart/form-data'        }
-      }).then((response) => {
+      const res = UploadExcel(formdata)
+      res.then(res => {
         const tableData = []
         const errorDate = []
-
-        for (let i = 0; i < response.data.data.length; i++) {
-          const bookData = response.data.data[i]
-          let { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num } = bookData
-          if (bookData.haveNum === 0) {
-            errorDate.push({ bookData })
-            this.$emit('errorRow', errorDate)
-          }
+        res.data.forEach((element) => {
+          if (element.img === undefined) {
+            element.img = ''          }
+          let { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num } = element
           const tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num }
           tableData.push(tableItem)
-        }
-
+        })
         this.$emit('upload', tableData)
         this.goNext()
-
-        // 请求成功返回的数据
-      }).catch((error) => {
-        this.$message.error('上传失败')
-        console.error(error) // 请求失败返回的数据
       })
     },
 

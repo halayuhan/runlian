@@ -17,7 +17,6 @@
               :picker-options="pickerOptions"
               :clearable="false"
               placeholder="选择起始时间"
-              @change="changeStart"
             ></el-date-picker>
             <el-date-picker
               v-model="timeEnd"
@@ -25,7 +24,6 @@
               :picker-options="pickerOptions"
               :clearable="false"
               placeholder="选择结束时间"
-              @change="changeEnd"
             ></el-date-picker>
           </div>
           <div class="data-filter">
@@ -118,6 +116,7 @@
 
 <script>
 import QRCode from 'qrcodejs2'
+import { GetSignRecord } from '../../../api/attendanceApi'
 
 export default {
   name: 'CheckIn',
@@ -160,20 +159,7 @@ export default {
     }
   },
   methods: {
-    changeStart() {
-      this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
-        disabledDate: (time) => {
-          return time.getTime() > this.timeEnd
-        }
-      })
-    },
-    changeEnd() {
-      this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
-        disabledDate: (time) => {
-          return time.getTime() < this.timeStart
-        }
-      })
-    },
+
     sortChange: function (column) {
       this.sign = (column.order === 'ascending') ? 1 : 2
       const paramsData = {
@@ -195,39 +181,32 @@ export default {
         sign: this.sign
       }
       const params = Object.assign({}, defaultParams, paramsData)
-      this.$axios({
-        methods: 'post',
-        url: process.env.API_HOST + '/signIn/getRecord',
-        params
-      }).then((response) => {
+      const res = GetSignRecord(params)
+      res.then(res => {
         this.tableData = []
-        if (response.data.code != '000') {
-          this.$message.error(response.data.msg)
+        if (res.code != '000') {
+          this.$message.error(res.msg)
           this.isShow = false
           return
         } else {
-          for (let i = 0; i < response.data.data.length; i++) {
-            const currentData = response.data.data[i]
-
-            let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = currentData
+          res.data.forEach(element => {
+            let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = element
             const tableItem = { ldap, userName, gender, isInternal, department, phoneNumber, bookName: book, time: timeString }
             this.tableData.push(tableItem)
-          }
-          this.currentPage = response.data.page
-          this.total = response.data.count
+          })
+          this.currentPage = res.page
+          this.total = res.count
           this.isShow = true
         }
       }).catch((error) => {
         this.$message.error('网络错误，请重试')
         this.isShow = false
-        console.log('error:', error) // 请求失败返回的数据
       })
     },
     filterSearch() {
       this.sign = 2
       const paramsData = {
         page: 1
-
       }
       this.queryData(paramsData)
     },

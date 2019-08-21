@@ -22,8 +22,8 @@
         >
           <div class="form-item-group">
             <div class="form-col-1">
-              <el-form-item label="ISBN" prop="ISBN">
-                <el-input v-model="formData.ISBN" @blur="getBookinfo()"></el-input>
+              <el-form-item label="ISBN">
+                <el-input v-model="formData.isbn" @blur="getBookinfo()"></el-input>
               </el-form-item>
               <el-form-item label="书籍名称" prop="bookName">
                 <el-input v-model="formData.bookName" :disabled="isRead"></el-input>
@@ -34,7 +34,7 @@
               <el-form-item label="书籍类型" prop="type">
                 <el-input v-model="formData.type" :disabled="isRead"></el-input>
               </el-form-item>
-              <el-form-item label="页数">
+              <el-form-item label="页数" prop="page">
                 <el-input v-model="formData.page" :disabled="isRead"></el-input>
               </el-form-item>
             </div>
@@ -42,7 +42,7 @@
               <div class="from-col-toptwo">
                 <div class="form-col-2">
                   <el-form-item label="数量" prop="addNum">
-                    <el-input v-model="formData.addNum"></el-input>
+                    <el-input v-model.number="formData.addNum"></el-input>
                   </el-form-item>
                   <el-form-item label="出版社" prop="publisher">
                     <el-input v-model="formData.publisher" :disabled="isRead"></el-input>
@@ -52,7 +52,7 @@
                   </el-form-item>
                 </div>
                 <div class="form-col-3">
-                  <el-form-item class="item-upload">
+                  <el-form-item class="item-upload" prop="img">
                     <div class="upload-div">
                       <el-upload
                         class="cover-uploader"
@@ -60,8 +60,15 @@
                         :show-file-list="false"
                         :http-request="handleUploadCover"
                         :before-upload="beforeUploadCover"
+                        :disabled="isRead"
                       >
-                        <img v-if="formData.img" :src="formData.img" alt="cover" class="cover" />
+                        <img
+                          v-model="formData.img"
+                          v-if="formData.img"
+                          :src="formData.img"
+                          alt="cover"
+                          class="cover"
+                        />
                         <i v-else class="el-icon-plus cover-uploader-icon">
                           <em>上传封面</em>
                         </i>
@@ -71,7 +78,7 @@
                 </div>
               </div>
               <div class="form-col-4">
-                <el-form-item label="书籍详情">
+                <el-form-item label="书籍详情" prop="description">
                   <el-input type="textarea" v-model="formData.description"></el-input>
                 </el-form-item>
               </div>
@@ -90,16 +97,18 @@
 </template>
 
 <script>
+import { GetBook, AddOneBook, UploadImg } from '../../../api/bookApi'
+const querystring = require('querystring')
 export default {
   name: 'AddBook',
-  data () {
+  data() {
     return {
       isRead: false,
       formData: {
         img: '',
         bookName: '',
         author: '',
-        ISBN: '',
+        isbn: '',
         publisher: '',
         pubDate: '',
         page: '',
@@ -108,7 +117,7 @@ export default {
         addNum: 1
       },
       rules: {
-        ISBN: [{
+        isbn: [{
           required: true, message: '请输入书籍ISBN编号或自建编号', trigger: 'blur'
         }],
         bookName: [{
@@ -146,95 +155,54 @@ export default {
     }
   },
   methods: {
-    getBookinfo () {
+    getBookinfo() {
       const params = {
-        isbn: this.formData.ISBN
+        isbn: this.formData.isbn
       }
-      this.$axios({
-        methods: 'get',
-        url: process.env.API_HOST + '/book/get',
-        params
-      })
-        .then((response) => {
-          if (response.data.code !== '000') {
-            this.formData.bookName = ''
-            this.formData.author = ''
-            this.formData.publisher = ''
-            this.formData.pubDate = ''
-            this.formData.type = ''
-            this.formData.page = ''
-            this.formData.img = ''
-            this.formData.description = ''
-            this.isRead = false
-          } else {
-            const bookinfo = response.data.data
-            this.formData.bookName = bookinfo.bookName
-            this.formData.author = bookinfo.author
-            this.formData.publisher = bookinfo.publisher
-            this.formData.pubDate = bookinfo.pubDate
-            this.formData.type = bookinfo.type
-            this.formData.page = bookinfo.page
-            this.formData.img = bookinfo.img
-            this.formData.description = bookinfo.description
-            this.isRead = true
-          }
-        }).catch((error) => {
+      const res = GetBook(params)
+      res.then(res => {
+        if (res.code === '000') {
+          const bookinfo = res.data
+          let { img, bookName, author, publisher, pubDate, page, type, description } = bookinfo
+          this.formData = Object.assign(this.formData, { img, bookName, author, publisher, pubDate, page, type, description })
+          this.isRead = true
+        } else {
+          this.$refs['formData'].resetFields()
           this.isRead = false
-          console.error(error) // 请求失败返回的数据
-        })
+        }
+      }).catch((error) => {
+        this.isRead = false
+        console.error(error) // 请求失败返回的数据
+      })
     },
-    handleCancel () {
-      this.formData = {
-        img: '',
-        bookName: '',
-        author: '',
-        ISBN: '',
-        publisher: '',
-        pubDate: '',
-        page: '',
-        type: '',
-        description: '',
-        addNum: ''
-      }
+    handleCancel() {
+      this.$refs['formData'].resetFields()
+      this.formData.isbn = ''
+      this.isRead = false
     },
-    handleSave (formData) {
+    handleSave(formData) {
       this.$refs[formData].validate((valid) => {
         if (!valid) {
           this.$message.error('请填入正确信息')
           return false
         } else {
-          const { img, bookName, author, ISBN, publisher, pubDate, page, type, description, addNum } = this.formData
-          const params = {
-            isbn: ISBN,
-            bookName: bookName,
-            author: author,
-            type: type,
+          const { img, bookName, author, isbn, publisher, pubDate, page, type, description, addNum } = this.formData
+          const paramsOther = {
             totalNum: addNum,
-            page: page,
-            pubDate: pubDate,
-            publisher: publisher,
-            img: img,
-            description: description
           }
-          this.$axios({
-            method: 'get',
-            url: process.env.API_HOST + '/book/add',
-            params
-          }).then(response => {
-            if (response.data.code != '000') {
-              this.$message.error(response.data.msg)
+          const params = Object.assign({}, { isbn, bookName, author, type, publisher, pubDate, page, img, description }, paramsOther)
+          AddOneBook(querystring.stringify(params)).then(res => {
+            if (res.code != '000') {
+              this.$message.error(res.msg)
             } else {
               this.$message.success('添加成功')
               this.$router.push('/book')
             }
-          }).catch((error) => {
-            this.$message.error('操作错误，请重试')
-            console.log(error)
           })
         }
       })
     },
-    beforeUploadCover (file) {
+    beforeUploadCover(file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -247,34 +215,25 @@ export default {
 
       return isJPG && isLt2M
     },
-    handleUploadCover (file) {
-      const isbn = this.formData.ISBN
+    handleUploadCover(file) {
+      const isbn = this.formData.isbn
       if (!isbn) {
         this.$message.error('请先输入书籍ISBN编号再上传图片')
       } else {
         const formdata = new FormData()
         formdata.append('isbn', isbn)
         formdata.append('file', file.file)
-        this.$axios({
-          method: 'post',
-          url: process.env.API_HOST + '/file/uploadImg',
-          data: formdata,
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((response) => {
-          if (response.data.code === '000') {
-            this.formData.img = process.env.API_HOST + '/file/get?fileName=' + response.data.data
+        const res = UploadImg(formdata)
+        res.then(res => {
+          if (res.code === '000') {
+            this.formData.img = process.env.API_HOST + '/file/get?fileName=' + res.data
           } else {
-            this.$message.error(response.data.msg)
+            this.$message.error(res.msg)
           }
-        }).catch((error) => {
-          this.$message.error('上传失败')
-          console.log(error)
         })
       }
     },
-    goback () {
+    goback() {
       this.$router.push('/book')
     }
   }

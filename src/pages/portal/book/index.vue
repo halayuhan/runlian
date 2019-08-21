@@ -20,11 +20,11 @@
             >
               <div slot="prepend" class="select-type">
                 <el-select v-model="selectType" placeholder="请选择">
-                  <el-option label="关键字" value="0"></el-option>
-                  <el-option label="书名" value="1"></el-option>
-                  <el-option label="类型" value="2"></el-option>
-                  <el-option label="作者名" value="3"></el-option>
-                  <el-option label="出版社" value="4"></el-option>
+                  <el-option label="关键字" :value="0"></el-option>
+                  <el-option label="书名" :value="1"></el-option>
+                  <el-option label="类型" :value="2"></el-option>
+                  <el-option label="作者名" :value="3"></el-option>
+                  <el-option label="出版社" :value="4"></el-option>
                 </el-select>
               </div>
               <el-button slot="append" icon="el-icon-search" @click.prevent="filterSearch"></el-button>
@@ -52,7 +52,6 @@
                 :title="title"
                 :visible.sync="visible"
                 @close="handleCloseImport"
-               
               />
             </li>
             <li>
@@ -87,15 +86,7 @@
           <el-table-column label="ISBN" align="center">
             <template slot-scope="scope">
               <span>{{scope.row.isbn}}</span>
-
               <i class="el-icon-edit-outline" @click="handleEditISBN(scope.$index,scope.row)"></i>
-              <!-- <el-button
-                size="mini"
-                type="danger"
-                :disabled="scope.row.edit"
-                v-if="!scope.row.edit"
-                @click="handleEditISBN(scope.$index,scope.row)"
-              >修改ISBN</el-button>-->
             </template>
           </el-table-column>
           <el-table-column label="书籍封面" align="center">
@@ -337,13 +328,14 @@
 </template>
 <script>
 import ExImport from './components/ExImport'
-
+import { QueryData, UploadImg, UpdateIsbn, UpdateBook } from '../../../api/bookApi'
+const querystring = require('querystring')
 export default {
   name: 'Book',
   components: {
     ExImport
   },
-  data () {
+  data() {
     return {
 
       title: '批量导入书单',
@@ -359,8 +351,8 @@ export default {
         type: '书籍类型*',
         description: '书籍简介'
       },
-      selectType: '0',
-      sortFlag: '0',
+      selectType: 0,
+      sortFlag: 0,
       downloadVisible: false,
       importVisible: false,
       visible: false, // 批量上传提示框可见情况
@@ -368,14 +360,16 @@ export default {
       tableData: [],
       currentPage: 1, // 当前页码
       pageSize: 10, // 每页显示行数
-      total: 0
+      total: 0,
+      updateOldValue: {}
     }
   },
-  created () {
+  created() {
     this.queryData()
   },
+
   methods: {
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       const defaultParams = {
         isExist: 0,
         keyword: this.filterInput.trim(),
@@ -385,31 +379,20 @@ export default {
         sortFlag: this.sortFlag
       }
       const params = Object.assign({}, defaultParams, paramsData)
-      this.$axios({
-        methods: 'get',
-        url: process.env.API_HOST + '/book/query',
-        params
-      }).then((response) => {
+
+      QueryData(querystring.stringify(params)).then(res => {
         this.tableData = []
-        if (response.data.code != '000') {
-          this.total = 0
-          this.$message.error(response.data.msg)
-        } else {
-          for (let i = 0; i < response.data.data.length; i++) {
-            const currentData = response.data.data[i]
-            let { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
-            if (img === '' || img === '0') {
-              img = '../../../../static/cover/blank_book.png'
-            }
-            const tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
-            this.tableData.push(tableItem)
+        let currentData = []
+        res.data.forEach((element) => {
+          let { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = element
+          if (img === '' || img === '0') {
+            img = '../../../../static/cover/default.jpg'
           }
-          this.currentPage = response.data.page
-          this.total = response.data.count
-        }
-      }).catch((error) => {
-        this.$message.error('网络错误，请重试')
-        console.log('error:', error)
+          const tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
+          this.tableData.push(tableItem)
+        })
+        this.currentPage = res.page
+        this.total = res.count
       })
     },
     sortChange: function (column) {
@@ -425,39 +408,39 @@ export default {
       }
       this.queryData(paramsData)
     },
-    filterSearch () {
+    filterSearch() {
       const paramsData = {
         sign: +this.selectType,
         page: 1
       }
       this.queryData(paramsData)
     },
-    importBook () {
+    importBook() {
       const baseurl = process.env.API_HOST + '/book/getBookList'
       const url = baseurl
       window.open(url)
       this.importVisible = false
     },
-    downloadTemplate () {
+    downloadTemplate() {
       const baseurl = process.env.API_HOST + '/file/getTemplate'
       const url = baseurl
       window.open(url)
       this.downloadVisible = false
     },
-    async requestFn (data) {
+    async requestFn(data) {
       this.tableData = JSON.stringify(data)
       return Promise.resolve()
     },
-    handleCloseImport () {
-      this.$forceUpdate()
+    handleCloseImport() {
+      this.queryData()
     },
-    handleOpen () {
+    handleOpen() {
       this.visible = true
     },
-    handleAddBook () {
+    handleAddBook() {
       this.$router.push('/book/add-book')
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       const paramsData = {
         page: index
       }
@@ -467,7 +450,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
@@ -478,7 +461,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    beforeUploadCover (file) {
+    beforeUploadCover(file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
@@ -489,40 +472,25 @@ export default {
       }
       return isJPG && isLt2M
     },
-    handleUploadCover (scope, file) {
+    handleUploadCover(scope, file) {
       const fileIsbn = scope[0].row.isbn
       const formdata = new FormData()
       formdata.append('isbn', fileIsbn)
       formdata.append('file', file.file)
-      this.$axios({
-        method: 'post',
-        url: process.env.API_HOST + '/file/uploadImg',
-        data: formdata,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
-        if (response.data.code === '000') {
-          scope[0].row.img = process.env.API_HOST + '/file/get?fileName=' + response.data.data
+      const res = UploadImg(formdata)
+      res.then(res => {
+        if (res.code === '000') {
+          scope[0].row.img = process.env.API_HOST + '/file/get?fileName=' + res.data
         } else {
-          this.$message.error(response.data.msg)
+          this.$message.error(res.msg)
         }
-      }).catch((error) => {
-        this.$message.error('上传失败')
-        console.log('error:', error)
       })
     },
-    handleEditChange (index, row) {
+    handleEditChange(index, row) {
+      this.updateOldValue = Object.assign(this.updateOldValue, row)
       row.edit = true
-      row.temp = {
-        img: row.img,
-        type: row.type,
-        totalNum: row.totalNum,
-        outNum: row.outNum,
-        haveNum: row.haveNum
-      }
     },
-    handleEditSave (index, row) {
+    handleEditSave(index, row) {
       if (row.haveNum < 0) {
         this.$message.error('可借数量不能为负!')
         return
@@ -543,15 +511,13 @@ export default {
       row.totalNum = +row.haveNum + +row.outNum
       this.updateData(index, row, '编辑')
     },
-    handleEditCancel (index, row) {
+    handleEditCancel(index, row) {
+
+      row = Object.assign(row, this.updateOldValue)
       row.edit = false
-      row.img = row.temp.img
-      row.type = row.temp.type
-      row.totalNum = row.temp.totalNum
-      row.outNum = row.temp.outNum
-      row.haveNum = row.temp.haveNum
+
     },
-    handleEditISBN (index, row) {
+    handleEditISBN(index, row) {
       this.$prompt('请输入新的书籍编号', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
@@ -560,12 +526,9 @@ export default {
           newIsbn: value,
           oldIsbn: row.isbn
         }
-        this.$axios({
-          methods: 'get',
-          url: process.env.API_HOST + '/book/updateISBN',
-          params
-        }).then(response => {
-          if (response.data.code === '000') {
+        const res = UpdateIsbn(params)
+        res.then(res => {
+          if (res.code === '000') {
             this.$message({
               message: '修改成功!',
               type: 'success',
@@ -579,13 +542,10 @@ export default {
             })
           }
           this.queryData({ page: this.currentPage })
-        }).catch((error) => {
-          this.$message.error('网络错误，请重试')
-          console.log('error:', error)
         })
       })
     },
-    updateData (index, row, msg) {
+    updateData(index, row, msg) {
       const params = {
         author: row.author,
         bookName: row.bookName,
@@ -599,13 +559,8 @@ export default {
         totalNum: row.totalNum,
         type: row.type
       }
-
-      this.$axios({
-        methods: 'get',
-        url: process.env.API_HOST + '/book/update',
-        params
-      }).then(response => {
-        if (response.data.code === '000') {
+      UpdateBook(querystring.stringify(params)).then(res => {
+        if (res.code === '000') {
           this.$message({
             message: msg + '成功!',
             type: 'success',
@@ -617,23 +572,16 @@ export default {
             type: 'error',
             duration: 2000
           })
-          row.img = row.temp.img
-          row.type = row.temp.type
-          row.totalNum = row.temp.totalNum
-          row.outNum = row.temp.outNum
-          row.haveNum = row.temp.haveNum
+          row = Object.assign(row, this.updateOldValue)
+          row.edit = false
         }
       }).catch((error) => {
         console.log('error:', error)
         this.$message.error('网络错误，请重试')
-        row.img = row.temp.img
-        row.type = row.temp.type
-        row.totalNum = row.temp.totalNum
-        row.outNum = row.temp.outNum
-        row.haveNum = row.temp.haveNum
+        row = Object.assign(row, this.updateOldValue)
       })
     },
-    handleBookBorrow (index, row) {
+    handleBookBorrow(index, row) {
       if (row.haveNum <= 0) {
         this.$message.error('已无可借书籍!')
         return
@@ -643,7 +591,7 @@ export default {
       row.totalNum = +row.haveNum + +row.outNum
       this.updateData(index, row, '借书')
     },
-    handleBookReturn (index, row) {
+    handleBookReturn(index, row) {
       if (row.outNum <= 0) {
         this.$message.error('还书操作异常!')
         return
@@ -653,12 +601,11 @@ export default {
       row.totalNum = +row.haveNum + +row.outNum
       this.updateData(index, row, '还书')
     },
-    showDetial (index, row) {
+    showDetial(index, row) {
       row.detial = true
     }
   }
 }
 </script>
-
 <style>
 </style>

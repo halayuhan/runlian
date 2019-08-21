@@ -28,6 +28,20 @@
         v-for="(label, field) of fields"
         :show-overflow-tooltip="true"
       ></el-table-column>
+
+      <!-- 自定义错误显示 -->
+      <!-- <template v-slot="scope">
+        <el-tooltip
+          :content="errorData[scope.$index][field]"
+          class="item"
+          effect="dark"
+          placement="top"
+          v-if="errorData[scope.$index] && errorData[scope.$index][field]"
+        >
+          <div>{{ scope.row[field] || "&nbsp;" }}</div>
+        </el-tooltip>
+        <template v-else>{{scope.row[field]}}</template>
+      </template>-->
     </el-table>
 
     <div class="ele-import-action">
@@ -39,7 +53,7 @@
 </template>
 
 <script>
-
+import { GetErrorExcel, AddBookList } from '../../../api/bookApi'
 export default {
   name: 'EleImportData',
   props: {
@@ -48,32 +62,30 @@ export default {
       type: Object,
       required: true
     },
-
-    errorIndex: {
-      type: Array,
-      default: () => []
-    },
     requestFn: {
       type: Function,
       required: true
     },
     tableData: {
       type: Array,
-      default () {
+      default() {
         return []
       }
-    }
+    },
+
 
   },
   inject: ['goNext', 'goPre'],
-  data () {
+  data() {
     return {
       isDownload: false,
-      hasError: true
+      hasError: true,
+      errorData: [],
+      correctData: []
     }
   },
   methods: {
-    tableRowStyle ({ row, rowIndex }) {
+    tableRowStyle({ row, rowIndex }) {
       if (this.tableData[rowIndex]['haveNum'] === 0) {
         this.hasError = true
         this.isDownload = false
@@ -84,13 +96,11 @@ export default {
         return ''
       }
     },
-    handlePre () {
+    handlePre() {
       this.$emit('pre')
     },
-    downloadError () {
+    _handleData() {
       const paramArray = this.tableData
-
-      const paramE = []
       paramArray.forEach((element) => {
         for (const key in element) {
           if (element[key] === null) {
@@ -100,73 +110,42 @@ export default {
             element[key] = 0
           }
         }
-        if (element.haveNum === 0) {
+        if (element.haveNum === 1) {
           let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
           const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
-          paramE.push(elItem)
+          this.correctData.push(elItem)
+        } else {
+          let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
+          const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
+          this.errorData.push(elItem)
         }
       })
-      this.$axios({
-        method: 'post',
-        url: process.env.API_HOST + '/file/getErrorExcel',
-        data: JSON.stringify(paramE)
-      }).then((response) => {
-        if (response.data.code != '000') {
-          this.$message.error(response.data.msg)
-        } else {
-          const urlString = response.data.data
-          const baseurl = 'http://10.0.58.22:8080/file/download?fileName='
-          const url = baseurl + urlString
-          window.open(url)
-        }
+    },
+    downloadError() {
+      this._handleData()
+      const paramError = this.errorData
+      const res = GetErrorExcel(paramError)
+      res.then(res => {
+        console.log(res)
+        const urlString = res.data
+        const baseurl = 'http://10.0.58.22:8080/file/download?fileName='
+        const url = baseurl + urlString
+        window.open(url)
         this.isDownload = true
-      }).catch((error) => {
-        this.$message.error('下载错误列表失败')
-        console.log('error:', error)
       })
     },
 
     // 发送请求
-    handleRequest () {
+    handleRequest() {
       if (!this.isDownload) {
         this.$message.error('请先下载错误信息表')
       } else {
-        const paramArray = this.tableData
-        var paramC = []
-        var paramE = []
-        paramArray.forEach((element) => {
-          for (const key in element) {
-            if (element[key] === null) {
-              element[key] = ''
-            }
-            if (element[key] === undefined) {
-              element[key] = 0
-            }
-          }
-          if (element.haveNum === 1) {
-            let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-            const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
-            paramC.push(elItem)
-          } else {
-            let { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type } = element
-            const elItem = { author, bookName, description, img, isbn, outNum, page, pubDate, publisher, totalNum, type }
-            paramE.push(elItem)
-          }
-        })
-        this.$axios({
-          method: 'post',
-          url: process.env.API_HOST + '/book/adds',
-          data: JSON.stringify(paramC)
-        }).then((response) => {
-          if (response.data.code != '000') {
-            this.$message.error(response.data.msg)
-          } else {
-            this.$message.success('导入成功')
-            this.goNext()
-          }
-        }).catch((error) => {
-          this.$message.error('导入失败, 请重试')
-          console.log('error:', error)
+        this._handleData()
+        const paramCorrect = this.correctData
+        const res = AddBookList(paramCorrect)
+        res.then(res => {
+          this.$message.success('导入成功')
+          this.goNext()
         })
       }
     }

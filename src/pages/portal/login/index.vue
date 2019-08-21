@@ -42,17 +42,17 @@
 
 <script>
 import { Encrypt } from '../../../api/encrypt'
+import { AdminLogin } from '../../../api/attendanceApi'
 export default {
   name: 'Login',
-
-  data () {
+  data() {
     return {
       username: '',
       password: ''
     }
   },
   methods: {
-    login_Submit () {
+    login_Submit() {
       const encryptPsw = Encrypt(this.password)
       const params = {
         adminName: this.username,
@@ -61,20 +61,16 @@ export default {
       if (this.username == '' || this.password == '') {
         this.$message.error('用户名与密码不能为空！')
       } else {
-        this.$axios({
-          methods: 'get',
-          url: process.env.API_HOST + '/admin/login',
-          params
-        }).then((response) => {
-          if (response.data.code != '000') {
-            this.$message.error(response.data.msg)
+        const res = AdminLogin(params)
+        res.then(res => {
+          if (res.code != '000') {
+            this.$message.error(res.msg)
           } else {
-            this.$store.commit('GET_USER', response.data.data.adminName)
+            this.$store.commit('GET_USER', res.data.adminName)
             this.$router.push('/search')
           }
         }).catch((error) => {
           this.$message.error('登录失败')
-          console.error(error) // 请求失败返回的数据
         })
       }
     }
