@@ -90,3 +90,10 @@
 .van-collapse-item__content .title-span {
   font-weight: bold;
 }
+
+.v-top {
+  font-size: 30px;
+  background-color: #999;
+  border-radius: 4px;
+  padding: 0 2px;
+}

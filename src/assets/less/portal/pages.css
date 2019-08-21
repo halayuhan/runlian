@@ -558,14 +558,15 @@
 .add-book-header .el-icon-back {
   display: inline-block;
   width: 40px;
-  height: 26px;
+  height: 24px;
   border-radius: 4px;
-  line-height: auto;
   text-align: center;
   font-size: 24px;
   color: #fff;
   background-color: rgb(187, 186, 181);
+ 
 }
+
 
 .add-book-header .el-icon-back:hover{
   cursor: pointer;

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-16 09:46:21
+ * @LastEditTime: 2019-08-19 10:21:03
  * @Description: file content
  -->
 <template>
@@ -110,6 +110,7 @@ export default {
   methods: {
     // 上传
     handleUpload (tableData) {
+      console.log(tableData)
       this.tableData = tableData
     },
 

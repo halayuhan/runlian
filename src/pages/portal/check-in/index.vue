@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:06:47
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:37:42
+ * @LastEditTime: 2019-08-19 14:08:33
  * @Description: file content
  -->
 <template>
@@ -121,7 +121,7 @@ import QRCode from 'qrcodejs2'
 
 export default {
   name: 'CheckIn',
-  data() {
+  data () {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -129,7 +129,7 @@ export default {
       qrcodeVisible: false, // 是否显示二维码
       qrcodeObject: {}, // 二维码封装对象
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
         }
       }, // 日期组件配置选项
@@ -144,30 +144,34 @@ export default {
       timeEnd // 结束时间
     }
   },
-  created() {
+  created () {
     this.queryData()
   },
-  mounted() {
+  updated () {
+    this.$parent.$parent.update()
+    console.log('update')
+  },
+  mounted () {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   filters: {
-    genderFormat(value) {
+    genderFormat (value) {
       return value === 'M' ? '男' : '女'
     },
-    internalFormat(value) {
+    internalFormat (value) {
       return value === 'Y' ? '内部' : '外部'
     }
   },
   methods: {
-    changeStart() {
+    changeStart () {
       this.pickerOptionsStart = Object.assign({}, this.pickerOptionsStart, {
         disabledDate: (time) => {
           return time.getTime() > this.timeEnd
         }
       })
     },
-    changeEnd() {
+    changeEnd () {
       this.pickerOptionsEnd = Object.assign({}, this.pickerOptionsEnd, {
         disabledDate: (time) => {
           return time.getTime() < this.timeStart
@@ -181,7 +185,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    queryData(paramsData = {}) {
+    queryData (paramsData = {}) {
       if (this.timeStart > this.timeEnd) {
         this.$message.error('起始时间不能大于结束时间!')
         return
@@ -204,7 +208,6 @@ export default {
         if (response.data.code != '000') {
           this.$message.error(response.data.msg)
           this.isShow = false
-          return
         } else {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
@@ -223,7 +226,7 @@ export default {
         console.log('error:', error) // 请求失败返回的数据
       })
     },
-    filterSearch() {
+    filterSearch () {
       this.sign = 2
       const paramsData = {
         page: 1
@@ -231,7 +234,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    downloadExcel() {
+    downloadExcel () {
       const baseurl = process.env.API_HOST + '/signIn/getExcel?'
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
@@ -242,18 +245,18 @@ export default {
       window.open(url)
       this.downloadVisible = false
     },
-    showMask() {
+    showMask () {
       const timestamp = Date.parse(new Date())
       // 创建二维码，填写相应 ip地址+时间戳
       this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance/?d=' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask() {
+    closeMask () {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode() {
+    qrcode () {
       const qrcode = new QRCode('qrcode', {
         width: 360,
         height: 360,
@@ -262,16 +265,16 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange(index) {
+    handleCurrentChange (index) {
       const paramsData = {
         page: index
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+        this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,
@@ -279,7 +282,9 @@ export default {
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
+        console.log(this.$parent.$parent)
         this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
+        this.$parent.$parent.update()
       })
     }
   }

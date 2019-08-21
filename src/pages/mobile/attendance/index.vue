@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-16 09:38:11
+ * @LastEditTime: 2019-08-16 13:25:21
  * @Description: file content
  -->
 <template>
@@ -127,7 +127,7 @@ export default {
         books: {
           val: '',
           err_msg: '请输入正确书名',
-          rules: [/^[\u4e00-\u9fffa-zA-Z0-9]{1,30}$/]
+          rules: [/^[\s\S]{1,30}$/]
         }
       }
     }

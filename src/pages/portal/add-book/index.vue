@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:35:09
+ * @LastEditTime: 2019-08-16 14:03:22
  * @Description: file content
  -->
 <template>
@@ -42,7 +42,7 @@
               <div class="from-col-toptwo">
                 <div class="form-col-2">
                   <el-form-item label="数量" prop="addNum">
-                    <el-input v-model="formData.addNum"></el-input>
+                    <el-input v-model.number="formData.addNum"></el-input>
                   </el-form-item>
                   <el-form-item label="出版社" prop="publisher">
                     <el-input v-model="formData.publisher" :disabled="isRead"></el-input>
@@ -165,6 +165,7 @@ export default {
             this.formData.page = ''
             this.formData.img = ''
             this.formData.description = ''
+            this.formData.addNum = 1
             this.isRead = false
           } else {
             const bookinfo = response.data.data

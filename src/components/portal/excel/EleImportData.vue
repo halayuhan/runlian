@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-09 14:46:45
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:31:25
+ * @LastEditTime: 2019-08-19 10:37:46
  * @Description: file content
  -->
 <template>
@@ -89,7 +89,6 @@ export default {
     },
     downloadError () {
       const paramArray = this.tableData
-
       const paramE = []
       paramArray.forEach((element) => {
         for (const key in element) {
@@ -132,6 +131,7 @@ export default {
         this.$message.error('请先下载错误信息表')
       } else {
         const paramArray = this.tableData
+        console.log(this.tableData)
         var paramC = []
         var paramE = []
         paramArray.forEach((element) => {

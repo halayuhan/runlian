@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-07 16:04:56
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:13:17
+ * @LastEditTime: 2019-08-20 16:35:35
  * @Description: file content
  -->
 
@@ -38,7 +38,9 @@
           <van-collapse-item v-for="(item,index) in listData" :key="item.id">
             <div slot="title" class="item_single">
               <div class="cell-title">
-                <van-image width="80" height="100" :src="item.img" />
+                <van-image width="80" height="100" :src="item.img">
+                  <template v-slot:error>加载失败</template>
+                </van-image>
               </div>
               <div class="cell-content">
                 <div class="item-header-group">
@@ -95,13 +97,7 @@
               </div>
             </div>
           </van-collapse-item>
-          <vueToTop
-            type="9"
-            top="280"
-            size="30"
-            color="#fff"
-            style="font-size: 30px;background-color: #1518198a;"
-          ></vueToTop>
+          <vueToTop type="9" top="280" size="30" color="#fff"></vueToTop>
         </van-collapse>
       </van-list>
     </div>
@@ -221,6 +217,9 @@ export default {
             const currentData = response.data.data[i]
             // console.log(currentData)
             let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
+            if (img === null || img === '0' || img === '') {
+              img = '../../../../static/cover/default.jpg'
+            }
             const ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             tableData.push(ListItem)
           }

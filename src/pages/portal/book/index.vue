@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-29 17:07:16
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-16 09:45:55
+ * @LastEditTime: 2019-08-19 17:37:21
  * @Description: file content
  -->
 <template>
@@ -12,7 +12,7 @@
         <div class="book-search-handle-left">
           <div class="book-filter">
             <el-input
-              placeholder="请输入书籍名称/作者/出版社"
+              placeholder="请输入书名/作者/书籍类型"
               v-model="filterInput"
               width="250"
               clearable
@@ -373,6 +373,10 @@ export default {
   created () {
     this.queryData()
   },
+  updated () {
+    this.$parent.$parent.update()
+    console.log('update')
+  },
   methods: {
     queryData (paramsData = {}) {
       const defaultParams = {
@@ -397,8 +401,8 @@ export default {
           for (let i = 0; i < response.data.data.length; i++) {
             const currentData = response.data.data[i]
             let { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = currentData
-            if (img === '' || img === '0') {
-              img = '../../../../static/cover/blank_book.png'
+            if (img === null || img === '0' || img === '') {
+              img = '../../../../static/cover/default.jpg'
             }
             const tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detial: false }
             this.tableData.push(tableItem)
@@ -462,7 +466,6 @@ export default {
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        // console.log(this.$el.parentNode.parentNode.parentNode.parentNode)
         this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
@@ -474,7 +477,7 @@ export default {
       }
       this.queryData(paramsData)
       this.$nextTick(() => {
-        this.$el.parentNode.parentNode.parentNode.scrollTop = 0
+        this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
     beforeUploadCover (file) {
