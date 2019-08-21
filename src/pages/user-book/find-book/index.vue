@@ -169,7 +169,6 @@ export default {
       this.queryData(paramsData)
     },
     onImgError(index) {
-
       this.listData[index].img = '../../../../static/cover/default.jpg'
     },
     queryData(paramsData = {}) {
