@@ -13,14 +13,14 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/less/public.css'
 import 'element-ui/lib/index.js'
-import axios from './util/http.js'
+import axios from '../src/api/request'
 import store from './store'
 import md5 from 'js-md5'
 import router from './router'
 import { getDate } from './api/dateFormat'
 import infiniteScroll from 'vue-infinite-scroll'
 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

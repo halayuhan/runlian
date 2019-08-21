@@ -7,6 +7,7 @@
  -->
 <template>
   <div>
+    <!-- 上传模板对话框 -->
     <el-dialog
       :title="title"
       :visible="visible"
@@ -21,7 +22,6 @@
           'align-center': true
         }"
       />
-      <!-- 下载模板 -->
 
       <!-- 上传Excel -->
       <ele-import-upload
@@ -36,7 +36,6 @@
         :fields="fields"
         :request-fn="requestFn"
         :table-data="tableData"
-        :error-data="errorData"
         @pre="handleStep3Pre"
         v-if="currentStep === 2"
       />
@@ -56,7 +55,6 @@ import EleImportFinish from '@/components/portal/excel/EleImportFinish'
 export default {
   name: 'ExImport',
   props: {
-
     // 请求方法
     requestFn: {
       type: Function,
@@ -103,7 +101,7 @@ export default {
     return {
       tableData: [],
       columns: [],
-      errorData: [],
+
       currentStep: 1
     }
   },

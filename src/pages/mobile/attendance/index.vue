@@ -19,7 +19,7 @@
         <div class="form-item">
           <span>*手机号码:</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.phone.val" />
+            <input type="text" v-model="form.phoneNumber.val" />
             <!-- <h2 v-if="!isShow">{{form.phone.val}}</h2> -->
             <!-- <p v-if="isCorrect">请谨慎填写，提交后不可修改</p> -->
           </div>
@@ -27,8 +27,8 @@
         <div class="form-item">
           <span>*姓名:</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.name.val" v-if="isShow" />
-            <h2 v-if="!isShow">{{form.name.val}}</h2>
+            <input type="text" v-model="form.userName.val" v-if="isShow" />
+            <h2 v-if="!isShow">{{form.userName.val}}</h2>
             <p v-if="isCorrect">请谨慎填写，提交后不可修改</p>
           </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="form-item">
           <span>*在读书籍:</span>
           <div class="form-item-input">
-            <input type="text" v-model="form.books.val" />
+            <input type="text" v-model="form.bookName.val" />
             <!-- <p v-if="errors.books">在读书籍{{errors.books}}</p> -->
           </div>
         </div>
@@ -94,9 +94,10 @@
 </template>
 
 <script>
+import { GetUser, AttendSign } from '../../../api/attendanceApi'
 export default {
   name: 'Attendance',
-  data () {
+  data() {
     return {
       isCorrect: false,
       isShow: true,
@@ -109,7 +110,7 @@ export default {
           err_msg: '请输入正确LDAP账号',
           rules: [/^[_a-zA-Z0-9]+$/]
         },
-        name: {
+        userName: {
           val: '',
           err_msg: '请输入正确姓名',
           rules: [/^[\u4e00-\u9fffa-zA-Z]+$/]
@@ -119,12 +120,12 @@ export default {
           err_msg: '请输入正确部门',
           rules: [/^[\u4e00-\u9fffa-zA-Z\\-]{1,15}$/]
         },
-        phone: {
+        phoneNumber: {
           val: '',
           err_msg: '请输入正确手机号',
           rules: [/^[1]([3-9])[0-9]{9}$/]
         },
-        books: {
+        bookName: {
           val: '',
           err_msg: '请输入正确书名',
           rules: [/^[\s\S]{1,30}$/]
@@ -134,25 +135,27 @@ export default {
   },
   mounted: function () {
     if (window.localStorage.getItem('ldap')) { // 判断本地localStorage内是否存有用户历史信息
-      this.gender = window.localStorage.getItem('gender')
-      this.isInternal = window.localStorage.getItem('isInternal')
-      this.form.name.val = window.localStorage.getItem('name')
-      this.form.department.val = window.localStorage.getItem('department')
-      this.form.phone.val = window.localStorage.getItem('phone')
-      this.form.ldap.val = window.localStorage.getItem('ldap')
-      this.form.books.val = window.localStorage.getItem('books')
+      let { ldap, userName, department, phoneNumber, bookName } = this.form
+      let formlocalData = Object.assign({}, localStorage)
+      this.gender = formlocalData.gender
+      this.isInternal = formlocalData.isInternal
+      userName.val = formlocalData.userName
+      department.val = formlocalData.department
+      phoneNumber.val = formlocalData.phoneNumber
+      ldap.val = formlocalData.ldap
+      bookName.val = formlocalData.bookName
       this.isShow = false
     } else {
       this.$message.info('请输入LDAP账号搜索签到历史')
     }
   },
   computed: {
-    channel () {
+    channel() {
       return this.form.ladp.val
     }
   },
   methods: {
-    _getUserinfo () {
+    _getUserinfo() {
       const params = {
         ldap: this.form.ldap.val
       }
@@ -160,37 +163,31 @@ export default {
       if (!reg.test(this.form.ldap.val)) {
         this.$message.error(this.form.ldap.err_msg)
       } else {
-        this.$axios({
-          methods: 'get',
-          url: process.env.API_HOST + '/signIn/getUser',
-          params
+        const res = GetUser(params)
+        res.then(res => {
+          if (res.code != '000') {
+            this.form.userName.val = ''
+            this.form.department.val = ''
+            this.form.phoneNumber.val = ''
+            this.form.bookName.val = ''
+            this.isShow = true
+            this.isCorrect = true
+          } else {
+            const attendData = res.data
+            this.gender = attendData.gender
+            this.isInternal = attendData.isInternal
+            this.form.userName.val = attendData.userName
+            this.form.department.val = attendData.department
+            this.form.phoneNumber.val = attendData.phoneNumber
+            this.form.bookName.val = attendData.bookName
+            this.isShow = false
+            this.isCorrect = false
+          }
         })
-          .then((response) => {
-            if (response.data.code != '000') {
-              this.form.name.val = ''
-              this.form.department.val = ''
-              this.form.phone.val = ''
-              this.form.books.val = ''
-              this.gender = 'M'
-              this.isShow = true
-              this.isCorrect = true
-            } else {
-              this.gender = response.data.data.gender
-              this.isInternal = response.data.data.isInternal
-              this.form.name.val = response.data.data.userName
-              this.form.department.val = response.data.data.department
-              this.form.phone.val = response.data.data.phoneNumber
-              this.form.books.val = response.data.data.book
-              this.isShow = false
-              this.isCorrect = false
-            }
-          }).catch((error) => {
-            console.error(error) // 请求失败返回的数据
-          })
       }
     },
 
-    _validate () {
+    _validate() {
       let isPass = false
       for (const key in this.form) {
         const reg = this.form[key].rules[0]
@@ -206,41 +203,30 @@ export default {
       return isPass
     },
 
-    attendSubmit () {
+    attendSubmit() {
       if (!this._validate()) {
         return
       }
-      const { ldap, name, department, phone, books } = this.form
+      const { ldap, userName, department, phoneNumber, bookName } = this.form
       const params = {
-
         gender: this.gender,
         isInternal: this.isInternal,
         ldap: ldap.val,
-        userName: name.val,
-        phoneNumber: phone.val,
+        userName: userName.val,
+        phoneNumber: phoneNumber.val,
         department: department.val,
-        bookName: books.val
+        bookName: bookName.val
       }
-      window.localStorage.setItem('ldap', params.ldap)
-      window.localStorage.setItem('gender', params.gender)
-      window.localStorage.setItem('isInternal', params.isInternal)
-      window.localStorage.setItem('name', params.userName)
-      window.localStorage.setItem('department', params.department)
-      window.localStorage.setItem('phone', params.phoneNumber)
-      window.localStorage.setItem('books', params.bookName)
-
-      this.$axios({
-        methods: 'post',
-        url: process.env.API_HOST + '/signIn/submit',
-        params
-      }).then((response) => {
-        if (response.data.code != '000') {
+      for (const key in params) {
+        window.localStorage.setItem(key, params[key])
+      }
+      const res = AttendSign(params)
+      res.then(res => {
+        if (res.code != '000') {
           this.$message.error('签到失败')
         } else {
           this.$router.push('/success')
         }
-      }).catch((error) => {
-        console.error(error) // 请求失败返回的数据
       })
     }
   }
