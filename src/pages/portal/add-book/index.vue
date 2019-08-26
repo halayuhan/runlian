@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-31 11:49:06
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:35:09
+ * @LastEditTime: 2019-08-16 14:03:22
  * @Description: file content
  -->
 <template>
@@ -97,10 +97,12 @@
 </template>
 
 <script>
-import { GetBook, AddOneBook, UploadImg } from '../../../api/bookApi'
+import { GetBook, AddOneBook, UploadImg } from '@api/bookApi'
+import { beforeUploadCover } from '@mixin/beforeUploadCover'
 const querystring = require('querystring')
 export default {
   name: 'AddBook',
+  mixins: [beforeUploadCover],
   data() {
     return {
       isRead: false,
@@ -147,10 +149,7 @@ export default {
         return this.formData.pubDate.substr(0, 10)
       },
       set: function (value) {
-        this.formData.pubDate = value.replace(/\s/g, '').replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1\/').replace(/(\d{4}\/\d{2})(?=\d)/g, '$1\/')
-        if (value.length === 7) {
-          this.formData.pubDate = value.replace(/[/]$/, '')
-        }
+        this.formData.pubDate = value.replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1\/').replace(/(\d{4}\/\d{2})(?=\d)/g, '$1\/')
       }
     }
   },
@@ -188,7 +187,7 @@ export default {
         } else {
           const { img, bookName, author, isbn, publisher, pubDate, page, type, description, addNum } = this.formData
           const paramsOther = {
-            totalNum: addNum,
+            totalNum: addNum
           }
           const params = Object.assign({}, { isbn, bookName, author, type, publisher, pubDate, page, img, description }, paramsOther)
           AddOneBook(querystring.stringify(params)).then(res => {
@@ -201,19 +200,6 @@ export default {
           })
         }
       })
-    },
-    beforeUploadCover(file) {
-      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传封面图片只能是JPG格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传封面图片大小不能超过2MB!')
-      }
-
-      return isJPG && isLt2M
     },
     handleUploadCover(file) {
       const isbn = this.formData.isbn

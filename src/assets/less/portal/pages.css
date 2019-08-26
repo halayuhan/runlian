@@ -455,46 +455,47 @@
   padding: 20px 40px 30px 40px;
 }
 
-.el-table .detial-content {
+.el-table .detail-content {
   display: flex;
   justify-content: space-between;
   padding: 20px 0;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
 }
-.el-table .detial-content-left {
+
+.el-table .detail-content-left {
   width: 30%;
 }
 
-.el-table .detial-content-right {
+.el-table .detail-content-right {
   width: 70%;
   padding: 0 0 0 40px;
 }
 
-.el-table .detial-footer {
+.el-table .detail-footer {
   display: flex;
   justify-content: flex-end;
-  margin: 10px 0 0 ;
+  margin: 10px 0 0 ;}
+
   /* border-top: 1px solid #000; */
-}
+
 
 .el-table .el-form-item {
   margin: 0;
   height: 30px;
 }
-.el-table .detial-footer .el-form-item {
+.el-table .detail-footer .el-form-item {
   margin: 0 0 0 30px;
 }
 .el-table .el-form-item div {
   display: flex;
 }
 
-.el-table .flex-column {
-  height: 100%;
-  position: relative;
-}
+/* .el-table .flex-column {
+ 
+} */
 
-.el-table li .detial-box p {
+.el-table li .detail-box p {
   height: 30px;
   width: 80px;
   font-size: 16px;
@@ -502,7 +503,7 @@
   text-align: left;
 }
 
-.el-table li .detial-box span {
+.el-table li .detail-box span {
   /* display: inline-block; */
   height: 30px;
   overflow: hidden;
@@ -516,7 +517,7 @@
   /* autoprefixer: on */
 }
 
-.el-table li .detial-box h1 {
+.el-table li .detail-box h1 {
   height: calc(100% - 30px);
   line-height: 30px;
   font-size: 14px;

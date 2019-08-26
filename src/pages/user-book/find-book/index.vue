@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-07 16:04:56
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 18:13:17
+ * @LastEditTime: 2019-08-21 13:55:58
  * @Description: file content
  -->
 
@@ -91,13 +91,7 @@
               </div>
             </div>
           </van-collapse-item>
-          <vueToTop
-            type="9"
-            top="280"
-            size="30"
-            color="#fff"
-            style="font-size: 30px;background-color: rgba(21, 24, 25, 0.5)"
-          ></vueToTop>
+          <vueToTop type="9" top="280" size="30" color="#fff"></vueToTop>
         </van-collapse>
       </van-list>
     </div>
@@ -105,12 +99,14 @@
 </template>
 
 <script>
-import { QueryData } from '../../../api/bookApi'
-const querystring = require('querystring')
+import { QueryData } from '@api/bookApi'
+import queryData from '@mixin/queryData.js'
 import { Row, Col, Icon, Image, Search, Collapse, CollapseItem, List, Tag, Skeleton, Card, Button, Cell, CellGroup, DropdownMenu, DropdownItem } from 'vant'
 import vueToTop from 'vue-totop'
+const querystring = require('querystring')
 export default {
   name: 'FindBook',
+  mixins: [queryData],
   components: {
     [CellGroup.name]: CellGroup,
     [Cell.name]: Cell,
@@ -140,7 +136,7 @@ export default {
       loading: false,
       finished: false,
       activeNames: ['1'],
-      filterInput: '',
+      // filterInput: '',
       total: 0,
       count: 0, // 相当于页码
       pageSize: 5
@@ -155,7 +151,7 @@ export default {
         isExist: this.value,
         page: this.count
       }
-      this.queryData(paramsData)
+      this.loadData(paramsData)
     },
     onCancel() {
       this.filterInput = ''
@@ -166,12 +162,12 @@ export default {
       const paramsData = {
         page: this.count
       }
-      this.queryData(paramsData)
+      this.loadData(paramsData)
     },
     onImgError(index) {
-      this.listData[index].img = '../../../../static/cover/default.jpg'
+      this.listData[index].img = '@assets/default.jpg'
     },
-    queryData(paramsData = {}) {
+    getParams(paramsData = {}) {
       const defaultParams = {
         isExist: this.value,
         keyword: this.filterInput.trim(),
@@ -180,8 +176,10 @@ export default {
         sign: 0,
         sortFlag: 0
       }
-      const params = Object.assign({}, defaultParams, paramsData)
-
+      return Object.assign({}, defaultParams, paramsData)
+    },
+    loadData(paramsData = {}) {
+      const params = this.getParams(paramsData)
       QueryData(querystring.stringify(params)).then(res => {
         if (res.code != '000') {
           this.total = 0
@@ -193,7 +191,7 @@ export default {
             let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = element
             const ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
             this.listData.push(ListItem)
-          });
+          })
           this.currentPage = res.page
           this.total = res.count
         }
@@ -205,6 +203,40 @@ export default {
         this.isScrollOver()
       })
     },
+    // queryData(paramsData = {}) {
+    //   const defaultParams = {
+    //     isExist: this.value,
+    //     keyword: this.filterInput.trim(),
+    //     page: this.count,
+    //     pageSize: this.pageSize,
+    //     sign: 0,
+    //     sortFlag: 0
+    //   }
+    //   const params = Object.assign({}, defaultParams, paramsData)
+
+    //   QueryData(querystring.stringify(params)).then(res => {
+    //     if (res.code != '000') {
+    //       this.total = 0
+    //       this.loading = false
+    //       this.isScrollOver()
+    //       return
+    //     } else {
+    //       res.data.forEach(element => {
+    //         let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = element
+    //         const ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
+    //         this.listData.push(ListItem)
+    //       })
+    //       this.currentPage = res.page
+    //       this.total = res.count
+    //     }
+    //     this.loading = false
+    //     this.isScrollOver()
+    //   }).catch((error) => {
+    //     console.log(error)
+    //     this.loading = false
+    //     this.isScrollOver()
+    //   })
+    // },
     isScrollOver() {
       if (this.count * this.pageSize > this.total) {
         this.finished = true
@@ -217,7 +249,7 @@ export default {
       const paramsData = {
         page: this.count
       }
-      this.queryData(paramsData)
+      this.loadData(paramsData)
     },
     handleSearch() {
       this.count = 1

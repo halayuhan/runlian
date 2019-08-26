@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-07-23 20:17:08
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:33:21
+ * @LastEditTime: 2019-08-16 13:25:21
  * @Description: file content
  -->
 <template>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { GetUser, AttendSign } from '../../../api/attendanceApi'
+import { GetUser, AttendSign } from '@api/attendanceApi'
 export default {
   name: 'Attendance',
   data() {

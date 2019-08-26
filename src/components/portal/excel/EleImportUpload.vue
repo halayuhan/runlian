@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:49
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:31:58
+ * @LastEditTime: 2019-08-21 13:55:52
  * @Description: file content
  -->
 <template>
@@ -48,23 +48,23 @@ export default {
     }
   },
   inject: ['goNext', 'goPre'],
-  data() {
+  data () {
     return {
       fileList: []
     }
   },
   methods: {
     // 上传
-    Requeset(file) {
+    Requeset (file) {
       const formdata = new FormData()
       formdata.append('file', file.file)
       const res = UploadExcel(formdata)
       res.then(res => {
         const tableData = []
-        const errorDate = []
         res.data.forEach((element) => {
           if (element.img === undefined) {
-            element.img = ''          }
+            element.img = ''
+          }
           let { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num } = element
           const tableItem = { id, isbn, bookName, author, publisher, pubDate, totalNum, type, description, haveNum, img, outNum, page, num }
           tableData.push(tableItem)
@@ -75,20 +75,20 @@ export default {
     },
 
     // 检测文件类型
-    checkType(file) {
+    checkType (file) {
       const fileExt = file.name.split('.').pop().toLocaleLowerCase()
       const extArr = ['xlsx', 'xls', 'csv']
       return extArr.includes(fileExt)
     },
     // 上传错处提示
-    uploadError(message) {
+    uploadError (message) {
       this.$notify.error({
         title: '上传出错了',
         message: message
       })
     },
     // 检测表头
-    checkTableTitle(columns, fields) {
+    checkTableTitle (columns, fields) {
       const titles = Object.values(fields)
       titles.forEach((item) => {
         if (!columns.includes(item)) {
@@ -99,7 +99,7 @@ export default {
         }
       })
     },
-    handleGoNext() {
+    handleGoNext () {
       this.$notify.error({
         title: '提示',
         message: '请先上传数据'
@@ -107,7 +107,7 @@ export default {
     },
 
     // 改变 tableData 的 key, 并且过滤掉不需要的字段
-    changeDatakeyAndFilter(arr) {
+    changeDatakeyAndFilter (arr) {
       const fields = this.fields
       return arr.map((item) => {
         const res = {}
@@ -118,7 +118,7 @@ export default {
       })
     },
 
-    async beforeUpload(file) {
+    async beforeUpload (file) {
       // 检测文件类型
       if (!this.checkType(file)) {
         this.uploadError('文件：' + file.name + ' 文件类型错误，请在模板文件上修改后上传')

@@ -2,7 +2,7 @@
  * @Author: liyan
  * @Date: 2019-08-06 17:07:50
  * @LastEditors: liyan
- * @LastEditTime: 2019-08-15 20:25:09
+ * @LastEditTime: 2019-08-19 10:21:03
  * @Description: file content
  -->
 <template>
@@ -48,9 +48,9 @@
 
 <script>
 import EleSteps from 'vue-ele-steps'
-import EleImportUpload from '@/components/portal/excel/EleImportUpload'
-import EleImportData from '@/components/portal/excel/EleImportData'
-import EleImportFinish from '@/components/portal/excel/EleImportFinish'
+import EleImportUpload from '@component/excel/EleImportUpload'
+import EleImportData from '@component/excel/EleImportData'
+import EleImportFinish from '@component/excel/EleImportFinish'
 
 export default {
   name: 'ExImport',
@@ -91,46 +91,45 @@ export default {
     EleImportFinish
 
   },
-  provide() {
+  provide () {
     return {
       goPre: this.preStep,
       goNext: this.nextStep
     }
   },
-  data() {
+  data () {
     return {
       tableData: [],
       columns: [],
-
       currentStep: 1
     }
   },
   methods: {
     // 上传
-    handleUpload(tableData) {
+    handleUpload (tableData) {
+      console.log(tableData)
       this.tableData = tableData
     },
 
-    handlClose() {
+    handlClose () {
       this.$emit('close')
       this.$emit('update:visible', false)
     },
     // 结束
-    handleFinish() {
+    handleFinish () {
       this.handlClose()
-      this.$emit('finish')
       this.currentStep = 1
     },
     // 下一步
-    nextStep() {
+    nextStep () {
       this.currentStep++
     },
     // 上一步
-    preStep() {
+    preStep () {
       this.currentStep--
     },
     // 第3步 -> 第2步
-    handleStep3Pre() {
+    handleStep3Pre () {
       this.tableData = []
       this.columns = []
       this.preStep()

@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { Encrypt } from '../../../api/encrypt'
-import { AdminLogin } from '../../../api/attendanceApi'
+import { Encrypt } from '@api/encrypt'
+import { AdminLogin } from '@api/attendanceApi'
 export default {
   name: 'Login',
   data() {
