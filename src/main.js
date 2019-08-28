@@ -19,6 +19,7 @@ import md5 from 'js-md5'
 import router from './router'
 import { getDate } from './api/dateFormat'
 import infiniteScroll from 'vue-infinite-scroll'
+import Vuelazyload from 'vue-lazyload'
 
 
 
@@ -27,6 +28,12 @@ Vue.use(ElementUI)
 Vue.use(infiniteScroll)
 Vue.prototype.$axios = axios
 Vue.prototype.getDate = getDate
+Vue.use(Vuelazyload, {
+  preLoad: 1.3,
+  error: 'static/cover/default.jpg',
+  loading: 'static/cover/default.jpg',
+  attempt: 1
+})
 
 /* eslint-disable no-new */
 new Vue({

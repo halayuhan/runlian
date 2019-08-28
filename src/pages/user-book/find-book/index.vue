@@ -203,40 +203,6 @@ export default {
         this.isScrollOver()
       })
     },
-    // queryData(paramsData = {}) {
-    //   const defaultParams = {
-    //     isExist: this.value,
-    //     keyword: this.filterInput.trim(),
-    //     page: this.count,
-    //     pageSize: this.pageSize,
-    //     sign: 0,
-    //     sortFlag: 0
-    //   }
-    //   const params = Object.assign({}, defaultParams, paramsData)
-
-    //   QueryData(querystring.stringify(params)).then(res => {
-    //     if (res.code != '000') {
-    //       this.total = 0
-    //       this.loading = false
-    //       this.isScrollOver()
-    //       return
-    //     } else {
-    //       res.data.forEach(element => {
-    //         let { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = element
-    //         const ListItem = { bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false }
-    //         this.listData.push(ListItem)
-    //       })
-    //       this.currentPage = res.page
-    //       this.total = res.count
-    //     }
-    //     this.loading = false
-    //     this.isScrollOver()
-    //   }).catch((error) => {
-    //     console.log(error)
-    //     this.loading = false
-    //     this.isScrollOver()
-    //   })
-    // },
     isScrollOver() {
       if (this.count * this.pageSize > this.total) {
         this.finished = true

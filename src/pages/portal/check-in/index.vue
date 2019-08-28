@@ -120,7 +120,7 @@ import { GetSignRecord } from '@api/attendanceApi'
 
 export default {
   name: 'CheckIn',
-  data () {
+  data() {
     const timeEnd = new Date().getTime()
     const timeStart = new Date().getTime() - 3600 * 1000 * 24 * 7
     return {
@@ -128,7 +128,7 @@ export default {
       qrcodeVisible: false, // 是否显示二维码
       qrcodeObject: {}, // 二维码封装对象
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() > Date.now()
         }
       }, // 日期组件配置选项
@@ -143,22 +143,21 @@ export default {
       timeEnd // 结束时间
     }
   },
-  created () {
+  created() {
     this.queryData()
   },
-  updated () {
+  updated() {
     this.$parent.$parent.update()
-    console.log('update')
   },
-  mounted () {
+  mounted() {
     // 创建二维码dom结构，返回数据对象
     this.qrcode()
   },
   filters: {
-    genderFormat (value) {
+    genderFormat(value) {
       return value === 'M' ? '男' : '女'
     },
-    internalFormat (value) {
+    internalFormat(value) {
       return value === 'Y' ? '内部' : '外部'
     }
   },
@@ -170,7 +169,7 @@ export default {
       }
       this.queryData(paramsData)
     },
-    queryData (paramsData = {}) {
+    queryData(paramsData = {}) {
       if (this.timeStart > this.timeEnd) {
         this.$message.error('起始时间不能大于结束时间!')
         return
@@ -188,8 +187,8 @@ export default {
       res.then(res => {
         this.tableData = []
         if (res.code != '000') {
-          this.$message.error(res.msg)
           this.isShow = false
+          console.log(res)
         } else {
           res.data.forEach(element => {
             let { ldap, userName, gender, isInternal, department, phoneNumber, book, timeString } = element
@@ -205,14 +204,14 @@ export default {
         this.isShow = false
       })
     },
-    filterSearch () {
+    filterSearch() {
       this.sign = 2
       const paramsData = {
         page: 1
       }
       this.queryData(paramsData)
     },
-    downloadExcel () {
+    downloadExcel() {
       const baseurl = process.env.API_HOST + '/signIn/getExcel?'
       const params = {
         start: this.getDate(this.timeStart, 'yyyy-MM-dd hh:mm:ss'),
@@ -223,18 +222,18 @@ export default {
       window.open(url)
       this.downloadVisible = false
     },
-    showMask () {
+    showMask() {
       const timestamp = Date.parse(new Date())
       // 创建二维码，填写相应 ip地址+时间戳
       this.qrcodeObject.makeCode('http://10.0.58.22:8090/#/attendance/?d=' + timestamp.toString())
       this.qrcodeVisible = true
     },
-    closeMask () {
+    closeMask() {
       // 清除二维码
       this.qrcodeObject.clear()
       this.qrcodeVisible = false
     },
-    qrcode () {
+    qrcode() {
       const qrcode = new QRCode('qrcode', {
         width: 360,
         height: 360,
@@ -243,7 +242,7 @@ export default {
       })
       this.qrcodeObject = qrcode
     },
-    handleCurrentChange (index) {
+    handleCurrentChange(index) {
       const paramsData = {
         page: index
       }
@@ -252,7 +251,7 @@ export default {
         this.$el.parentNode.parentNode.parentNode.parentNode.scrollTop = 0
       })
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       const paramsData = {
         pageSize,

@@ -73,7 +73,7 @@
           </el-table-column>
           <el-table-column label="书籍封面">
             <template slot-scope="scope">
-              <img :src="scope.row.img" alt="cover" />
+              <img v-lazy="scope.row.img" :src="scope.row.img" alt="cover" />
               <div class="upload-div">
                 <el-upload
                   class="cover-uploader"
@@ -267,9 +267,6 @@ export default {
         this.tableData = []
         res.data.forEach((element) => {
           let { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum } = element
-          if (img === '' || img === '0') {
-            img = '@assets/default.jpg'
-          }
           const borrowstatus = (haveNum === 0) ? true : false
           const returnstatus = (outNum === 0) ? true : false
           const tableItem = { createDate, bookName, author, isbn, publisher, pubDate, page, img, description, type, totalNum, outNum, haveNum, edit: false, detail: false, borrowstatus, returnstatus }

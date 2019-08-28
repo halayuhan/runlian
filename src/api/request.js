@@ -2,6 +2,9 @@
 
 import axios from 'axios'
 import store from '../store'
+import { ErrorMessage, InfoMessage } from './utils'
+
+// 拦截器
 
 axios.interceptors.request.use(
   config => {
@@ -32,6 +35,9 @@ function checkStatus (response) {
     // 如果不需要除了data之外的数据，可以直接 return response.data
   }
   // 异常状态下，把错误信息返回给checkcode处理
+  else if (response.data.code === '101') {
+    InfoMessage('很抱歉，查询结果不存在')
+  }
   return {
     code: -404,
     msg: response.data.msg
@@ -40,9 +46,9 @@ function checkStatus (response) {
 
 function checkCode (res) {
   // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
-  if (res.code === -404) {
-    // alert(res.msg)
-  }
+  // if (res.code === -404) {
+  //   ErrorMessage(res.msg)
+  // }
   return res
 }
 
@@ -81,6 +87,7 @@ export async function get (url, params) {
       params,
       timeout: 10000
     })
+    console.log(response)
     const res = checkStatus(response)
     return checkCode(res)
   } catch (err) {
