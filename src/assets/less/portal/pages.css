@@ -564,10 +564,8 @@
   text-align: center;
   font-size: 24px;
   color: #fff;
-  background-color: rgb(187, 186, 181);
- 
+  background-color: rgb(187, 186, 181); 
 }
-
 
 .add-book-header .el-icon-back:hover{
   cursor: pointer;
@@ -575,8 +573,6 @@
 .add-book-header span {
   font-size: 20px;
   margin-left: 10px;
- 
-  
 }
 
 .add-book-form {
@@ -680,30 +676,20 @@
   padding: 8px 40px;
   margin-right: 100px;
 }
-.form-btn-group .back_btn{
-  background-color: #fff;
-  color: #5caaab;
-   font-size: 14px;
-  padding: 8px 12px;
-  margin-right: 100px;
-}
-.form-btn-group .back_btn:hover{
-  background-color: #5caaab;
-  color: #fff;
-}
+
 
 .add-book-wrapper .el-form-item >>> .el-form-item__label {
   font-size: 16px;
   font-weight: bold;
 }
-.el-textarea__inner {
+/* .el-textarea__inner {
   resize: both;
   min-height: 33px;
   margin: 0px;
   width: 435px;
   height: 90px;
   
-}
+} */
 .el-textarea__inner:focus {
   outline: 0;
   border-color: #5caaab;

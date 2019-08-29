@@ -46,8 +46,7 @@ module.exports = {
       '@api': resolve('src/api'),
       '@component': resolve('src/components/portal'),
       '@mixin': resolve('src/mixin'),
-      '@assets': resolve('src/assets'),
-      
+      '@assets': resolve('src/assets')
     }
   },
   module: {
@@ -90,6 +89,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.less$/,
+        use: ['vue-style-loader', 'css-loader', 'less-loader']
       }
     ]
   },

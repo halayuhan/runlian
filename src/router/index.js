@@ -79,8 +79,8 @@ const router = new Router({
             },
             {
               path: '/book/add-book',
-              name: 'AddBook',
-              component: () => import('@/pages/portal/add-book/index'),
+              name: 'AddBookT',
+              component: () => import('@/pages/portal/add-book/responsive'),
               meta: {
                 requireAuth: true //  添加该字段，表示进入这个路由是需要登录的
               }
@@ -98,6 +98,7 @@ const router = new Router({
 })
 router.beforeEach((to, from, next) => {
   const user = window.sessionStorage.getItem('user')
+  console.log(to.meta)
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
     if (user) {
